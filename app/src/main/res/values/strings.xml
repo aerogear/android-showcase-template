@@ -1,12 +1,13 @@
 <resources>
     <!-- Strings related to apps -->
+    <string name="org_name">FeedHenry</string>
+    <string name="org_url">www.feedhenry.org</string>
     <string name="app_name">Secure Android Template</string>
     <string name="app_description">A Native Android Application that demonstrates Secure Mobile Development Practises.</string>
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
 
     <!-- Strings related to Home -->
     <string name="fragment_title_home">Home</string>
