@@ -14,9 +14,19 @@ android {
             useSupportLibrary true
         }
     }
+    signingConfigs {
+        release {
+            storeFile file("../signing_keys.keystore")
+            keyAlias "developer"
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            versionNameSuffix System.getenv("CIRCLE_BUILD_NUM")
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

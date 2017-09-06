@@ -33,6 +33,14 @@ test:
     - circle-android wait-for-boot
     - ./gradlew build test connectedAndroidTest
     # copy the build outputs to artifacts
-    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r app/build/outputs/apk/* $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
     - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+
+deployment:
+  release:
+    tag: /release-.*/
+    commands:
+      - ./gradlew aR
+      - ./pushToKryptowire.sh $KRYPTOWIRE_API_KEY
+

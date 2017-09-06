@@ -4,6 +4,8 @@ image:https://circleci.com/gh/feedhenry/mobile-security-android-template.svg?sty
 
 A Native Android Application that demonstrates Secure Mobile Development Practises.
 
+For more information, please check [Mobile Secure Project](https://github.com/feedhenry/mobile-security).
+
 == Requirements
 * Minimum SDK Version: 15
 * Target SDK Version: 25
@@ -25,3 +27,13 @@ A Native Android Application that demonstrates Secure Mobile Development Practis
 **** Relates to: `res/layout/fragment_authentication.xml`
 *** *AuthenticationDetailsFragment*  _(Authentication user details view and logic)_
 **** Relates to: `res/layout/fragment_authentication_details.xml`
+
+== Push to Kryptowire
+
+If you need to push the built binary to [Kryptowire](https://www.kryptowire.com/) for scan, just create a git tag like `release-*`. This will trigger a build in CircleCI, which will push the built release binary to Kryptowire automatically.
+
+```bash
+git checkout master
+git tag release-1.0.0 #change the release version based on the current release
+git push origin --tags
+```
