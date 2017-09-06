@@ -1,3 +1,5 @@
+image:https://circleci.com/gh/feedhenry/mobile-security-android-template.svg?style=svg["CircleCI", link="https://circleci.com/gh/feedhenry/mobile-security-android-template"]
+
 = Secure Native Android Template
 
 A Native Android Application that demonstrates Secure Mobile Development Practises.
