@@ -4,6 +4,8 @@ image:https://circleci.com/gh/feedhenry/mobile-security-android-template.svg?sty
 
 A Native Android Application that demonstrates Secure Mobile Development Practises.
 
+For more information, please check [Mobile Secure Project](https://github.com/feedhenry/mobile-security).
+
 == Requirements
 * Minimum SDK Version: 15
 * Target SDK Version: 25
