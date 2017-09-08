@@ -39,6 +39,7 @@
     <string name="token_save_success">Token Saved Securely</string>
     <string name="authentication_failed">Authentication Failed</string>
     <string name="logged_out">Logged out Successfully</string>
+    <string name="logged_out_failed">Logout Failed</string>
 
     <!-- Strings related to Storage -->
     <string name="fragment_title_storage">Storage</string>

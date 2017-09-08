@@ -8,29 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.feedhenry.securenativeandroidtemplate.authenticate.OpenIDAuthenticationProvider;
+
 /**
  * A login screen that offers login via Keycloak.
  */
 public class AuthenticationFragment extends Fragment {
 
     private View view;
-    private AuthListener authListener;
+    private OpenIDAuthenticationProvider keycloakListener;
 
 
     public AuthenticationFragment() {
         // Required empty public constructor
     }
 
-    public interface AuthListener{
-        public void performKeycloakAuthentication();
-        public void performKeycloakLogout();
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            authListener = (AuthListener) activity;
+            keycloakListener = (OpenIDAuthenticationProvider) activity;
         } catch (ClassCastException castException) {
             /** The activity does not implement the listener. */
         }
@@ -46,7 +43,7 @@ public class AuthenticationFragment extends Fragment {
         Button loginButton = (Button) view.findViewById(R.id.keycloakLogin);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                authListener.performKeycloakAuthentication();
+                keycloakListener.performAuthRequest();
             }
         });
 
@@ -54,7 +51,7 @@ public class AuthenticationFragment extends Fragment {
         Button logoutButton = (Button) view.findViewById(R.id.keycloakLogout);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                authListener.performKeycloakLogout();
+                keycloakListener.logout();
             }
         });
 

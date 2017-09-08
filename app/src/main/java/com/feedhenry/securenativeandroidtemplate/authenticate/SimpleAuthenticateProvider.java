@@ -4,13 +4,14 @@ package com.feedhenry.securenativeandroidtemplate.authenticate;
  * Created by weili on 04/09/2017.
  */
 
-public interface AuthenticateProvider {
+/**
+ * An interface for Simple Authentication Providers
+ */
+public interface SimpleAuthenticateProvider {
 
     /**
      * Perform the authentication request synchronously
-     * @param username
-     * @param password
      * @return
      */
-    public AuthenticateResult authenticateWithUsernameAndPassword(String username, String password);
+    public AuthenticateResult performAuthentication(String username, String password);
 }
