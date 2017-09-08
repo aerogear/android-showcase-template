@@ -1,12 +1,10 @@
 package com.feedhenry.securenativeandroidtemplate;
 
-
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 /**
  * A fragment for showing the user details view after they have logged in.

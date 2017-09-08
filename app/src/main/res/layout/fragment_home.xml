@@ -9,26 +9,31 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.feedhenry.securenativeandroidtemplate.HomeFragment">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="176dp"
-        app:srcCompat="@drawable/fh_icon"
-        tools:ignore="VectorDrawableCompat" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/home_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageView3"
-        android:layout_marginTop="35dp"
-        android:text="@string/app_description"
-        android:textAlignment="center" />
+        <ImageView
+            android:id="@+id/home_icon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="176dp"
+            app:srcCompat="@drawable/fh_icon"
+            tools:ignore="VectorDrawableCompat" />
 
+        <TextView
+            android:id="@+id/app_desc_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/home_icon"
+            android:layout_marginTop="35dp"
+            android:text="@string/app_description"
+            android:textAlignment="center" />
 
+    </RelativeLayout>
 </FrameLayout>
+
