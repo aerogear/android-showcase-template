@@ -21,6 +21,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.View;
+import android.widget.Button;
 
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
@@ -42,7 +43,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthListener {
 
     private static final String BASE_SERVER_URI = "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com/auth/realms/secure-app/protocol/openid-connect";
     private static final Uri AUTHORIZATION_ENDPOINT = Uri.parse(BASE_SERVER_URI + "/auth");

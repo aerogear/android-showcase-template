@@ -1,5 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,9 +14,26 @@ import android.widget.Button;
 public class AuthenticationFragment extends Fragment {
 
     private View view;
+    private AuthListener authListener;
+
 
     public AuthenticationFragment() {
         // Required empty public constructor
+    }
+
+    public interface AuthListener{
+        public void performKeycloakAuthentication();
+        public void performKeycloakLogout();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            authListener = (AuthListener) activity;
+        } catch (ClassCastException castException) {
+            /** The activity does not implement the listener. */
+        }
     }
 
     @Override
@@ -28,7 +46,7 @@ public class AuthenticationFragment extends Fragment {
         Button loginButton = (Button) view.findViewById(R.id.keycloakLogin);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                attemptKeycloakLogin();
+                authListener.performKeycloakAuthentication();
             }
         });
 
@@ -36,24 +54,10 @@ public class AuthenticationFragment extends Fragment {
         Button logoutButton = (Button) view.findViewById(R.id.keycloakLogout);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                attemptKeycloakLogout();
+                authListener.performKeycloakLogout();
             }
         });
 
         return view;
-    }
-
-    /**
-     * Login via Keycloak with a redirect to the Native browser on the device.
-     */
-    public void attemptKeycloakLogin() {
-        ((MainActivity)getActivity()).performKeycloakAuthentication();
-    }
-
-    /**
-     * Login via Keycloak with a redirect to the Native browser on the device.
-     */
-    public void attemptKeycloakLogout() {
-        ((MainActivity)getActivity()).performKeycloakLogout();
     }
 }
