@@ -7,11 +7,11 @@ package com.feedhenry.securenativeandroidtemplate.authenticate;
 /**
  * An interface for Simple Authentication Providers
  */
-public interface SimpleAuthenticateProvider {
+public interface SimpleAuthenticationProvider {
 
     /**
      * Perform the authentication request synchronously
      * @return
      */
-    public AuthenticateResult performAuthentication(String username, String password);
+    public AuthenticateResult authenticateWithUsernameAndPassword(String username, String password);
 }

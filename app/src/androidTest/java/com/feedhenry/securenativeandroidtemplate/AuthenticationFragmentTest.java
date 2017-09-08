@@ -2,8 +2,8 @@ package com.feedhenry.securenativeandroidtemplate;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.feedhenry.securenativeandroidtemplate.authenticate.AuthenticateProvider;
 import com.feedhenry.securenativeandroidtemplate.authenticate.AuthenticateResult;
+import com.feedhenry.securenativeandroidtemplate.authenticate.SimpleAuthenticationProviderImpl;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import static junit.framework.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 public class AuthenticationFragmentTest extends FragmentTestBase{
-    AuthenticationFragment authenticateFragment;
+    SimpleAuthenticationFragment simpleAuthenticationFragment;
 
     static final String TEST_USERNAME_ERROR = "testuser_error";
     static final String TEST_USERNAME_SUCCESS = "testuser_success";
@@ -30,22 +30,23 @@ public class AuthenticationFragmentTest extends FragmentTestBase{
 
     private boolean authenticated = false;
 
-    AuthenticateProvider authProvider = new AuthenticateProvider() {
+    SimpleAuthenticationProviderImpl authProvider = new SimpleAuthenticationProviderImpl() {
+
         @Override
         public AuthenticateResult authenticateWithUsernameAndPassword(String username, String password) {
             if (TEST_USERNAME_ERROR.equalsIgnoreCase(username)) {
-                return null;
+                return new AuthenticateResult(true);
             } else {
-                return new AuthenticateResult();
+                return new AuthenticateResult(false);
             }
         }
     };
 
     @Before
     public void setUp() throws Exception {
-        authenticateFragment = new AuthenticationFragment();
-        authenticateFragment.setAuthProvider(authProvider);
-        loadFragment(authenticateFragment);
+        simpleAuthenticationFragment = new SimpleAuthenticationFragment();
+        simpleAuthenticationFragment.setAuthProvider(authProvider);
+        loadFragment(simpleAuthenticationFragment);
     }
 
     @Test
@@ -65,7 +66,7 @@ public class AuthenticationFragmentTest extends FragmentTestBase{
 
     @Test
     public void authSuccess() throws Exception {
-        authenticateFragment.setAuthSuccessCallback(new AuthenticationFragment.AuthenticateSuccessCallback() {
+        simpleAuthenticationFragment.setAuthSuccessCallback(new SimpleAuthenticationFragment.AuthenticateSuccessCallback() {
             @Override
             public void authenticated(AuthenticateResult result) {
                 if (result != null) {
