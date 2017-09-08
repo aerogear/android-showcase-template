@@ -40,8 +40,8 @@ public class MainActivityInstrumentedTest {
         navigateTo(R.string.fragment_title_authenticate, R.id.login_form);
     }
 
-    private void navigateTo(final int titleId, final int framgmentId) throws Exception {
+    private void navigateTo(final int titleId, final int fragmentId) throws Exception {
         onView(withText(titleId)).perform(click());
-        onView(withId(framgmentId)).check(matches(isDisplayed()));
+        onView(withId(fragmentId)).check(matches(isDisplayed()));
     }
 }

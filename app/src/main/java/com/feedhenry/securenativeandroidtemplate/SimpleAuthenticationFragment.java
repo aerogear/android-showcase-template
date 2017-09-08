@@ -52,7 +52,7 @@ public class SimpleAuthenticationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment - Set the view as the authenticate fragment
-        view = inflater.inflate(R.layout.fragment_authentication, container, false);
+        view = inflater.inflate(R.layout.fragment_simple_authentication, container, false);
 
         // Reference the username and password fields from the UI
         mUsernameView = (AutoCompleteTextView) view.findViewById(R.id.username);

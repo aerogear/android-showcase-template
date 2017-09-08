@@ -8,16 +8,12 @@ public class SimpleAuthenticationProviderImpl implements SimpleAuthenticationPro
 
     @Override
     public AuthenticateResult authenticateWithUsernameAndPassword(String username, String password) {
-        AuthenticateResult loginState = new AuthenticateResult(false);
-
         try {
             // Simulate network access.
             Thread.sleep(2000);
-            // simulate login success
-            loginState.setResult(true);
         } catch (InterruptedException e) {
             return null;
         }
-        return loginState;
+        return new AuthenticateResult();
     }
 }

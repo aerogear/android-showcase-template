@@ -31,13 +31,12 @@ public class AuthenticationFragmentTest extends FragmentTestBase{
     private boolean authenticated = false;
 
     SimpleAuthenticationProviderImpl authProvider = new SimpleAuthenticationProviderImpl() {
-
         @Override
         public AuthenticateResult authenticateWithUsernameAndPassword(String username, String password) {
             if (TEST_USERNAME_ERROR.equalsIgnoreCase(username)) {
-                return new AuthenticateResult(true);
+                return null;
             } else {
-                return new AuthenticateResult(false);
+                return new AuthenticateResult();
             }
         }
     };

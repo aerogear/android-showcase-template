@@ -15,7 +15,7 @@ public class AuthenticateProviderImplTest {
 
     @Test
     public void testAuthenticateWithUsernameAndPassword() {
-        //TODO: implment me!
+        //TODO: implement me!
         assertTrue(true);
     }
 }
