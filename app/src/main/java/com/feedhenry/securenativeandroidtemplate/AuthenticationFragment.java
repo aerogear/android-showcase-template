@@ -40,9 +40,6 @@ public class AuthenticationFragment extends Fragment {
             }
         });
 
-        // set the information dialog text
-        ((MainActivity)getActivity()).setInformationText(getString(R.string.popup_authentication_fragment));
-
         return view;
     }
 

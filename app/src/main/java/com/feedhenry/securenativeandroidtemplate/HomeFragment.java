@@ -22,9 +22,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // set the information dialog text
-        ((MainActivity)getActivity()).setInformationText(getString(R.string.popup_home_fragment));
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }

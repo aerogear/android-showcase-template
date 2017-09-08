@@ -324,10 +324,12 @@ public class MainActivity extends AppCompatActivity
 
         // Visit the Authentication Screen
         if (id == R.id.nav_home) {
+            setInformationText(getString(R.string.popup_home_fragment));
             loadFragment(new HomeFragment());
         }
         // Visit the Authentication Screen
         if (id == R.id.nav_authentication) {
+            setInformationText(getString(R.string.popup_authentication_fragment));
             loadFragment(new AuthenticationFragment());
         }
 
