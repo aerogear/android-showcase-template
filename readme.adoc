@@ -1,21 +1,13 @@
-<<<<<<< 3d6357868b163f1c0839af44996ea67f21703349
 image:https://circleci.com/gh/feedhenry/mobile-security-android-template.svg?style=svg["CircleCI", link="https://circleci.com/gh/feedhenry/mobile-security-android-template"]
 
-=======
->>>>>>> add openid connect auth
 = Secure Native Android Template
 
 A Native Android Application that demonstrates Secure Mobile Development Practises.
 
-<<<<<<< 3d6357868b163f1c0839af44996ea67f21703349
 For more information, please check [Mobile Secure Project](https://github.com/feedhenry/mobile-security).
 
 == Requirements
-* Minimum SDK Version: 15
-=======
-== Requirements
-* Minimum SDK Version: 16
->>>>>>> add openid connect auth
+* Minimum SDK Version: 21
 * Target SDK Version: 25
 
 == Structure
@@ -34,7 +26,6 @@ For more information, please check [Mobile Secure Project](https://github.com/fe
 *** *AuthenticationFragment*  _(Authentication view and logic)_
 **** Relates to: `res/layout/fragment_authentication.xml`
 *** *AuthenticationDetailsFragment*  _(Authentication user details view and logic)_
-<<<<<<< 3d6357868b163f1c0839af44996ea67f21703349
 **** Relates to: `res/layout/fragment_authentication_details.xml`
 
 == Push to Kryptowire
@@ -46,6 +37,3 @@ git checkout master
 git tag release-1.0.0 #change the release version based on the current release
 git push origin --tags
 ```
-=======
-**** Relates to: `res/layout/fragment_authentication_details.xml`
->>>>>>> add openid connect auth
