@@ -1,4 +1,6 @@
 image:https://circleci.com/gh/feedhenry/mobile-security-android-template.svg?style=svg["CircleCI", link="https://circleci.com/gh/feedhenry/mobile-security-android-template"]
+image:https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp/badge.svg?style=svg["Known Vulnerabilities", link="https://snyk.io/test/github/feedhenry/mobile-security-android-template/master/app"]
+
 
 = Secure Native Android Template
 
