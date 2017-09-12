@@ -9,7 +9,7 @@ A Native Android Application that demonstrates Secure Mobile Development Practis
 For more information, please check [Mobile Secure Project](https://github.com/feedhenry/mobile-security).
 
 == Requirements
-* Minimum SDK Version: 15
+* Minimum SDK Version: 21
 * Target SDK Version: 25
 
 == Structure

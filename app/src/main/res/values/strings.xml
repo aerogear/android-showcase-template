@@ -5,6 +5,11 @@
     <string name="app_name">Secure Android Template</string>
     <string name="app_description">A Native Android Application that demonstrates Secure Mobile Development Practises.</string>
 
+    <!-- Strings related to the information popups -->
+    <string name="popup_title">Information</string>
+    <string name="popup_home_fragment">Welcome. Clicking this button on each view inside the App will give you more information about the different security measures implemented.</string>
+    <string name="popup_authentication_fragment">The Authentication and Access control is provided by the Keycloak Identity Manager.</string>
+
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,6 +19,11 @@
 
     <!-- Strings related to Authentication -->
     <string name="fragment_title_authenticate">Authenticate</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Strings related to Authentication -->
+    <string name="app_redirect_scheme">com.feedhenry.securenativeandroidtemplate</string>
+    <string name="title_activity_authenticate">Authenticate</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -22,6 +32,14 @@
     <string name="auth_description">OpenID Connect Authentication via Keycloak.</string>
     <string name="error_field_required">This field is required</string>
     <string name="auth_user_details_view">User Profile Details View</string>
+    <string name="keycloak_login">Keycloak Login</string>
+    <string name="keycloak_logout">Keycloak Logout</string>
+    <string name="token_retrieved_success">Tokens Retrieved Successfully</string>
+    <string name="token_exchange_fail">Tokens Retrieved Successfully</string>
+    <string name="token_save_success">Token Saved Securely</string>
+    <string name="authentication_failed">Authentication Failed</string>
+    <string name="logged_out">Logged out Successfully</string>
+    <string name="logged_out_failed">Logout Failed</string>
 
     <!-- Strings related to Storage -->
     <string name="fragment_title_storage">Storage</string>
@@ -38,4 +56,6 @@
     <!-- Strings related to Configuration -->
     <string name="fragment_title_configuration">Configuration</string>
 
+    <!-- Strings related to Configuration -->
+    <string name="home_title">Home</string>
 </resources>
