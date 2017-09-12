@@ -33,7 +33,6 @@ public class MainActivityInstrumentedTest {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed()));
     }
 
-
     @Test
     public void appNavigation() throws Exception {
         onView(withId(R.id.drawer_layout)).perform(open());
