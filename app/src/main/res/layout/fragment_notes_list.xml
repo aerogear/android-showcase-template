@@ -9,7 +9,7 @@
         android:id="@+id/add_note_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
+        android:layout_gravity="bottom|right|end"
         android:layout_margin="@dimen/note_add_btn_margin"
         android:clickable="true"
         android:tint="@android:color/background_light"

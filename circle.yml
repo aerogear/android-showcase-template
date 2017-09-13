@@ -26,16 +26,16 @@ dependencies:
 test:
   override:
     # Launch the emulator
-    - emulator -avd $ANDROID_EMULATOR -no-window:
-        background: true
-        parallel: true
+    #- emulator -avd $ANDROID_EMULATOR -no-window:
+    #    background: true
+    #    parallel: true
     # Wait to emulator get ready
-    - circle-android wait-for-boot
-    - ./gradlew build test connectedAndroidTest
+    #- circle-android wait-for-boot
+    - ./gradlew build test
     # copy the build outputs to artifacts
     - cp -r app/build/outputs/apk/* $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
-    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    #- cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
 
 deployment:
   release:

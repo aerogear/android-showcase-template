@@ -59,4 +59,6 @@
 
     <!-- Strings related to Configuration -->
     <string name="home_title">Home</string>
+
+    <string name="help_title">Help</string>
 </resources>

@@ -27,20 +27,6 @@
             tools:layout_constraintRight_creator="1"
             tools:layout_constraintTop_creator="1">
 
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/helpButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
-                    android:layout_margin="10dp"
-                    android:clickable="true"
-                    android:tint="#fff"
-                    app:backgroundTint="#d82b32"
-                    app:elevation="10dp"
-                    app:fabSize="normal"
-                    app:rippleColor="#fff"
-                    app:srcCompat="@android:drawable/ic_menu_help" />
-
         </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
