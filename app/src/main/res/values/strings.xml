@@ -9,6 +9,7 @@
     <string name="popup_title">Information</string>
     <string name="popup_home_fragment">Welcome. Clicking this button on each view inside the App will give you more information about the different security measures implemented.</string>
     <string name="popup_authentication_fragment">The Authentication and Access control is provided by the Keycloak Identity Manager.</string>
+    <string name="popup_storage_fragment">The notes are encrypted automatically when saved locally.</string>
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -31,7 +32,7 @@
     <string name="error_incorrect_credentials">Incorrect Credentials</string>
     <string name="auth_description">OpenID Connect Authentication via Keycloak.</string>
     <string name="error_field_required">This field is required</string>
-    <string name="auth_user_details_view">User Profile Details View</string>
+    <string name="no_auth_token">No Authentication Token</string>
     <string name="keycloak_login">Keycloak Login</string>
     <string name="keycloak_logout">Keycloak Logout</string>
     <string name="token_retrieved_success">Tokens Retrieved Successfully</string>

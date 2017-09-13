@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.feedhenry.securenativeandroidtemplate.AuthenticationDetailsFragment">
+    tools:context="com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/authResView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/auth_user_details_view"
+        android:text="@string/no_auth_token"
         android:textAlignment="center" />
 </FrameLayout>

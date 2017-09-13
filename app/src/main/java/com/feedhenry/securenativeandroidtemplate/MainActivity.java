@@ -1,30 +1,55 @@
 package com.feedhenry.securenativeandroidtemplate;
 
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
+
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.view.View;
 
-import com.feedhenry.securenativeandroidtemplate.authenticate.KeycloakAuthenticateProviderImpl;
-import com.feedhenry.securenativeandroidtemplate.authenticate.OpenIDAuthenticationProvider;
+import com.feedhenry.securenativeandroidtemplate.domain.Constants;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
+import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
+import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
+import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
+import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OpenIDAuthenticationProvider {
+import net.openid.appauth.TokenResponse;
 
-    private String infoText;
-    private KeycloakAuthenticateProviderImpl keycloak = new KeycloakAuthenticateProviderImpl(this);
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasFragmentInjector;
+
+public class MainActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener,  HasFragmentInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
+
+    @Inject
+    OpenIDAuthenticationProvider authProvider;
+
+    @Inject
+    Navigator navigator;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -32,54 +57,20 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        // Default to the app description for the help popup
-        setInformationText(getString(R.string.app_description));
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.helpButton);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(getString(R.string.popup_title));
-                builder.setCancelable(true);
-                builder.setMessage(infoText);
-                builder.show();
-            }
-        });
-
-        // Load the home fragment by default
-        loadFragment(new HomeFragment());
-    }
-
-
-    /**
-     * Perform an auth request
-     */
-    @Override
-    public void performAuthRequest() {
-        keycloak.performAuthRequest();
-    }
-
-    /**
-     * Perform a logout request
-     */
-    @Override
-    public void logout() {
-        keycloak.logout();
+        // load the main menu fragment
+        navigator.navigateToHomeView(this);
     }
 
     /**
@@ -90,33 +81,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (navigator.canGoBack(this)){
+            navigator.goBack(this);
         } else {
             super.onBackPressed();
         }
-    }
-
-    /**
-     * Listen for new intents
-     * @param intent - the incoming intent
-     */
-    protected void onNewIntent(Intent intent) {
-        keycloak.checkIntent(intent);
-    }
-
-    /**
-     * On start listener to check if there are any incoming intents
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        keycloak.checkIntent(getIntent());
-    }
-
-    /**
-     * Set the current text for the information dialog
-     */
-    public void setInformationText(String text) {
-        infoText = text;
     }
 
     /**
@@ -131,13 +100,15 @@ public class MainActivity extends AppCompatActivity
 
         // Visit the Authentication Screen
         if (id == R.id.nav_home) {
-            setInformationText(getString(R.string.popup_home_fragment));
-            loadFragment(new HomeFragment());
+            navigator.navigateToHomeView(this);
         }
         // Visit the Authentication Screen
         if (id == R.id.nav_authentication) {
-            setInformationText(getString(R.string.popup_authentication_fragment));
-            loadFragment(new AuthenticationFragment());
+            navigator.navigateToAuthenticationView(this);
+        }
+
+        if (id == R.id.nav_storage) {
+            navigator.navigateToStorageView(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -145,28 +116,43 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /**
-     * Show a snackbar message
-     * @param message
-     */
-    private void showSnackbar(String message) {
-        Snackbar.make(getCurrentFocus(), message, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+    @Override
+    public AndroidInjector<Fragment> fragmentInjector() {
+        return fragmentInjector;
     }
 
-    /**
-     * Fragment loader to load a new fragment
-     * @param fragment - the fragment to load
-     */
-    public void loadFragment(Fragment fragment) {
-        // create a FragmentManager
-        FragmentManager fm = getFragmentManager();
-        // create a FragmentTransaction to begin the transaction and replace the Fragment
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        // replace the FrameLayout with new Fragment
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.commit(); // save the changes
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODES.AUTH_CODE) {
+            authProvider.onAuthResult(data);
+        }
     }
 
+    @Override
+    public void onAuthSuccess(TokenResponse token) {
+        navigator.navigateToAuthenticateDetailsView(this, token);
+    }
+
+    @Override
+    public void onAuthError(Exception error) {
+
+    }
+
+    @Override
+    public void onLogoutSuccess() {
+
+    }
+
+    @Override
+    public void onLogoutError() {
+
+    }
+
+    @Override
+    public void onNoteClicked(Note note) {
+        Log.i("SecureAndroidApp", "Note selected: " + note.getContent());
+        navigator.navigateToSingleNoteView(this, note);
+    }
 }
 
 

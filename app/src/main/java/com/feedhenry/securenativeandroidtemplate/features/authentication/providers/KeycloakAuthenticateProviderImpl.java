@@ -1,21 +1,15 @@
-package com.feedhenry.securenativeandroidtemplate.authenticate;
+package com.feedhenry.securenativeandroidtemplate.features.authentication.providers;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
-import com.feedhenry.securenativeandroidtemplate.AuthenticationDetailsFragment;
-import com.feedhenry.securenativeandroidtemplate.AuthenticationFragment;
-import com.feedhenry.securenativeandroidtemplate.MainActivity;
 import com.feedhenry.securenativeandroidtemplate.R;
+import com.feedhenry.securenativeandroidtemplate.domain.Constants;
+import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
 
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
@@ -36,12 +30,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by tjackman on 9/8/17.
  */
 
+@Singleton
 public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationProvider {
 
     private static final String BASE_SERVER_URI = "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com/auth/realms/secure-app/protocol/openid-connect";
@@ -52,21 +50,28 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private static final String KEYCLOAK_INTENT = "KEYCLOAK_INTENT";
     private static final String AUTH_CALLBACK_HANDLER = "com.feedhenry.securenativeandroidtemplate.HANDLE_AUTHORIZATION_RESPONSE";
     private static final String OPEN_ID_SCOPE = "openid";
+
     private AuthState authState;
     private AuthorizationService authService;
     private AuthorizationRequest authRequest;
     private AuthorizationServiceConfiguration serviceConfig;
-    private Activity mainActivity;
 
-    public KeycloakAuthenticateProviderImpl(Context context){
-        mainActivity = (Activity) context;
+    private Callback authCallback;
+
+    @Inject
+    Context context;
+
+    @Inject
+    public KeycloakAuthenticateProviderImpl(){
+
     }
 
     /**
      * Create the config for the initial Keycloak auth request to get a temporary token and create an intent to handle the response
      */
     @Override
-    public void performAuthRequest() {
+    public void performAuthRequest(Activity fromActivity, Callback authCallback) {
+        this.authCallback = authCallback;
         // Setup the config for the AuthorizationService
         serviceConfig =
                 new AuthorizationServiceConfiguration(
@@ -83,7 +88,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
                 .build();
 
         // create a new auth service with the auth config
-        authService = new AuthorizationService(mainActivity, appAuthConfig);
+        authService = new AuthorizationService(context, appAuthConfig);
 
         AuthorizationRequest.Builder authRequestBuilder =
                 new AuthorizationRequest.Builder(
@@ -94,36 +99,19 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
                         .setScopes(OPEN_ID_SCOPE);
 
         authRequest = authRequestBuilder.build();
-
-        // prepare the intent to handle the auth response from keycloak
-        String action = AUTH_CALLBACK_HANDLER;
-        Intent postAuthorizationIntent = new Intent(mainActivity, MainActivity.class);
-        postAuthorizationIntent.setAction(action);
-        PendingIntent pendingIntent = PendingIntent.getActivity(mainActivity.getApplicationContext(),
-                authRequest.hashCode(),
-                postAuthorizationIntent, 0);
-
         // perform the auth request
-        authService.performAuthorizationRequest(authRequest, pendingIntent);
+        Intent authIntent = authService.getAuthorizationRequestIntent(authRequest);
+        fromActivity.startActivityForResult(authIntent, Constants.REQUEST_CODES.AUTH_CODE);
+
     }
 
     /**
      * Checks if the incoming intent matches the Keycloak Auth response intent
      * @param intent - the intent to check
      */
-    public void checkIntent(@Nullable Intent intent) {
+    public void onAuthResult(@Nullable Intent intent) {
         if (intent != null) {
-            String action = intent.getAction();
-            switch (action) {
-                case AUTH_CALLBACK_HANDLER:
-                    if (!intent.hasExtra(KEYCLOAK_INTENT)) {
-                        handleAuthorizationResponse(intent);
-                        intent.putExtra(KEYCLOAK_INTENT, true);
-                    }
-                    break;
-                default:
-                    // do nothing
-            }
+            handleAuthorizationResponse(intent);
         }
     }
 
@@ -138,8 +126,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         if (response != null) {
             exchangeTokens(response);
         } else {
-            showSnackbar(mainActivity. getString(R.string.authentication_failed));
-            Log.w("", mainActivity.getString(R.string.authentication_failed), error);
+            authFailed(error);
         }
     }
 
@@ -148,19 +135,16 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      * @param response - the auth response from the intent/server
      */
     public void exchangeTokens(AuthorizationResponse response) {
-        AuthorizationService service = new AuthorizationService(mainActivity.getApplicationContext());
-        service.performTokenRequest(response.createTokenExchangeRequest(), new AuthorizationService.TokenResponseCallback() {
+        authService.performTokenRequest(response.createTokenExchangeRequest(), new AuthorizationService.TokenResponseCallback() {
             @Override
             public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
                 if (tokenResponse != null) {
-                    showSnackbar(mainActivity.getString(R.string.token_retrieved_success));
                     saveAccessToken(tokenResponse.accessToken);
                     saveIdentityToken(tokenResponse.idToken);
-                    enablePostAuthorizationFlows(true);
+                    authSuccess(tokenResponse);
                 }
                 else {
-                    showSnackbar(mainActivity.getString(R.string.token_exchange_fail));
-                    enablePostAuthorizationFlows(false);
+                    authFailed(exception);
                 }
             }
         });
@@ -171,7 +155,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      * @param accessToken - the OpenID Connect access token
      */
     private void saveAccessToken(String accessToken) {
-        showSnackbar(mainActivity.getString(R.string.token_save_success));
         saveToFile(accessToken, "accessToken.txt");
     }
 
@@ -191,7 +174,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private void saveToFile(String data, String filename) {
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter
-                    (mainActivity.openFileOutput(filename, MODE_PRIVATE));
+                    (context.openFileOutput(filename, MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
         }
@@ -205,7 +188,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      * @param fileName - the filename to retieve the data from
      */
     public String readFileAsString(String fileName) {
-        Context context = mainActivity.getApplicationContext();
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         BufferedReader in;
@@ -226,7 +208,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     /**
      * Perform a logout of the user
      */
-    public void logout() {
+    public void logout(Callback logoutCallback) {
         // TODO Perform logout call to keycloak to end session - http://www.keycloak.org/docs/3.0/securing_apps/topics/oidc/oidc-generic.html
         // TODO The user agent can be redirected to the endpoint, in which case the active user session is logged out. Afterward the user agent is redirected back to the application.
         // TODO See Logout Endpoint (the refresh token needs to be included as well as the credentials required to authenticate the client.)
@@ -237,48 +219,22 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         boolean logoutSuccess = false;
 
         if (logoutSuccess) {
-            // logout success
-            showSnackbar(mainActivity.getString(R.string.logged_out));
+            logoutCallback.onSuccess(null);
         } else {
-            // logout failed
-            showSnackbar(mainActivity.getString(R.string.logged_out_failed));
+            logoutCallback.onError(null);
         }
     }
 
-    /**
-     * Handling for post auth flows
-     * @param success - the outcome of the auth action
-     */
-    private void enablePostAuthorizationFlows(boolean success) {
-        if (success) {
-            // load the auth detail view
-            loadFragment(new AuthenticationDetailsFragment());
-        } else {
-            // load the auth view again and display a message to show the login has failed
-            loadFragment(new AuthenticationFragment());
+    private void authSuccess(TokenResponse token) {
+        if (this.authCallback != null) {
+            authCallback.onSuccess(token);
         }
     }
 
-    /**
-     * Show a snackbar message
-     * @param message
-     */
-    private void showSnackbar(String message) {
-        Snackbar.make(mainActivity.getCurrentFocus(), message, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-    }
-
-    /**
-     * Fragment loader to load a new fragment
-     * @param fragment - the fragment to load
-     */
-    public void loadFragment(Fragment fragment) {
-        // create a FragmentManager
-        FragmentManager fm = mainActivity.getFragmentManager();
-        // create a FragmentTransaction to begin the transaction and replace the Fragment
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        // replace the FrameLayout with new Fragment
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        // save the changes
-        fragmentTransaction.commit();
+    private void authFailed(Exception error) {
+        Log.w("", context.getString(R.string.authentication_failed), error);
+        if (this.authCallback != null) {
+            authCallback.onError(error);
+        }
     }
 }
