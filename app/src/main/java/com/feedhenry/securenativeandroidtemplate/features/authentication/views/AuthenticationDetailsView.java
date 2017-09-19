@@ -7,4 +7,7 @@ import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
  */
 
 public interface AuthenticationDetailsView extends AppView {
+    public void logoutSuccess();
+
+    public void logoutFailure();
 }

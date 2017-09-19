@@ -2,6 +2,7 @@ package com.feedhenry.securenativeandroidtemplate.features.authentication.views;
 
 import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
 
+import net.openid.appauth.AuthState;
 import net.openid.appauth.TokenResponse;
 
 /**
@@ -10,11 +11,7 @@ import net.openid.appauth.TokenResponse;
 
 public interface AuthenticationView extends AppView {
 
-    public void renderTokenInfo(TokenResponse token);
+    public void renderIdentityInfo(AuthState state);
 
     public void showAuthError(Exception error);
-
-    public void logoutSuccess();
-
-    public void logoutFailure();
 }

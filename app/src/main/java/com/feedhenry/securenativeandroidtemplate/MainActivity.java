@@ -20,7 +20,7 @@ import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFra
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
-import net.openid.appauth.TokenResponse;
+import net.openid.appauth.AuthState;
 
 import javax.inject.Inject;
 
@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_authentication) {
             navigator.navigateToAuthenticationView(this);
         }
-
+        // Visit the Storage Screen
         if (id == R.id.nav_storage) {
             navigator.navigateToStorageView(this);
         }
@@ -130,22 +130,12 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onAuthSuccess(TokenResponse token) {
-        navigator.navigateToAuthenticateDetailsView(this, token);
+    public void onAuthSuccess(AuthState state) {
+        navigator.navigateToAuthenticateDetailsView(this, state);
     }
 
     @Override
     public void onAuthError(Exception error) {
-
-    }
-
-    @Override
-    public void onLogoutSuccess() {
-
-    }
-
-    @Override
-    public void onLogoutError() {
 
     }
 

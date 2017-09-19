@@ -1,14 +1,12 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.presenters;
 
 import com.feedhenry.securenativeandroidtemplate.MainActivity;
-import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
-import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
 
-import net.openid.appauth.TokenResponse;
+import net.openid.appauth.AuthState;
 
 import javax.inject.Inject;
 
@@ -32,8 +30,8 @@ public class AuthenticationViewPresenter extends BasePresenter<AuthenticationVie
         authProvider.performAuthRequest(mainActivity, new Callback() {
             @Override
             public void onSuccess(Object response) {
-                TokenResponse token = (TokenResponse) response;
-                view.renderTokenInfo(token);
+                AuthState state = (AuthState) response;
+                view.renderIdentityInfo(state);
             }
 
             @Override
@@ -43,17 +41,4 @@ public class AuthenticationViewPresenter extends BasePresenter<AuthenticationVie
         });
     }
 
-    public void doLogout() {
-        authProvider.logout(new Callback() {
-            @Override
-            public void onSuccess(Object models) {
-                view.logoutSuccess();
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                view.logoutFailure();
-            }
-        });
-    }
 }

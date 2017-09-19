@@ -12,4 +12,12 @@ public class AuthenticationDetailsViewImpl extends BaseAppView implements Authen
     public AuthenticationDetailsViewImpl(Fragment fragment) {
         super(fragment);
     }
+    public void logoutSuccess() {
+
+    }
+
+    public void logoutFailure() {
+
+    }
+
 }

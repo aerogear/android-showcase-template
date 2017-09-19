@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
 
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
@@ -23,17 +25,13 @@ import net.openid.appauth.TokenResponse;
 import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import static android.content.Context.MODE_PRIVATE;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by tjackman on 9/8/17.
@@ -42,28 +40,27 @@ import static android.content.Context.MODE_PRIVATE;
 @Singleton
 public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationProvider {
 
-    private static final String BASE_SERVER_URI = "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com/auth/realms/secure-app/protocol/openid-connect";
-    private static final Uri AUTHORIZATION_ENDPOINT = Uri.parse(BASE_SERVER_URI + "/auth");
-    private static final Uri TOKEN_ENDPOINT = Uri.parse(BASE_SERVER_URI + "/token");
-    private static final String CLIENT_ID = "client-app";
-    private static final Uri REDIRECT_URI = Uri.parse("com.feedhenry.securenativeandroidtemplate:/callback");
-    private static final String KEYCLOAK_INTENT = "KEYCLOAK_INTENT";
-    private static final String AUTH_CALLBACK_HANDLER = "com.feedhenry.securenativeandroidtemplate.HANDLE_AUTHORIZATION_RESPONSE";
-    private static final String OPEN_ID_SCOPE = "openid";
+    private static final Uri AUTHORIZATION_ENDPOINT = Constants.KEYCLOAK_CONFIG.AUTHORIZATION_ENDPOINT;
+    private static final Uri TOKEN_ENDPOINT = Constants.KEYCLOAK_CONFIG.TOKEN_ENDPOINT;
+    private static final String CLIENT_ID = Constants.KEYCLOAK_CONFIG.CLIENT_ID;
+    private static final Uri REDIRECT_URI = Constants.KEYCLOAK_CONFIG.REDIRECT_URI;
+    private static final String OPEN_ID_SCOPE = Constants.KEYCLOAK_CONFIG.OPEN_ID_SCOPE;
 
     private AuthState authState;
     private AuthorizationService authService;
     private AuthorizationRequest authRequest;
     private AuthorizationServiceConfiguration serviceConfig;
-
+    private static boolean logoutSuccess = false;
     private Callback authCallback;
+    private AuthHelper authHelper;
 
     @Inject
     Context context;
 
     @Inject
-    public KeycloakAuthenticateProviderImpl(){
-
+    public KeycloakAuthenticateProviderImpl(@NonNull Context context) {
+        this.context = context;
+        this.authHelper = new AuthHelper(context);
     }
 
     /**
@@ -107,6 +104,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
 
     /**
      * Checks if the incoming intent matches the Keycloak Auth response intent
+     *
      * @param intent - the intent to check
      */
     public void onAuthResult(@Nullable Intent intent) {
@@ -117,11 +115,15 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
 
     /**
      * Handles the initial auth response and create a new request to the token endpoint to get the actual tokens
+     *
      * @param intent - the auth response intent
      */
     public void handleAuthorizationResponse(Intent intent) {
         AuthorizationResponse response = AuthorizationResponse.fromIntent(intent);
         AuthorizationException error = AuthorizationException.fromIntent(intent);
+
+        // update the auth state
+        authState.update(response, error);
 
         if (response != null) {
             exchangeTokens(response);
@@ -132,6 +134,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
 
     /**
      * Token exchange against the token endpoint
+     *
      * @param response - the auth response from the intent/server
      */
     public void exchangeTokens(AuthorizationResponse response) {
@@ -139,11 +142,10 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             @Override
             public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
                 if (tokenResponse != null) {
-                    saveAccessToken(tokenResponse.accessToken);
-                    saveIdentityToken(tokenResponse.idToken);
-                    authSuccess(tokenResponse);
-                }
-                else {
+                    authState.update(tokenResponse, exception);
+                    authHelper.writeAuthState(authState);
+                    authSuccess(authState);
+                } else {
                     authFailed(exception);
                 }
             }
@@ -151,72 +153,28 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     }
 
     /**
-     * Save the access token
-     * @param accessToken - the OpenID Connect access token
-     */
-    private void saveAccessToken(String accessToken) {
-        saveToFile(accessToken, "accessToken.txt");
-    }
-
-    /**
-     * Save the identity token
-     * @param identityToken - the OpenID Connect identity token
-     */
-    private void saveIdentityToken(String identityToken) {
-        saveToFile(identityToken, "identityToken.txt");
-    }
-
-    /**
-     * Save data to a file
-     * @param data - the data to save to the file
-     * @param filename - the filename to save the data in
-     */
-    private void saveToFile(String data, String filename) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter
-                    (context.openFileOutput(filename, MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
-
-    /**
-     * Read data from files and return them in String format
-     * @param fileName - the filename to retieve the data from
-     */
-    public String readFileAsString(String fileName) {
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        BufferedReader in;
-
-        try {
-            in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
-            while ((line = in.readLine()) != null) stringBuilder.append(line);
-
-        } catch (FileNotFoundException e) {
-            Log.e("Exception", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("Exception", "File read failed: " + e.toString());
-        }
-
-        return stringBuilder.toString();
-    }
-
-    /**
-     * Perform a logout of the user
+     * Perform a logout
      */
     public void logout(Callback logoutCallback) {
-        // TODO Perform logout call to keycloak to end session - http://www.keycloak.org/docs/3.0/securing_apps/topics/oidc/oidc-generic.html
-        // TODO The user agent can be redirected to the endpoint, in which case the active user session is logged out. Afterward the user agent is redirected back to the application.
-        // TODO See Logout Endpoint (the refresh token needs to be included as well as the credentials required to authenticate the client.)
+        String baseLogoutEndpoint = Constants.KEYCLOAK_CONFIG.LOGOUT_ENDPOINT;
+        String identityToken = authHelper.getIdentityToken();
+        String redirectUri = Constants.KEYCLOAK_CONFIG.REDIRECT_URI.toString();
 
-        // TODO: Delete tokens in the storage mechanism we will use
+        // Construct the Keycloak logout URL
+        String logoutRequestUri = baseLogoutEndpoint + "?id_token_hint=" + identityToken + "&redirect_uri=" +redirectUri;
 
-        // TODO: Replace, attempt to perform logout
-        boolean logoutSuccess = false;
+        authHelper.makeBearerRequest(logoutRequestUri, new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                logoutSuccess = false;
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                logoutSuccess = true;
+                authHelper.writeAuthState(null);
+            }
+        });
 
         if (logoutSuccess) {
             logoutCallback.onSuccess(null);
@@ -225,9 +183,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         }
     }
 
-    private void authSuccess(TokenResponse token) {
+    private void authSuccess(AuthState authState) {
         if (this.authCallback != null) {
-            authCallback.onSuccess(token);
+            authCallback.onSuccess(authState);
         }
     }
 

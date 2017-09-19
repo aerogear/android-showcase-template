@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 
 /**
@@ -32,8 +33,8 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     @Inject
     AuthenticationDetailsPresenter authDetailsPresenter;
 
-    @BindView(R.id.authResView)
-    TextView authResField;
+    @BindView(R.id.user_profile_name)
+    TextView user_profile_name;
 
     View view;
 
@@ -59,7 +60,7 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         ButterKnife.bind(this, view);
         Bundle args = getArguments();
         if (args != null) {
-            showAuthToken(args);
+            renderIdentityInfo(args);
         }
         return view;
     }
@@ -92,10 +93,19 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         return R.string.popup_authentication_fragment;
     }
 
-    private void showAuthToken(Bundle args) {
-        String token = args.getString(Constants.TOKEN_FIELDS.AUTH_TOKEN);
-        if (token != null ) {
-            authResField.setText(token);
+    private void renderIdentityInfo(Bundle args) {
+        String identityFields = args.getString(Constants.TOKEN_FIELDS.AUTH_STATE);
+        if (identityFields != null ) {
+            user_profile_name.setText(identityFields);
         }
     }
+
+    @OnClick(R.id.keycloakLogout)
+    public void logout() {
+        if (authDetailsPresenter != null) {
+            authDetailsPresenter.logout();
+        }
+    }
+
+
 }

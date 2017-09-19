@@ -8,9 +8,9 @@
     <!-- Strings related to the information popups -->
     <string name="popup_title">Information</string>
     <string name="popup_home_fragment">Welcome. Clicking this button on each view inside the App will give you more information about the different security measures implemented.</string>
-    <string name="popup_authentication_fragment">The Authentication and Access control is provided by the Keycloak Identity Manager.</string>
-    <string name="popup_storage_fragment">The notes are encrypted automatically when saved locally. Each note is saved in its own file, and encrypted with its own secret key. The secret keys are persisted in the Android Keystore.
-        \nTo encrypt the files, AES is used. The key size is 128 bit, with GCM mode to ensure the integrity of the data.</string>
+    <string name="popup_authentication_fragment">The Authentication and Access Control is provided by the OpenID Connect standard. The Open Source Identity and Access Management Server, Keycloak, is being used as the Identity Provider. This App uses the Authorization Code flow and saves the tokens to Shared Preferences.</string>
+    <string name="popup_storage_fragment">The notes are encrypted automatically when saved locally. Each note is saved in its own file, and encrypted with its own secret key. The secret keys are persisted in the Android Keystore.</string>
+
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -34,8 +34,8 @@
     <string name="auth_description">OpenID Connect Authentication via Keycloak.</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_auth_token">No Authentication Token</string>
-    <string name="keycloak_login">Keycloak Login</string>
-    <string name="keycloak_logout">Keycloak Logout</string>
+    <string name="keycloak_login">Authenticate</string>
+    <string name="keycloak_logout">Logout</string>
     <string name="token_retrieved_success">Tokens Retrieved Successfully</string>
     <string name="token_exchange_fail">Tokens Retrieved Successfully</string>
     <string name="token_save_success">Token Saved Securely</string>
@@ -72,4 +72,5 @@
     <string name="home_title">Home</string>
 
     <string name="help_title">Help</string>
+    <string name="authentication_success">Authentication Success</string>
 </resources>
