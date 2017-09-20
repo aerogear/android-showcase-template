@@ -56,4 +56,8 @@ public class NoteListPresenter extends BasePresenter<NoteListAppView> {
         this.view.viewNote(note);
     }
 
+    public void onCreateNote() {
+        this.view.createNote();
+    }
+
 }

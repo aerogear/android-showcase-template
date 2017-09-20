@@ -9,7 +9,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.feedhenry.securenativeandroidtemplate.MockTestRunner"
         manifestPlaceholders = ['appAuthRedirectScheme': 'com.feedhenry.securenativeandroidtemplate']
         vectorDrawables {
             useSupportLibrary true
@@ -54,7 +54,9 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.mockito:mockito-core:2.10.0'
+
+    androidTestCompile 'org.mockito:mockito-android:2.10.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -65,4 +67,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude module: 'recyclerview-v7'
     }
+    androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    androidTestAnnotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
 }

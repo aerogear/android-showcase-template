@@ -27,6 +27,8 @@ import dagger.android.AndroidInjection;
  */
 public class HomeFragment extends BaseFragment<HomeViewPresenter, HomeView> {
 
+    public static final String TAG = "home";
+
     @Inject
     HomeViewPresenter homeViewPresenter;
 

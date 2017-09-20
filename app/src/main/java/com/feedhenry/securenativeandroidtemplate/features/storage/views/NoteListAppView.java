@@ -14,4 +14,6 @@ public interface NoteListAppView extends AppView {
     void renderNotes(List<Note> notesCollection);
 
     void viewNote(Note noteToView);
+
+    void createNote();
 }

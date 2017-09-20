@@ -16,17 +16,6 @@ public class InMemoryNoteStore implements NoteDataStore {
 
     private Map<String, Note> inMemoryStore = new HashMap<String, Note>();
 
-    {
-        Note n1 = new Note("sample", "sample1");
-        Note n2 = new Note("sample", "sample2");
-        Note n3 = new Note("sample", "sample3");
-        Note n4 = new Note("sample", "sample4");
-        inMemoryStore.put(n1.getId(), n1);
-        inMemoryStore.put(n2.getId(), n2);
-        inMemoryStore.put(n3.getId(), n3);
-        inMemoryStore.put(n4.getId(), n4);
-    }
-
     @Override
     public void createNote(Note note, Callback<Note> callback) {
         if (!inMemoryStore.containsKey(note.getId())) {

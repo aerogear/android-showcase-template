@@ -25,6 +25,8 @@ import dagger.android.AndroidInjection;
  */
 public class AuthenticationFragment extends BaseFragment<AuthenticationViewPresenter, AuthenticationView> {
 
+    public static final String TAG = "auth";
+
     public interface AuthenticationListener {
 
         void onAuthSuccess(TokenResponse token);

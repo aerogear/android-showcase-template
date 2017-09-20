@@ -13,4 +13,10 @@ public class Constants {
     public static final class TOKEN_FIELDS {
         public static final String AUTH_TOKEN = "authToken";
     }
+
+    public static final class NOTE_FIELDS {
+        public static final String ID_FIELD = "id";
+        public static final String TITLE_FIELD = "title";
+        public static final String CONTENT_FIELD = "content";
+    }
 }

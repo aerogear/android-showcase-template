@@ -14,6 +14,8 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.views.A
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsViewImpl;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
+import net.openid.appauth.TokenResponse;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -24,6 +26,8 @@ import dagger.android.AndroidInjection;
  * A fragment for showing the user details view after they have logged in.
  */
 public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDetailsPresenter, AuthenticationDetailsView> {
+
+    public static final String TAG = "authDetails";
 
     @Inject
     AuthenticationDetailsPresenter authDetailsPresenter;
@@ -37,6 +41,16 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         // Required empty public constructor
     }
 
+    public static AuthenticationDetailsFragment forToken(TokenResponse token) {
+        AuthenticationDetailsFragment detailsFragment = new AuthenticationDetailsFragment();
+        if (token != null) {
+            Bundle args = new Bundle();
+            args.putString(Constants.TOKEN_FIELDS.AUTH_TOKEN, token.jsonSerializeString());
+            detailsFragment.setArguments(args);
+        }
+        return detailsFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,7 +58,9 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         view = inflater.inflate(R.layout.fragment_authentication_details, container, false);
         ButterKnife.bind(this, view);
         Bundle args = getArguments();
-        showAuthToken(args);
+        if (args != null) {
+            showAuthToken(args);
+        }
         return view;
     }
 

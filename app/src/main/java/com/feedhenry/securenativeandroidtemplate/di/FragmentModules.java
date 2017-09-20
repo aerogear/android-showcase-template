@@ -1,14 +1,12 @@
 package com.feedhenry.securenativeandroidtemplate.di;
 
-import com.feedhenry.securenativeandroidtemplate.MainActivity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
-import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
+import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 
 import dagger.Module;
-import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
 
 /**
@@ -29,4 +27,7 @@ public abstract class FragmentModules {
 
     @ContributesAndroidInjector
     abstract AuthenticationDetailsFragment contributeAuthenticationDetailsFragmentInjector();
+
+    @ContributesAndroidInjector
+    abstract NotesDetailFragment contributeNoteCreateFragmentInjector();
 }

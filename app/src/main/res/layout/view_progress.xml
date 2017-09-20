@@ -5,11 +5,4 @@
     android:visibility="gone"
     >
 
-    <ProgressBar
-        style="@android:style/Widget.Material.ProgressBar"
-        android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/progress_bar_height"
-        />
-
 </RelativeLayout>

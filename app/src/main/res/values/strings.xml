@@ -44,6 +44,13 @@
 
     <!-- Strings related to Storage -->
     <string name="fragment_title_storage">Storage</string>
+    <string name="fragment_note_title">Title</string>
+    <string name="fragment_note_content">Content</string>
+    <string name="action_save">Save</string>
+    <string name="info_note_saved">Note is saved</string>
+    <string name="error_missing_note_title">Note title is required</string>
+    <string name="error_failed_save_note">Failed to save note</string>
+    <string name="error_failed_read_note">Failed to read note</string>
 
     <!-- Strings related to Network -->
     <string name="fragment_title_network">Network</string>

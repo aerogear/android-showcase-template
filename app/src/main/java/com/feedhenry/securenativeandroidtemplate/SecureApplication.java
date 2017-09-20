@@ -25,6 +25,10 @@ public class SecureApplication extends Application implements HasActivityInjecto
     @Override
     public void onCreate() {
         super.onCreate();
+        initInjector();
+    }
+
+    protected void initInjector() {
         DaggerSecureApplicationComponent
                 .builder()
                 .application(this)

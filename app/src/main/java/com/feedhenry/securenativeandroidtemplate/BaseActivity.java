@@ -49,6 +49,8 @@ public class BaseActivity extends AppCompatActivity {
      * Set the current text for the information dialog
      */
     public void setInformationTextResourceId(int resourceId) {
-        infoText = getString(resourceId);
+        if (resourceId != 0) {
+            infoText = getString(resourceId);
+        }
     }
 }
