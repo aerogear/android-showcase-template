@@ -33,11 +33,8 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
 
 public class MainActivity extends BaseActivity
-<<<<<<< HEAD
-        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, NotesDetailFragment.SaveNoteListener,  HasFragmentInjector {
-=======
-        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
->>>>>>> add auth details view
+        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, NotesDetailFragment.SaveNoteListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
+
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;

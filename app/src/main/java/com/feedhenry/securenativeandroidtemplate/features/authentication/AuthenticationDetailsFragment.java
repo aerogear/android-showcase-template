@@ -83,7 +83,7 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         AuthenticationDetailsFragment detailsFragment = new AuthenticationDetailsFragment();
         if (token != null) {
             Bundle args = new Bundle();
-            args.putString(Constants.TOKEN_FIELDS.AUTH_TOKEN, token.jsonSerializeString());
+            args.putString(Constants.TOKEN_FIELDS.IDENTITY_DATA, token.jsonSerializeString());
             detailsFragment.setArguments(args);
         }
         return detailsFragment;
