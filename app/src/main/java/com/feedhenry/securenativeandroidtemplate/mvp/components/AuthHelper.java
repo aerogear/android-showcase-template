@@ -30,12 +30,15 @@ public class AuthHelper {
     private static final String STORE_NAME = "AuthState";
     private static final String KEY_STATE = "state";
 
+    private AuthState authState;
+
     @Inject
     Context context;
 
     public AuthHelper(@NonNull Context context) {
         mPrefs = context.getSharedPreferences(STORE_NAME, Context.MODE_PRIVATE);
         mPrefsLock = new ReentrantLock();
+        authState = readAuthState();
     }
 
     /**
@@ -63,6 +66,9 @@ public class AuthHelper {
      * Write the auth state to shared preferences
      */
     public void writeAuthState(@Nullable AuthState state) {
+        // reset the current auth state
+        authState = state;
+
         mPrefsLock.lock();
         try {
             if (state == null) {
@@ -83,24 +89,21 @@ public class AuthHelper {
      * Check if the user is authenticated/authorized
      */
     public boolean isAuthorized() {
-        AuthState state = readAuthState();
-        return state.isAuthorized();
+        return authState.isAuthorized();
     }
 
     /**
      * Get the access token
      */
     public String getAccessToken() {
-        AuthState state = readAuthState();
-        return state.getAccessToken();
+        return authState.getAccessToken();
     }
 
     /**
      * Get the identity token
      */
     public String getIdentityToken() {
-        AuthState state = readAuthState();
-        return state.getIdToken();
+        return authState.getIdToken();
     }
 
     /**
@@ -124,20 +127,18 @@ public class AuthHelper {
      * Check if a new access token needs to be required
      */
     public boolean getNeedsTokenRefresh() {
-        AuthState state = readAuthState();
-        return state.getNeedsTokenRefresh();
+        return authState.getNeedsTokenRefresh();
     }
 
     /**
      * Request a new access token
      */
     public void setNeedsTokenRefresh() {
-        AuthState state = readAuthState();
-        state.setNeedsTokenRefresh(true);
+        authState.setNeedsTokenRefresh(true);
     }
 
     /**
-     * Make a request to a resource that requires the access token to be sent with hte request
+     * Make a request to a resource that requires the access token to be sent with the request
      */
     public Call makeBearerRequest(String url, okhttp3.Callback callback) {
 

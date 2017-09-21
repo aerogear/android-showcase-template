@@ -20,7 +20,6 @@ import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
 
 import net.openid.appauth.AuthState;
-import net.openid.appauth.TokenResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -176,14 +175,12 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
                     Type listType = new TypeToken<List<String>>() {}.getType();
                     realmRoles = new Gson().fromJson(tokenRealmRolesJSON, listType);
 
-                    if (realmRoles.size() > 0) {
-                        realmRolesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, realmRoles);
-                        listViewRealmRoles.setAdapter(realmRolesAdapter);
+                    realmRolesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, realmRoles);
+                    listViewRealmRoles.setAdapter(realmRolesAdapter);
 
-                    } else {
-                        listViewRealmRoles.setVisibility(View.GONE);
-                        divider_realm.setVisibility(View.GONE);
-                    }
+                } else {
+                    listViewRealmRoles.setVisibility(View.GONE);
+                    divider_realm.setVisibility(View.GONE);
                 }
             } catch (JSONException e) {
                 Log.i("", "Error Parsing Access Token", e);

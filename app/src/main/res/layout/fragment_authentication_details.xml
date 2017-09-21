@@ -69,22 +69,20 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginBottom="3dp"
-                android:layout_marginTop="3dp"
-                android:background="#fff"
-                android:elevation="4dp"
-                android:padding="20dp"
                 android:id="@+id/divider_realm"
-                android:text="@string/realm_roles" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/realm_roles"
+                android:textStyle="bold" />
 
             <ListView
                 android:id="@+id/realm_roles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none" />
+
+
 
         </LinearLayout>
         <Button

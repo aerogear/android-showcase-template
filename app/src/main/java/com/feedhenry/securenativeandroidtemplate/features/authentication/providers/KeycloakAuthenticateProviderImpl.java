@@ -46,7 +46,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private AuthorizationService authService;
     private AuthorizationRequest authRequest;
     private AuthorizationServiceConfiguration serviceConfig;
-    private static boolean logoutSuccess = false;
     private Callback authCallback;
     private Callback logoutCallback;
     private AuthHelper authHelper;
