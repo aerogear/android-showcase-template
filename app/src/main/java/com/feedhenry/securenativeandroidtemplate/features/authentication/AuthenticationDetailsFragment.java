@@ -79,11 +79,11 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         // Required empty public constructor
     }
 
-    public static AuthenticationDetailsFragment forToken(TokenResponse token) {
+    public static AuthenticationDetailsFragment forIdentityData(String identityData) {
         AuthenticationDetailsFragment detailsFragment = new AuthenticationDetailsFragment();
-        if (token != null) {
+        if (identityData != null) {
             Bundle args = new Bundle();
-            args.putString(Constants.TOKEN_FIELDS.IDENTITY_DATA, token.jsonSerializeString());
+            args.putString(Constants.TOKEN_FIELDS.IDENTITY_DATA, identityData);
             detailsFragment.setArguments(args);
         }
         return detailsFragment;
