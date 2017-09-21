@@ -7,12 +7,10 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
-
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -24,9 +22,7 @@ import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenResponse;
 import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
-
 import java.io.IOException;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -52,6 +48,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private AuthorizationServiceConfiguration serviceConfig;
     private static boolean logoutSuccess = false;
     private Callback authCallback;
+    private Callback logoutCallback;
     private AuthHelper authHelper;
 
     @Inject
@@ -137,14 +134,16 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      *
      * @param response - the auth response from the intent/server
      */
-    public void exchangeTokens(AuthorizationResponse response) {
+    private void exchangeTokens(AuthorizationResponse response) {
         authService.performTokenRequest(response.createTokenExchangeRequest(), new AuthorizationService.TokenResponseCallback() {
             @Override
             public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
                 if (tokenResponse != null) {
                     authState.update(tokenResponse, exception);
                     authHelper.writeAuthState(authState);
-                    authSuccess(authState);
+
+                    String decodedIdentityData = authHelper.getIdentityInfomation();
+                    authSuccess(decodedIdentityData);
                 } else {
                     authFailed(exception);
                 }
@@ -153,37 +152,54 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     }
 
     /**
-     * Perform a logout
+     * Perform a logout request against the openid connect server
+     * @param logoutCallback - the logout callback
      */
     public void logout(Callback logoutCallback) {
+        this.logoutCallback = logoutCallback;
+
         String baseLogoutEndpoint = Constants.KEYCLOAK_CONFIG.LOGOUT_ENDPOINT;
         String identityToken = authHelper.getIdentityToken();
         String redirectUri = Constants.KEYCLOAK_CONFIG.REDIRECT_URI.toString();
+        String tokenHintFragment = Constants.KEYCLOAK_CONFIG.TOKEN_HINT_FRAGMENT;
+        String redirectFragment = Constants.KEYCLOAK_CONFIG.REDIRECT_FRAGMENT;
 
         // Construct the Keycloak logout URL
-        String logoutRequestUri = baseLogoutEndpoint + "?id_token_hint=" + identityToken + "&redirect_uri=" +redirectUri;
+        String logoutRequestUri = baseLogoutEndpoint +
+                tokenHintFragment +
+                identityToken +
+                redirectFragment +
+                redirectUri;
 
         authHelper.makeBearerRequest(logoutRequestUri, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                logoutSuccess = false;
+                logoutFailed(e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                logoutSuccess = true;
+                // nullify the auth state
                 authHelper.writeAuthState(null);
+                logoutSuccess(authHelper.readAuthState());
             }
         });
+    }
 
-        if (logoutSuccess) {
-            logoutCallback.onSuccess(null);
-        } else {
-            logoutCallback.onError(null);
+    private void logoutSuccess(AuthState authState) {
+        if (this.logoutCallback != null) {
+            logoutCallback.onSuccess(authState);
         }
     }
 
-    private void authSuccess(AuthState authState) {
+    private void logoutFailed(Exception error) {
+        Log.w("", context.getString(R.string.logout_failed), error);
+        if (this.logoutCallback != null) {
+            logoutCallback.onError(error);
+        }
+    }
+
+    private void authSuccess(String authState) {
         if (this.authCallback != null) {
             authCallback.onSuccess(authState);
         }

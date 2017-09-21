@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
+import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
@@ -32,7 +33,11 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
 
 public class MainActivity extends BaseActivity
+<<<<<<< HEAD
         implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, NotesDetailFragment.SaveNoteListener,  HasFragmentInjector {
+=======
+        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
+>>>>>>> add auth details view
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;
@@ -130,12 +135,22 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onAuthSuccess(AuthState state) {
-        navigator.navigateToAuthenticateDetailsView(this, state);
+    public void onAuthSuccess(String identityData) {
+        navigator.navigateToAuthenticateDetailsView(this, identityData);
     }
 
     @Override
     public void onAuthError(Exception error) {
+
+    }
+
+    @Override
+    public void onLogoutSuccess(AuthState state) {
+        navigator.navigateToAuthenticationView(this);
+    }
+
+    @Override
+    public void onLogoutError(Exception error) {
 
     }
 

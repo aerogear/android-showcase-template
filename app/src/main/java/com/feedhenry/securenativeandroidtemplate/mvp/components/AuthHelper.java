@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.util.Log;
 import net.openid.appauth.AuthState;
 import org.json.JSONException;
+
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.inject.Inject;
@@ -31,7 +34,6 @@ public class AuthHelper {
     Context context;
 
     public AuthHelper(@NonNull Context context) {
-        System.out.println(">>>> " + context);
         mPrefs = context.getSharedPreferences(STORE_NAME, Context.MODE_PRIVATE);
         mPrefsLock = new ReentrantLock();
     }
@@ -102,11 +104,20 @@ public class AuthHelper {
     }
 
     /**
-     * Get the expiration time of the access token
+     * Get the authenticated users identity information
      */
-    public Long getAccessTokenExpirationTime() {
-        AuthState state = readAuthState();
-        return state.getAccessTokenExpirationTime();
+    public String getIdentityInfomation() {
+        String accessToken = getAccessToken();
+        String decodedIdentityData = "";
+        try {
+            // Decode the Access Token to Extract the Identity Information
+            String[] splitToken = accessToken.split("\\.");
+            byte[] decodedBytes = Base64.decode(splitToken[1], Base64.URL_SAFE);
+            decodedIdentityData = new String(decodedBytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e("", "Error Decoding Access Token", e);
+        }
+        return decodedIdentityData;
     }
 
     /**

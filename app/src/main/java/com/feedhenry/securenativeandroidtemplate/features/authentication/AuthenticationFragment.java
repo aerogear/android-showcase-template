@@ -29,7 +29,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     public interface AuthenticationListener {
 
-        void onAuthSuccess(AuthState state);
+        void onAuthSuccess(String identityData);
 
         void onAuthError(Exception error);
     }
@@ -78,7 +78,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     protected AuthenticationView initView() {
         return new AuthenticationViewImpl(this) {
             @Override
-            public void renderIdentityInfo(AuthState state) {
+            public void renderIdentityInfo(String state) {
                 showMessage(R.string.authentication_success);
                 if (authenticationListener != null) {
                     authenticationListener.onAuthSuccess(state);

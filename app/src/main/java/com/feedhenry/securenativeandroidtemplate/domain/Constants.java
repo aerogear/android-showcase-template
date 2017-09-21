@@ -14,6 +14,7 @@ public class Constants {
 
     public static final class TOKEN_FIELDS {
         public static final String AUTH_STATE = "authState";
+        public static final String IDENTITY_DATA = "identityData";
     }
 
     public static final class KEYCLOAK_CONFIG {
@@ -24,6 +25,8 @@ public class Constants {
         public static final Uri REDIRECT_URI = Uri.parse("com.feedhenry.securenativeandroidtemplate:/callback");
         public static final String OPEN_ID_SCOPE = "openid";
         public static final String LOGOUT_ENDPOINT = BASE_SERVER_URI + "/logout";
+        public static final String TOKEN_HINT_FRAGMENT = "?id_token_hint=";
+        public static final String REDIRECT_FRAGMENT = "&redirect_uri=";
     }
 
     public static final class NOTE_FIELDS {

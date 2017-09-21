@@ -8,7 +8,7 @@
         android:id="@+id/action_help"
         android:layout_margin="10dp"
         android:clickable="true"
-        android:icon="@android:drawable/ic_menu_help"
+        android:icon="@drawable/ic_help_white"
         android:orderInCategory="1"
         android:title="@string/help_title"
         app:showAsAction="always" />

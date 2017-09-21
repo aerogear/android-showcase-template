@@ -6,8 +6,6 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.provide
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
 
-import net.openid.appauth.AuthState;
-
 import javax.inject.Inject;
 
 /**
@@ -26,12 +24,11 @@ public class AuthenticationViewPresenter extends BasePresenter<AuthenticationVie
     }
 
     public void doLogin() {
-        //TODO: if user is already logged in, render the user token right away
         authProvider.performAuthRequest(mainActivity, new Callback() {
             @Override
-            public void onSuccess(Object response) {
-                AuthState state = (AuthState) response;
-                view.renderIdentityInfo(state);
+            public void onSuccess(Object identityInformation) {
+                String identityData = (String) identityInformation;
+                view.renderIdentityInfo(identityData);
             }
 
             @Override

@@ -10,7 +10,7 @@
     <string name="popup_home_fragment">Welcome. Clicking this button on each view inside the App will give you more information about the different security measures implemented.</string>
     <string name="popup_authentication_fragment">The Authentication and Access Control is provided by the OpenID Connect standard. The Open Source Identity and Access Management Server, Keycloak, is being used as the Identity Provider. This App uses the Authorization Code flow and saves the tokens to Shared Preferences.</string>
     <string name="popup_storage_fragment">The notes are encrypted automatically when saved locally. Each note is saved in its own file, and encrypted with its own secret key. The secret keys are persisted in the Android Keystore.</string>
-
+    <string name="popup_authentication_details_fragment">The Users Identity and Access Data is being retrieved from the OpenID Connect Access Token. The remote	endpoint terminates the	existing session when the user logs out.</string>
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -22,26 +22,20 @@
     <!-- Strings related to Authentication -->
     <string name="fragment_title_authenticate">Authenticate</string>
     <string name="action_settings">Settings</string>
-
-    <!-- Strings related to Authentication -->
     <string name="app_redirect_scheme">com.feedhenry.securenativeandroidtemplate</string>
     <string name="title_activity_authenticate">Authenticate</string>
-    <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_incorrect_credentials">Incorrect Credentials</string>
-    <string name="auth_description">OpenID Connect Authentication via Keycloak.</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_auth_token">No Authentication Token</string>
     <string name="keycloak_login">Authenticate</string>
     <string name="keycloak_logout">Logout</string>
-    <string name="token_retrieved_success">Tokens Retrieved Successfully</string>
-    <string name="token_exchange_fail">Tokens Retrieved Successfully</string>
-    <string name="token_save_success">Token Saved Securely</string>
     <string name="authentication_failed">Authentication Failed</string>
-    <string name="logged_out">Logged out Successfully</string>
-    <string name="logged_out_failed">Logout Failed</string>
+    <string name="authentication_success">Authentication Success</string>
+    <string name="logout_failed">Logout Failed</string>
+    <string name="logout_success">Logged Out Successfully</string>
+    <string name="realm_roles">Realm Roles</string>
+    <string name="resource_roles">Resource Roles</string>
+    <string name="unknown_email">Unknown Email</string>
+    <string name="unknown_name">Unknown Name</string>
 
     <!-- Strings related to Storage -->
     <string name="fragment_title_storage">Storage</string>
@@ -58,6 +52,7 @@
 
     <!-- Strings related to Network -->
     <string name="fragment_title_network">Network</string>
+    <string name="network_request_failed">Network Request Failed</string>
 
     <!-- Strings related to Device -->
     <string name="fragment_title_device">Device</string>
@@ -72,5 +67,5 @@
     <string name="home_title">Home</string>
 
     <string name="help_title">Help</string>
-    <string name="authentication_success">Authentication Success</string>
+
 </resources>

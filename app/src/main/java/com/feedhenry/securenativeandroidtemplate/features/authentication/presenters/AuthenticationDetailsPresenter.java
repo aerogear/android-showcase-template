@@ -6,6 +6,8 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.provide
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
 
+import net.openid.appauth.AuthState;
+
 import javax.inject.Inject;
 
 /**
@@ -23,30 +25,17 @@ public class AuthenticationDetailsPresenter extends BasePresenter<Authentication
         this.mainActivity = mainActivity;
     }
 
-    public void doLogout() {
-        authProvider.logout(new Callback() {
-            @Override
-            public void onSuccess(Object models) {
-                view.logoutSuccess();
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                view.logoutFailure();
-            }
-        });
-    }
-
     public void logout() {
         authProvider.logout(new Callback() {
             @Override
-            public void onSuccess(Object models) {
-                view.logoutSuccess();
+            public void onSuccess(Object state) {
+                AuthState authState = (AuthState) state;
+                view.logoutSuccess(authState);
             }
 
             @Override
             public void onError(Throwable error) {
-                view.logoutFailure();
+                view.logoutFailure((Exception) error);
             }
         });
     }
