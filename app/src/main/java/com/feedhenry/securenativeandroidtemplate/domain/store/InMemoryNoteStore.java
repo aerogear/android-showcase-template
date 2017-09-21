@@ -11,41 +11,40 @@ import java.util.Map;
 /**
  * An in-memory storage for the notes.
  */
-
 public class InMemoryNoteStore implements NoteDataStore {
 
     private Map<String, Note> inMemoryStore = new HashMap<String, Note>();
 
     @Override
-    public void createNote(Note note, Callback<Note> callback) {
+    public Note createNote(Note note) {
         if (!inMemoryStore.containsKey(note.getId())) {
             inMemoryStore.put(note.getId(), note);
         }
-        callback.onSuccess(note);
+        return note;
     }
 
     @Override
-    public void updateNote(Note note, Callback<Note> callback) {
+    public Note updateNote(Note note) {
         inMemoryStore.put(note.getId(), note);
-        callback.onSuccess(note);
+        return note;
     }
 
     @Override
-    public void deleteNote(Note note, Callback<Note> callback) {
+    public Note deleteNote(Note note) {
         inMemoryStore.remove(note.getId());
-        callback.onSuccess(note);
+        return note;
     }
 
     @Override
-    public void readNote(String noteId, Callback<Note> callback) {
+    public Note readNote(String noteId) {
         Note note = inMemoryStore.get(noteId);
-        callback.onSuccess(note);
+        return note;
     }
 
     @Override
-    public void listNotes(Callback<List<Note>> callback) {
+    public List<Note> listNotes() {
         List<Note> notes =  new ArrayList<Note>();
         notes.addAll(inMemoryStore.values());
-        callback.onSuccess(notes);
+        return notes;
     }
 }

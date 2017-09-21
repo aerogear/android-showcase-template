@@ -16,10 +16,12 @@
     <dimen name="note_add_btn_margin">16dp</dimen>
 
     <dimen name="note_view_padding">8dp</dimen>
+
     <dimen name="note_title_height">50dp</dimen>
     <dimen name="note_content_height">120dp</dimen>
     <dimen name="note_content_edit_min_height">200dp</dimen>
-    <dimen name="cardview_height">180dp</dimen>
+    <dimen name="cardview_height">90dp</dimen>
+    <dimen name="note_view_margin">8dp</dimen>
 
     <dimen name="progress_bar_height">30dp</dimen>
 </resources>

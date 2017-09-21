@@ -3,10 +3,11 @@ package com.feedhenry.securenativeandroidtemplate.di;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesGcmCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepositoryImpl;
 import com.feedhenry.securenativeandroidtemplate.domain.store.InMemoryNoteStore;
-import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
+import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 
@@ -16,7 +17,6 @@ import dagger.Module;
 import dagger.Provides;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Define the DI providers for the tests here.
@@ -31,10 +31,8 @@ public class SecureApplicationTestModule {
     }
 
     @Provides @Singleton
-    NoteDataStoreFactory provideNoteDataStoreFactory() {
-        NoteDataStoreFactory dataStoreFactory = mock(NoteDataStoreFactory.class);
-        when(dataStoreFactory.getDataStore()).thenReturn(new InMemoryNoteStore());
-        return dataStoreFactory;
+    NoteDataStore provideNoteDataStore() {
+        return new InMemoryNoteStore();
     }
 
     @Provides @Singleton NoteRepository provideNoteRepository(NoteRepositoryImpl noteRepo) {
@@ -44,5 +42,10 @@ public class SecureApplicationTestModule {
     @Provides @Singleton
     OpenIDAuthenticationProvider provideAuthProvider() {
         return mock(KeycloakAuthenticateProviderImpl.class);
+    }
+
+    @Provides @Singleton
+    AesGcmCrypto provideAesGcmCrypto() {
+        return new AesGcmCrypto();
     }
 }

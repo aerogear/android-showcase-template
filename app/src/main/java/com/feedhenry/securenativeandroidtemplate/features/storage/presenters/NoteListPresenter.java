@@ -3,6 +3,7 @@ package com.feedhenry.securenativeandroidtemplate.features.storage.presenters;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
+import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
 import com.feedhenry.securenativeandroidtemplate.features.storage.views.NoteListAppView;
 
@@ -17,11 +18,11 @@ import javax.inject.Inject;
 
 public class NoteListPresenter extends BasePresenter<NoteListAppView> {
 
-    private NoteRepository noteRepository;
+    private NoteCrudlService noteCrudlService;
 
     @Inject
-    public NoteListPresenter(NoteRepository noteRepo) {
-        this.noteRepository = noteRepo;
+    public NoteListPresenter(NoteCrudlService noteCrudlService) {
+        this.noteCrudlService = noteCrudlService;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class NoteListPresenter extends BasePresenter<NoteListAppView> {
 
     private void loadData() {
         this.view.showLoading();
-        this.noteRepository.listNotes(new Callback<List<Note>>() {
+        this.noteCrudlService.listNotes(new Callback<List<Note>>() {
             @Override
             public void onSuccess(List<Note> models) {
                 if (view != null) {

@@ -31,8 +31,6 @@ public class RVNoteAdapter extends RecyclerView.Adapter<RVNoteAdapter.NoteViewHo
         CardView noteCardView;
         @BindView(R.id.noteTitle)
         TextView noteTitle;
-        @BindView(R.id.noteContentText)
-        TextView noteContent;
 
         NoteViewHolder(View itemView) {
             super(itemView);
@@ -66,7 +64,6 @@ public class RVNoteAdapter extends RecyclerView.Adapter<RVNoteAdapter.NoteViewHo
     public void onBindViewHolder(NoteViewHolder holder, int position) {
         final Note selectedNote = notes.get(position);
         holder.noteTitle.setText(selectedNote.getTitle());
-        holder.noteContent.setText(selectedNote.getContent());
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

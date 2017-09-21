@@ -56,6 +56,15 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:text="@string/action_save" />
 
+            <Button
+                android:id="@+id/delete_note_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/layout_marginTop"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:text="@string/action_delete" />
+
         </LinearLayout>
     </ScrollView>
 

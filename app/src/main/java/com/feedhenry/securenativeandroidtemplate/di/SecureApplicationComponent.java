@@ -4,7 +4,10 @@ import android.app.Application;
 import android.content.Context;
 
 import com.feedhenry.securenativeandroidtemplate.SecureApplication;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesGcmCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
+import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
+import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 
 import javax.inject.Singleton;
@@ -31,6 +34,11 @@ public interface SecureApplicationComponent {
     void inject(SecureApplication app);
 
     Context context();
+    AesGcmCrypto provideAesGcmCrypto();
+    NoteDataStore providesNoteDataStore();
+
     NoteRepository noteRepository();
     OpenIDAuthenticationProvider authProvider();
+
+    NoteCrudlService provideNoteCrudleService();
 }

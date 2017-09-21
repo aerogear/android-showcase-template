@@ -13,13 +13,15 @@ import javax.inject.Singleton;
 public class NoteDataStoreFactory {
 
     private Context context;
+    private NoteDataStore dataStore;
 
     @Inject
-    public NoteDataStoreFactory(@NonNull Context context) {
+    public NoteDataStoreFactory(@NonNull Context context, NoteDataStore dataStore) {
         this.context = context;
+        this.dataStore = dataStore;
     }
 
     public NoteDataStore getDataStore() {
-        return new InMemoryNoteStore();
+        return this.dataStore;
     }
 }

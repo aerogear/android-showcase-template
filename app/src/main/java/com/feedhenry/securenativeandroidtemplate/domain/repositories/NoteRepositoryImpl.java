@@ -27,27 +27,27 @@ public class NoteRepositoryImpl implements NoteRepository {
     }
 
     @Override
-    public void listNotes(Callback<List<Note>> cb) {
-        this.noteDataStore.listNotes(cb);
+    public List<Note> listNotes() throws Exception {
+        return this.noteDataStore.listNotes();
     }
 
     @Override
-    public void readNote(String noteId, Callback<Note> cb) {
-        this.noteDataStore.readNote(noteId, cb);
+    public Note readNote(String noteId) throws Exception {
+        return this.noteDataStore.readNote(noteId);
     }
 
     @Override
-    public void createNote(Note noteModel, Callback<Note> cb) {
-        this.noteDataStore.createNote(noteModel, cb);
+    public Note createNote(Note noteModel) throws Exception {
+        return this.noteDataStore.createNote(noteModel);
     }
 
     @Override
-    public void updateNote(Note noteModel, Callback<Note> cb) {
-        this.noteDataStore.updateNote(noteModel, cb);
+    public Note updateNote(Note noteModel) throws Exception {
+        return this.noteDataStore.updateNote(noteModel);
     }
 
     @Override
-    public void deleteNote(Note noteModel, Callback<Note> cb) {
-        this.noteDataStore.deleteNote(noteModel, cb);
+    public Note deleteNote(Note noteModel) throws Exception {
+        return this.noteDataStore.deleteNote(noteModel);
     }
 }

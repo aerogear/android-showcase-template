@@ -14,36 +14,31 @@ public interface NoteDataStore {
     /**
      * Save the note in the data store
      * @param note
-     * @param callback
      */
-    void createNote(Note note, Callback<Note> callback);
+    Note createNote(Note note) throws Exception;
 
     /**
      * Update the note in the data store
      * @param note
-     * @param callback
      */
-    void updateNote(Note note, Callback<Note> callback);
+    Note updateNote(Note note) throws Exception;
 
 
     /**
      * Delete the note in the data store
      * @param note
-     * @param callback
      */
-    void deleteNote(Note note, Callback<Note> callback);
+    Note deleteNote(Note note) throws Exception;
 
 
     /**
-     *  Read the note from the data store
+     * Read the note from the data store
      * @param noteId the id of the note
-     * @param callback
      */
-    void readNote(String noteId, Callback<Note> callback);
+    Note readNote(String noteId) throws Exception;
 
     /**
      *  List the notes from the data store
-     * @param callback
      */
-    void listNotes(Callback<List<Note>> callback);
+    List<Note> listNotes() throws Exception;
 }
