@@ -37,7 +37,7 @@ public class MainActivityInstrumentedTest {
     @Test
     public void appNavigation() throws Exception {
         onView(withId(R.id.drawer_layout)).perform(open());
-        navigateTo(R.string.fragment_title_authenticate, R.id.login_form);
+        navigateTo(R.string.fragment_title_authenticate, R.id.keycloakLogin);
     }
 
     private void navigateTo(final int titleId, final int fragmentId) throws Exception {
