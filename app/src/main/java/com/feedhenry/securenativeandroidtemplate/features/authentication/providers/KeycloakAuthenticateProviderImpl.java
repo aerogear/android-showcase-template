@@ -48,7 +48,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private AuthorizationServiceConfiguration serviceConfig;
     private Callback authCallback;
     private Callback logoutCallback;
-    private AuthHelper authHelper;
 
     @Inject
     Context context;
@@ -56,7 +55,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     @Inject
     public KeycloakAuthenticateProviderImpl(@NonNull Context context) {
         this.context = context;
-        this.authHelper = new AuthHelper(context);
     }
 
     /**
@@ -139,9 +137,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
                 if (tokenResponse != null) {
                     authState.update(tokenResponse, exception);
-                    authHelper.writeAuthState(authState);
+                    AuthHelper.writeAuthState(authState);
 
-                    String decodedIdentityData = authHelper.getIdentityInfomation();
+                    String decodedIdentityData = AuthHelper.getIdentityInfomation();
                     authSuccess(decodedIdentityData);
                 } else {
                     authFailed(exception);
@@ -158,7 +156,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         this.logoutCallback = logoutCallback;
 
         String baseLogoutEndpoint = Constants.KEYCLOAK_CONFIG.LOGOUT_ENDPOINT;
-        String identityToken = authHelper.getIdentityToken();
+        String identityToken = AuthHelper.getIdentityToken();
         String redirectUri = Constants.KEYCLOAK_CONFIG.REDIRECT_URI.toString();
         String tokenHintFragment = Constants.KEYCLOAK_CONFIG.TOKEN_HINT_FRAGMENT;
         String redirectFragment = Constants.KEYCLOAK_CONFIG.REDIRECT_FRAGMENT;
@@ -170,7 +168,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
                 redirectFragment +
                 redirectUri;
 
-        authHelper.makeBearerRequest(logoutRequestUri, new okhttp3.Callback() {
+        AuthHelper.makeBearerRequest(logoutRequestUri, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 logoutFailed(e);
@@ -179,8 +177,8 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 // nullify the auth state
-                authHelper.writeAuthState(null);
-                logoutSuccess(authHelper.readAuthState());
+                AuthHelper.writeAuthState(null);
+                logoutSuccess(AuthHelper.readAuthState());
             }
         });
     }

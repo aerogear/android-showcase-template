@@ -41,10 +41,11 @@ public class Navigator {
     }
 
     public void navigateToAuthenticationView(BaseActivity activity) {
+        // initialise the authhelper with a context
+        AuthHelper.init(context);
         AuthenticationFragment authFragment = new AuthenticationFragment();
-        AuthHelper authHelper = new AuthHelper(context);
-        if(authHelper.isAuthorized()) {
-            navigateToAuthenticateDetailsView(activity, authHelper.getIdentityInfomation());
+        if(AuthHelper.isAuthorized()) {
+            navigateToAuthenticateDetailsView(activity, AuthHelper.getIdentityInfomation());
         } else {
             loadFragment(activity, authFragment, AuthenticationFragment.TAG);
         }
