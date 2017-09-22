@@ -12,20 +12,20 @@
         <ImageView
             android:id="@+id/header_cover_image"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="@dimen/authentication_header_image_height"
             android:scaleType="centerCrop"
             android:src="@drawable/fh_background" />
 
         <ImageButton
             android:id="@+id/user_profile_photo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="@dimen/authentication_banner_image_width"
+            android:layout_height="@dimen/authentication_banner_image_height"
             android:layout_below="@+id/header_cover_image"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-60dp"
+            android:layout_marginTop="@dimen/authentication_banner_image_margin_top"
             android:background="@drawable/profile_image_border"
-            android:elevation="5dp"
-            android:padding="30dp"
+            android:elevation="@dimen/authentication_banner_image_elevation"
+            android:padding="@dimen/authentication_banner_image_padding"
             android:scaleType="centerCrop"
             android:src="@drawable/fh_icon" />
 
@@ -35,8 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/header_cover_image"
             android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            android:paddingBottom="24dp">
+            android:elevation="@dimen/authentication_banner_padding_elevation"
+            android:paddingBottom="@dimen/authentication_banner_padding_bottom">
 
 
             <TextView
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="@dimen/authentication_name_margin_top"
                 android:textColor="#fff"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/user_name"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/authentication_email_margin_top"
                 android:textColor="#fff"
                 android:textSize="14sp" />
         </RelativeLayout>
@@ -72,7 +72,7 @@
                 android:id="@+id/divider_realm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="@dimen/section_header_padding"
                 android:text="@string/realm_roles"
                 android:textStyle="bold" />
 
@@ -82,15 +82,13 @@
                 android:layout_height="wrap_content"
                 android:scrollbars="none" />
 
-
-
         </LinearLayout>
         <Button
             android:id="@+id/keycloakLogout"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="@dimen/authentication_button_margin_bottom"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:text="Logout" />

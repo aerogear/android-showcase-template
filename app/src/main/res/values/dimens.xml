@@ -5,6 +5,9 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
 
+    <dimen name="help_icon_height">48dp</dimen>
+    <dimen name="help_icon_width">48dp</dimen>
+
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="layout_marginBottom">8dp</dimen>
     <dimen name="layout_marginEnd">8dp</dimen>
@@ -24,4 +27,21 @@
     <dimen name="note_view_margin">8dp</dimen>
 
     <dimen name="progress_bar_height">30dp</dimen>
+    <dimen name="profile_image_border_radius">100dp</dimen>
+    <dimen name="profile_image_border_padding_bottom">10dp</dimen>
+    <dimen name="profile_image_border_padding_left">10dp</dimen>
+    <dimen name="profile_image_border_padding_right">10dp</dimen>
+    <dimen name="profile_image_border_padding_top">10dp</dimen>
+    <dimen name="authentication_button_margin_bottom">15dp</dimen>
+    <dimen name="section_header_padding">10dp</dimen>
+    <dimen name="authentication_email_margin_top">12dp</dimen>
+    <dimen name="authentication_name_margin_top">75dp</dimen>
+    <dimen name="authentication_banner_padding_bottom">24dp</dimen>
+    <dimen name="authentication_banner_padding_elevation">4dp</dimen>
+    <dimen name="authentication_banner_image_padding">30dp</dimen>
+    <dimen name="authentication_banner_image_elevation">5dp</dimen>
+    <dimen name="authentication_banner_image_margin_top">-60dp</dimen>
+    <dimen name="authentication_banner_image_height">120dp</dimen>
+    <dimen name="authentication_banner_image_width">120dp</dimen>
+    <dimen name="authentication_header_image_height">100dp</dimen>
 </resources>
