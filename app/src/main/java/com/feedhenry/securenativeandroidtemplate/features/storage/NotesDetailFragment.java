@@ -8,12 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
+import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.features.storage.presenters.NoteDetailPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.storage.views.NoteDetailAppView;
 import com.feedhenry.securenativeandroidtemplate.features.storage.views.NoteDetailAppViewImpl;
@@ -23,6 +27,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
@@ -55,6 +60,15 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
     @BindView(R.id.delete_note_btn)
     Button deleteButton;
 
+    @BindView(R.id.store_type_choice)
+    RadioGroup storeTypeChoice;
+
+    @BindView(R.id.store_type_file_system)
+    RadioButton storeTypeFileSystemRadio;
+
+    @BindView(R.id.store_type_sqlite)
+    RadioButton storeTypeSqlRadio;
+
     private View noteCreateView;
     private Unbinder unbinder;
 
@@ -75,6 +89,7 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
         if (note != null) {
             Bundle args = new Bundle();
             args.putString(Constants.NOTE_FIELDS.ID_FIELD, note.getId());
+            args.putInt(Constants.NOTE_FIELDS.STORE_TYPE_FIELD, note.getStoreType());
             detailsFragment.setArguments(args);
         }
         return detailsFragment;
@@ -150,6 +165,12 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
                 titleField.setText(note.getTitle());
                 contentField.setText(note.getContent());
                 deleteButton.setVisibility(View.VISIBLE);
+                if (note.getStoreType() == NoteDataStore.STORE_TYPE_FILE) {
+                    storeTypeFileSystemRadio.setChecked(true);
+                } else {
+                    storeTypeSqlRadio.setChecked(true);
+                }
+                disableRadioButtons(storeTypeChoice);
             }
         };
     }
@@ -173,7 +194,7 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
             existingNote.setContent(noteContent);
             noteDetailPresenter.updateNote(existingNote);
         } else {
-            noteDetailPresenter.createNote(noteTitle, noteContent);
+            noteDetailPresenter.createNote(noteTitle, noteContent, getSelectedStoreType());
         }
     }
 
@@ -193,13 +214,29 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
 
     private void setNoteFields(Bundle args) {
         String noteId = args.getString(Constants.NOTE_FIELDS.ID_FIELD);
+        int storeType = args.getInt(Constants.NOTE_FIELDS.STORE_TYPE_FIELD);
         if (!TextUtils.isEmpty(noteId)) {
-            noteDetailPresenter.loadNoteWithId(noteId);
+            noteDetailPresenter.loadNoteWithId(noteId, storeType);
         }
     }
 
     private void clearNoteFields() {
         titleField.getText().clear();
         contentField.getText().clear();
+    }
+
+    private int getSelectedStoreType() {
+        int selectedStoreTypeId = storeTypeChoice.getCheckedRadioButtonId();
+        if (selectedStoreTypeId == storeTypeFileSystemRadio.getId()) {
+            return NoteDataStore.STORE_TYPE_FILE;
+        } else {
+            return NoteDataStore.STORE_TYPE_SQL;
+        }
+    }
+
+    private void disableRadioButtons(RadioGroup radioButtons) {
+        for (int i = 0; i < radioButtons.getChildCount(); i++) {
+            radioButtons.getChildAt(i).setEnabled(false);
+        }
     }
 }

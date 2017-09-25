@@ -35,11 +35,7 @@ public class NoteCrudlService {
         protected Result doInBackground(Param... params) {
             Result r = null;
             try {
-                Param p = null;
-                if (params.length > 0) {
-                    p = params[0];
-                }
-                r = performOperation(p);
+                r = performOperation(params);
             } catch (Exception e) {
                 error = e;
             }
@@ -56,18 +52,20 @@ public class NoteCrudlService {
             }
         }
 
-        protected abstract Result performOperation(Param param) throws Exception;
+        protected abstract Result performOperation(Param... params) throws Exception;
     }
 
-    private class CreateNoteTask extends NoteTask<Note, Void, Note> {
+    private class CreateNoteTask extends NoteTask<Object, Void, Note> {
 
         CreateNoteTask(NoteRepository noteRepo, Callback<Note> callback) {
             super(noteRepo, callback);
         }
 
         @Override
-        protected Note performOperation(Note note) throws Exception {
-            return noteRepository.createNote(note);
+        protected Note performOperation(Object... params) throws Exception {
+            Note noteToCreate = (Note) params[0];
+            int storeType = (int) params[1];
+            return noteRepository.createNote(noteToCreate, storeType);
         }
     }
 
@@ -78,20 +76,22 @@ public class NoteCrudlService {
         }
 
         @Override
-        protected Note performOperation(Note note) throws Exception {
-            return noteRepository.updateNote(note);
+        protected Note performOperation(Note... notes) throws Exception {
+            return noteRepository.updateNote(notes[0]);
         }
     }
 
-    private class ReadNoteTask extends NoteTask<String, Void, Note> {
+    private class ReadNoteTask extends NoteTask<Object, Void, Note> {
 
         ReadNoteTask(NoteRepository noteRepo, Callback<Note> callback) {
             super(noteRepo, callback);
         }
 
         @Override
-        protected Note performOperation(String noteId) throws Exception {
-            return noteRepository.readNote(noteId);
+        protected Note performOperation(Object... params) throws Exception {
+            String noteId = (String) params[0];
+            int storeType = (int) params[1];
+            return noteRepository.readNote(noteId, storeType);
         }
     }
 
@@ -102,8 +102,8 @@ public class NoteCrudlService {
         }
 
         @Override
-        protected Note performOperation(Note note) throws Exception {
-            Note deleted = noteRepository.deleteNote(note);
+        protected Note performOperation(Note... notes) throws Exception {
+            Note deleted = noteRepository.deleteNote(notes[0]);
             return deleted;
         }
     }
@@ -115,7 +115,7 @@ public class NoteCrudlService {
         }
 
         @Override
-        protected List<Note> performOperation(Void aVoid) throws Exception {
+        protected List<Note> performOperation(Void... aVoid) throws Exception {
             return noteRepository.listNotes();
         }
     }
@@ -139,10 +139,11 @@ public class NoteCrudlService {
     /**
      * Create the given note.
      * @param noteToCreate the note to be created.
+     * @param storeType the storage type of the note
      * @param callback the function to be executed when the operation is finished. The callback will be executed on the main UI thread.
      */
-    public void createNote(Note noteToCreate, Callback<Note> callback) {
-        new CreateNoteTask(this.noteRepo, callback).execute(noteToCreate);
+    public void createNote(Note noteToCreate, int storeType, Callback<Note> callback) {
+        new CreateNoteTask(this.noteRepo, callback).execute(noteToCreate, storeType);
     }
 
     /**
@@ -166,9 +167,10 @@ public class NoteCrudlService {
     /**
      * Read the note details
      * @param noteId the id of the note
+     * @param storeType the storage type of the note
      * @param callback the function to be executed when the operation is finished. The callback will be executed on the main UI thread.
      */
-    public void readNote(String noteId, Callback<Note> callback) {
-        new ReadNoteTask(this.noteRepo, callback).execute(noteId);
+    public void readNote(String noteId, int storeType, Callback<Note> callback) {
+        new ReadNoteTask(this.noteRepo, callback).execute(noteId, storeType);
     }
 }

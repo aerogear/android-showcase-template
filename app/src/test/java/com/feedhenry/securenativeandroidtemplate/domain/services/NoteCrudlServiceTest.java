@@ -4,6 +4,7 @@ import com.feedhenry.securenativeandroidtemplate.BuildConfig;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
+import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,6 +23,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -50,13 +52,13 @@ public class NoteCrudlServiceTest {
         Note note = new Note(testTitle, testContent);
         List<Note> notes = new ArrayList<Note>();
         notes.add(note);
-        when(noteRepository.createNote(any(Note.class))).thenReturn(note);
-        when(noteRepository.readNote(anyString())).thenReturn(note);
+        when(noteRepository.createNote(any(Note.class), anyInt())).thenReturn(note);
+        when(noteRepository.readNote(anyString(), anyInt())).thenReturn(note);
         when(noteRepository.updateNote(any(Note.class))).thenReturn(note);
         when(noteRepository.listNotes()).thenReturn(notes);
         when(noteRepository.deleteNote(any(Note.class))).thenReturn(note);
 
-        serviceToTest.createNote(note, new Callback<Note>() {
+        serviceToTest.createNote(note, NoteDataStore.STORE_TYPE_INMEMORY, new Callback<Note>() {
             @Override
             public void onSuccess(Note models) {
                 assertNotNull(models);
@@ -67,7 +69,7 @@ public class NoteCrudlServiceTest {
                 assertNotNull(error);
             }
         });
-        verify(noteRepository, times(1)).createNote(any(Note.class));
+        verify(noteRepository, times(1)).createNote(any(Note.class), anyInt());
 
         serviceToTest.updateNote(note, new Callback<Note>() {
             @Override
@@ -82,7 +84,7 @@ public class NoteCrudlServiceTest {
         });
         verify(noteRepository, times(1)).updateNote(any(Note.class));
 
-        serviceToTest.readNote(note.getId(), new Callback<Note>() {
+        serviceToTest.readNote(note.getId(), NoteDataStore.STORE_TYPE_INMEMORY, new Callback<Note>() {
             @Override
             public void onSuccess(Note models) {
                 assertNotNull(models);
@@ -93,7 +95,7 @@ public class NoteCrudlServiceTest {
                 assertNull(error);
             }
         });
-        verify(noteRepository, times(1)).readNote(anyString());
+        verify(noteRepository, times(1)).readNote(anyString(), anyInt());
 
         serviceToTest.listNotes(new Callback<List<Note>>() {
             @Override

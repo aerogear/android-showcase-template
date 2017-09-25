@@ -1,5 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -10,7 +11,10 @@ import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
+import com.feedhenry.securenativeandroidtemplate.domain.store.SecureFileNoteStoreTest;
+import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.NoteDbHelper;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,6 +62,12 @@ public class StorageFeatureTest {
     public void setUp() {
         SecureTestApplication application = (SecureTestApplication) InstrumentationRegistry.getTargetContext().getApplicationContext();
         application.getComponent().inject(this);
+        clearData();
+    }
+
+    @After
+    public void tearDown() {
+        clearData();
     }
 
     @Test
@@ -90,5 +100,11 @@ public class StorageFeatureTest {
         onView(withId(R.id.save_note_btn)).perform(click());
         //title should be updated on the list view
         onView(withId(R.id.notes_list_view)).check(matches(hasDescendant(withText(TEST_TITLE_UPDATED))));
+    }
+
+    private void clearData() {
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        context.deleteDatabase(NoteDbHelper.DATABASE_NAME);
+        SecureFileNoteStoreTest.removeFiles(context);
     }
 }

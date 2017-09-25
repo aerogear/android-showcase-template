@@ -13,10 +13,16 @@ import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteReposit
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepositoryImpl;
 import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
+import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
 import com.feedhenry.securenativeandroidtemplate.domain.store.SecureFileNoteStore;
+import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.SqliteNoteStore;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -54,9 +60,22 @@ public class SecureApplicationModule {
         return new AesGcmCrypto(keyStore);
     }
 
-    @Provides @Singleton
+    @Provides @Singleton @Named("fileStore")
     NoteDataStore providesNoteDataStore(Context context, AesGcmCrypto aesGcmCrypto) {
         return new SecureFileNoteStore(context, aesGcmCrypto);
+    }
+
+    @Provides @Singleton @Named("sqliteStore")
+    NoteDataStore providesSqliteNoteDataStore(Context context) {
+        return new SqliteNoteStore(context);
+    }
+
+    @Provides @Singleton
+    NoteDataStoreFactory provideNoteDataStoreFactory(Context context, @Named("fileStore") NoteDataStore fileStore, @Named("sqliteStore") NoteDataStore sqlStore) {
+        List<NoteDataStore> stores = new ArrayList<NoteDataStore>();
+        stores.add(fileStore);
+        stores.add(sqlStore);
+        return new NoteDataStoreFactory(context, stores);
     }
 
     @Provides @Singleton NoteRepository provideNoteRepository(NoteRepositoryImpl noteRepository) {

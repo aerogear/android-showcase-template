@@ -78,10 +78,11 @@ public class SecureFileNoteStore implements NoteDataStore {
     public Note readNote(String noteId) throws Exception {
         loadMetadata();
         if (!notesMetadata.has(noteId)) {
-            throw new Exception("can not find note with id " + noteId);
+            return null;
         }
         String noteJson = readFileWithDecryption(noteId);
         Note note = Note.fromJSON(new JSONObject(noteJson));
+        note.setStoreType(getType());
         return note;
     }
 
@@ -90,6 +91,11 @@ public class SecureFileNoteStore implements NoteDataStore {
         loadMetadata();
         List<Note> notes = convertToList(notesMetadata);
         return notes;
+    }
+
+    @Override
+    public int getType() {
+        return STORE_TYPE_FILE;
     }
 
     private void loadMetadata() throws GeneralSecurityException, IOException {
@@ -142,7 +148,9 @@ public class SecureFileNoteStore implements NoteDataStore {
         while (keys.hasNext()) {
             String noteId = keys.next();
             JSONObject noteJson = notesMetaData.getJSONObject(noteId);
-            notes.add(Note.fromJSON(noteJson));
+            Note noteObject = Note.fromJSON(noteJson);
+            noteObject.setStoreType(getType());
+            notes.add(noteObject);
         }
         return notes;
     }

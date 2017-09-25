@@ -47,4 +47,9 @@ public class InMemoryNoteStore implements NoteDataStore {
         notes.addAll(inMemoryStore.values());
         return notes;
     }
+
+    @Override
+    public int getType() {
+        return STORE_TYPE_INMEMORY;
+    }
 }

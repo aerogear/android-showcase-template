@@ -4,7 +4,9 @@ import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
+import com.feedhenry.securenativeandroidtemplate.domain.store.NoteStoreException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,31 +25,71 @@ public class NoteRepositoryImpl implements NoteRepository {
     @Inject
     public NoteRepositoryImpl(NoteDataStoreFactory noteStoreFactory) {
         this.noteStoreFactory = noteStoreFactory;
-        this.noteDataStore = this.noteStoreFactory.getDataStore();
     }
 
     @Override
     public List<Note> listNotes() throws Exception {
-        return this.noteDataStore.listNotes();
+        List<Note> notes = new ArrayList<Note>();
+        List<NoteDataStore> stores = this.noteStoreFactory.getAllStores();
+        for (NoteDataStore store: stores) {
+            notes.addAll(store.listNotes());
+        }
+        return notes;
     }
 
     @Override
     public Note readNote(String noteId) throws Exception {
-        return this.noteDataStore.readNote(noteId);
+        Note readNote = null;
+        List<NoteDataStore> stores = this.noteStoreFactory.getAllStores();
+        for (NoteDataStore store:stores) {
+            readNote = store.readNote(noteId);
+            if (readNote != null) {
+                break;
+            }
+        }
+        return readNote;
     }
 
     @Override
-    public Note createNote(Note noteModel) throws Exception {
-        return this.noteDataStore.createNote(noteModel);
+    public Note readNote(String noteId, int storeType) throws Exception {
+        NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
+        if (dataStore != null) {
+            return dataStore.readNote(noteId);
+        } else {
+            throw new NoteStoreException("invalid store type " + storeType);
+        }
+    }
+
+    @Override
+    public Note createNote(Note noteModel, int storeType) throws Exception {
+        noteModel.setStoreType(storeType);
+        NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
+        if (dataStore != null) {
+            return dataStore.createNote(noteModel);
+        } else {
+            throw new NoteStoreException("invalid store type " + storeType);
+        }
     }
 
     @Override
     public Note updateNote(Note noteModel) throws Exception {
-        return this.noteDataStore.updateNote(noteModel);
+        int storeType = noteModel.getStoreType();
+        NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
+        if (dataStore != null) {
+            return dataStore.updateNote(noteModel);
+        } else {
+            throw new NoteStoreException("invalid store type " + storeType);
+        }
     }
 
     @Override
     public Note deleteNote(Note noteModel) throws Exception {
-        return this.noteDataStore.deleteNote(noteModel);
+        int storeType = noteModel.getStoreType();
+        NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
+        if (dataStore != null) {
+            return dataStore.deleteNote(noteModel);
+        } else {
+            throw new NoteStoreException("invalid store type " + storeType);
+        }
     }
 }

@@ -6,6 +6,8 @@ import com.feedhenry.securenativeandroidtemplate.AesGcmCryptoTest;
 import com.feedhenry.securenativeandroidtemplate.StorageFeatureTest;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
+import com.feedhenry.securenativeandroidtemplate.domain.store.SecureFileNoteStoreTest;
+import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.SqliteNoteStoreTest;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 
 import javax.inject.Singleton;
@@ -34,6 +36,8 @@ public interface SecureApplicationTestComponent {
     //Then in the test itself, make sure call this method during setup. See StorageFeatureTest for example.
     void inject(StorageFeatureTest fragmentTest);
     void inject(AesGcmCryptoTest cryptoTest);
+    void inject(SqliteNoteStoreTest noteStoreTest);
+    void inject(SecureFileNoteStoreTest fileNoteStoreTest);
 
     Context context();
     NoteDataStoreFactory provideNoteDataStoreFactory();

@@ -34,7 +34,6 @@ public interface SecureApplicationComponent {
 
     Context context();
     AesGcmCrypto provideAesGcmCrypto();
-    NoteDataStore providesNoteDataStore();
 
     NoteRepository noteRepository();
     OpenIDAuthenticationProvider authProvider();

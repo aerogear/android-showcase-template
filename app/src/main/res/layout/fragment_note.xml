@@ -24,8 +24,16 @@
                 android:padding="@dimen/note_view_padding"
                 android:textSize="24sp"
                 android:textStyle="bold|italic">
-
             </TextView>
+
+            <TextView
+                android:id="@+id/noteStore"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/note_store_height"
+                android:layout_below="@+id/noteTitle"
+                android:paddingLeft="@dimen/note_view_padding"
+                android:textSize="18sp" />
+
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

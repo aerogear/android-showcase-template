@@ -24,10 +24,10 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
         this.noteCrudlService = noteCrudlService;
     }
 
-    public void createNote(String noteTitle, String noteContent) {
+    public void createNote(String noteTitle, String noteContent, int storeType) {
         this.view.showLoading();
         Note note = new Note(noteTitle, noteContent);
-        this.noteCrudlService.createNote(note, new Callback<Note>() {
+        this.noteCrudlService.createNote(note, storeType, new Callback<Note>() {
             @Override
             public void onSuccess(Note note) {
                 view.hideLoading();
@@ -43,9 +43,9 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
         });
     }
 
-    public void loadNoteWithId(String noteId) {
+    public void loadNoteWithId(String noteId, int storeType) {
         this.view.showLoading();
-        this.noteCrudlService.readNote(noteId, new Callback<Note>() {
+        this.noteCrudlService.readNote(noteId, storeType, new Callback<Note>() {
             @Override
             public void onSuccess(Note note) {
                 view.hideLoading();
