@@ -1,5 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.views;
 
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
 
 import net.openid.appauth.AuthState;
@@ -10,7 +11,7 @@ import net.openid.appauth.AuthState;
 
 public interface AuthenticationDetailsView extends AppView {
 
-    public void logoutSuccess(AuthState authState);
+    public void logoutSuccess(Identity identity);
 
     public void logoutFailure(Exception error);
 }

@@ -13,22 +13,16 @@ import android.widget.TextView;
 
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationDetailsPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsViewImpl;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
-
-import net.openid.appauth.AuthState;
-
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -45,7 +39,7 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
 
     public interface AuthenticationDetailsListener {
 
-        void onLogoutSuccess(AuthState authState);
+        void onLogoutSuccess(Identity authState);
 
         void onLogoutError(Exception error);
     }
@@ -69,7 +63,6 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     ListView listViewRealmRoles;
 
     View view;
-    ArrayList<String> realmRoles;
     ArrayAdapter<String> realmRolesAdapter;
 
     private AuthenticationDetailsListener authenticationDetailsListener;
@@ -78,11 +71,11 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         // Required empty public constructor
     }
 
-    public static AuthenticationDetailsFragment forIdentityData(String identityData) {
+    public static AuthenticationDetailsFragment forIdentityData(Identity identityData) {
         AuthenticationDetailsFragment detailsFragment = new AuthenticationDetailsFragment();
         if (identityData != null) {
             Bundle args = new Bundle();
-            args.putString(Constants.TOKEN_FIELDS.IDENTITY_DATA, identityData);
+            args.putSerializable(Constants.TOKEN_FIELDS.IDENTITY_DATA, identityData);
             detailsFragment.setArguments(args);
         }
         return detailsFragment;
@@ -125,10 +118,10 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     protected AuthenticationDetailsView initView() {
         return new AuthenticationDetailsViewImpl(this) {
             @Override
-            public void logoutSuccess(AuthState authState) {
+            public void logoutSuccess(Identity identity) {
                 showMessage(R.string.logout_success);
                 if (authenticationDetailsListener != null) {
-                    authenticationDetailsListener.onLogoutSuccess(authState);
+                    authenticationDetailsListener.onLogoutSuccess(identity);
                 }
             }
 
@@ -148,44 +141,22 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
 
     /**
      * Render the Users Identity Information in the View
+     *
      * @param args
      */
     private void renderIdentityInfo(Bundle args) {
-        String identityData = args.getString(Constants.TOKEN_FIELDS.IDENTITY_DATA);
-        if (identityData != null) {
-            try {
-                JSONObject identityDataJSON = new JSONObject(identityData);
-                // get the users name
-                if (identityDataJSON.has("name") && identityDataJSON.getString("name").length() > 0) {
-                    user_name.setText(identityDataJSON.getString("name"));
-                }
-                else {
-                    user_name.setText(R.string.unknown_name);
-                }
-                // get the users email
-                if (identityDataJSON.has("email") && identityDataJSON.getString("email").length() > 0) {
-                    user_email.setText(identityDataJSON.getString("email"));
-                } else {
-                    user_email.setText(R.string.unknown_email);
-                }
-                // get the users realm level roles
-                if (identityDataJSON.has("realm_access") && identityDataJSON.getJSONObject("realm_access").has("roles")) {
-                    String tokenRealmRolesJSON = identityDataJSON.getJSONObject("realm_access").getString("roles");
-
-                    Type listType = new TypeToken<List<String>>() {}.getType();
-                    realmRoles = new Gson().fromJson(tokenRealmRolesJSON, listType);
-
-                    realmRolesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, realmRoles);
-                    listViewRealmRoles.setAdapter(realmRolesAdapter);
-
-                } else {
-                    listViewRealmRoles.setVisibility(View.GONE);
-                    divider_realm.setVisibility(View.GONE);
-                }
-            } catch (JSONException e) {
-                Log.i("", "Error Parsing Access Token", e);
-            }
+        Identity identity = (Identity) args.get(Constants.TOKEN_FIELDS.IDENTITY_DATA);
+        if (identity != null) {
+            // get the users name
+            user_name.setText(identity.getFullName());
+            // get the users email
+            user_email.setText(identity.getEmailAddress());
+            // get the users realm level roles
+            ArrayList realmRoles = identity.getRealmRoles();
+            realmRolesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, realmRoles);
+            listViewRealmRoles.setAdapter(realmRolesAdapter);
         }
+
     }
 
     @OnClick(R.id.keycloakLogout)

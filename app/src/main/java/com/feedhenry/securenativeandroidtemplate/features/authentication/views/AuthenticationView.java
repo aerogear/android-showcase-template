@@ -1,5 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.views;
 
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
 
 /**
@@ -8,7 +9,7 @@ import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
 
 public interface AuthenticationView extends AppView {
 
-    public void renderIdentityInfo(String state);
+    public void renderIdentityInfo(Identity identity);
 
     public void showAuthError(Exception error);
 }

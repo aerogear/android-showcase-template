@@ -10,6 +10,7 @@ import android.util.Log;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
@@ -22,7 +23,13 @@ import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenResponse;
 import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -139,8 +146,16 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
                     authState.update(tokenResponse, exception);
                     AuthHelper.writeAuthState(authState);
 
-                    String decodedIdentityData = AuthHelper.getIdentityInfomation();
-                    authSuccess(decodedIdentityData);
+                    JSONObject decodedIdentityData = AuthHelper.getIdentityInfomation();
+                    Identity newIdentity = new Identity("", "", "", new ArrayList<String>());
+
+                    try {
+                        newIdentity = Identity.fromJson(decodedIdentityData);
+                    } catch (JSONException e) {
+                        Log.i("","Decoding Access Token Failed", e);
+                    }
+
+                    authSuccess(newIdentity);
                 } else {
                     authFailed(exception);
                 }
@@ -178,14 +193,14 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             public void onResponse(Call call, Response response) throws IOException {
                 // nullify the auth state
                 AuthHelper.writeAuthState(null);
-                logoutSuccess(AuthHelper.readAuthState());
+                logoutSuccess();
             }
         });
     }
 
-    private void logoutSuccess(AuthState authState) {
+    private void logoutSuccess() {
         if (this.logoutCallback != null) {
-            logoutCallback.onSuccess(authState);
+            logoutCallback.onSuccess(null);
         }
     }
 
@@ -196,9 +211,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         }
     }
 
-    private void authSuccess(String authState) {
+    private void authSuccess(Identity identity) {
         if (this.authCallback != null) {
-            authCallback.onSuccess(authState);
+            authCallback.onSuccess(identity);
         }
     }
 

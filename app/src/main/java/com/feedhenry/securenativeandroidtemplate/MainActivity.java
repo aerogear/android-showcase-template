@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
@@ -20,8 +21,6 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.provide
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
-
-import net.openid.appauth.AuthState;
 
 import javax.inject.Inject;
 
@@ -132,7 +131,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onAuthSuccess(String identityData) {
+    public void onAuthSuccess(Identity identityData) {
         navigator.navigateToAuthenticateDetailsView(this, identityData);
     }
 
@@ -142,7 +141,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onLogoutSuccess(AuthState state) {
+    public void onLogoutSuccess(Identity state) {
         navigator.navigateToAuthenticationView(this);
     }
 

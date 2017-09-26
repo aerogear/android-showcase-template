@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.feedhenry.securenativeandroidtemplate.R;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationViewImpl;
@@ -29,7 +30,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     public interface AuthenticationListener {
 
-        void onAuthSuccess(String identityData);
+        void onAuthSuccess(Identity identityData);
 
         void onAuthError(Exception error);
     }
@@ -78,10 +79,10 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     protected AuthenticationView initView() {
         return new AuthenticationViewImpl(this) {
             @Override
-            public void renderIdentityInfo(String state) {
+            public void renderIdentityInfo(Identity identity) {
                 showMessage(R.string.authentication_success);
                 if (authenticationListener != null) {
-                    authenticationListener.onAuthSuccess(state);
+                    authenticationListener.onAuthSuccess(identity);
                 }
             }
 

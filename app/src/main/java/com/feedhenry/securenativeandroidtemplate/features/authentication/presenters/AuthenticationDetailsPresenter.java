@@ -2,6 +2,7 @@ package com.feedhenry.securenativeandroidtemplate.features.authentication.presen
 
 import com.feedhenry.securenativeandroidtemplate.MainActivity;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
@@ -26,11 +27,10 @@ public class AuthenticationDetailsPresenter extends BasePresenter<Authentication
     }
 
     public void logout() {
-        authProvider.logout(new Callback() {
+        authProvider.logout(new Callback<Identity>() {
             @Override
-            public void onSuccess(Object state) {
-                AuthState authState = (AuthState) state;
-                view.logoutSuccess(authState);
+            public void onSuccess(Identity identity) {
+                view.logoutSuccess(identity);
             }
 
             @Override

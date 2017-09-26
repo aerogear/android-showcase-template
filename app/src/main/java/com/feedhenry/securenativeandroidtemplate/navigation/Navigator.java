@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.feedhenry.securenativeandroidtemplate.BaseActivity;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
@@ -19,6 +20,9 @@ import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
 import net.openid.appauth.TokenResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 
@@ -45,13 +49,19 @@ public class Navigator {
         AuthHelper.init(context);
         AuthenticationFragment authFragment = new AuthenticationFragment();
         if(AuthHelper.isAuthorized()) {
-            navigateToAuthenticateDetailsView(activity, AuthHelper.getIdentityInfomation());
+            Identity identity = null;
+            try {
+                identity = Identity.fromJson(AuthHelper.getIdentityInfomation());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            navigateToAuthenticateDetailsView(activity, identity);
         } else {
             loadFragment(activity, authFragment, AuthenticationFragment.TAG);
         }
     }
 
-    public void navigateToAuthenticateDetailsView(BaseActivity activity, String identityData) {
+    public void navigateToAuthenticateDetailsView(BaseActivity activity, Identity identityData) {
         AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(identityData);
         loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
     }

@@ -2,6 +2,7 @@ package com.feedhenry.securenativeandroidtemplate.features.authentication.presen
 
 import com.feedhenry.securenativeandroidtemplate.MainActivity;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
@@ -24,11 +25,10 @@ public class AuthenticationViewPresenter extends BasePresenter<AuthenticationVie
     }
 
     public void doLogin() {
-        authProvider.performAuthRequest(mainActivity, new Callback() {
+        authProvider.performAuthRequest(mainActivity, new Callback<Identity>() {
             @Override
-            public void onSuccess(Object identityInformation) {
-                String identityData = (String) identityInformation;
-                view.renderIdentityInfo(identityData);
+            public void onSuccess(Identity identity) {
+                view.renderIdentityInfo(identity);
             }
 
             @Override

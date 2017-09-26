@@ -8,6 +8,8 @@ import android.util.Base64;
 import android.util.Log;
 import net.openid.appauth.AuthState;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -88,14 +90,21 @@ public class AuthHelper {
     /**
      * Get the authenticated users identity information
      */
-    public static String getIdentityInfomation() {
+    public static JSONObject getIdentityInfomation() {
         String accessToken = getAccessToken();
-        String decodedIdentityData = "";
+        JSONObject decodedIdentityData = new JSONObject();
+
         try {
             // Decode the Access Token to Extract the Identity Information
             String[] splitToken = accessToken.split("\\.");
             byte[] decodedBytes = Base64.decode(splitToken[1], Base64.URL_SAFE);
-            decodedIdentityData = new String(decodedBytes, "UTF-8");
+            String decoded = new String(decodedBytes, "UTF-8");
+            try {
+                decodedIdentityData = new JSONObject(decoded);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         } catch (UnsupportedEncodingException e) {
             Log.e("", "Error Decoding Access Token", e);
         }
