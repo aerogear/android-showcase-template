@@ -2,12 +2,13 @@ package com.feedhenry.securenativeandroidtemplate.domain.store.sqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteStoreException;
+
+import net.sqlcipher.Cursor;
+import net.sqlcipher.database.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class SqliteNoteStore implements NoteDataStore {
     SQLiteDatabase writableDb;
     SQLiteDatabase readableDb;
 
+    private static final String password = "test123";
+
     @Inject
     public SqliteNoteStore(Context context) {
         this.dbHelper = new NoteDbHelper(context);
@@ -31,14 +34,14 @@ public class SqliteNoteStore implements NoteDataStore {
 
     private SQLiteDatabase getWritableDatabase() {
         if (this.writableDb == null) {
-            this.writableDb = this.dbHelper.getWritableDatabase();
+            this.writableDb = this.dbHelper.getWritableDatabase(password);
         }
         return this.writableDb;
     }
 
     private SQLiteDatabase getReadableDb() {
         if (this.readableDb == null) {
-            this.readableDb = this.dbHelper.getReadableDatabase();
+            this.readableDb = this.dbHelper.getReadableDatabase(password);
         }
         return this.readableDb;
     }
@@ -139,6 +142,7 @@ public class SqliteNoteStore implements NoteDataStore {
             note.setStoreType(getType());
             notes.add(note);
         }
+        cursor.close();
         return notes;
     }
 

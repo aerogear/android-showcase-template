@@ -59,6 +59,8 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
 
+    compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.10.0'
     testCompile 'org.json:json:20160810'

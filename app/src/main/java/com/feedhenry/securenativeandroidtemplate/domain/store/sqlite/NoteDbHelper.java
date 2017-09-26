@@ -1,8 +1,9 @@
 package com.feedhenry.securenativeandroidtemplate.domain.store.sqlite;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
 
 /**
  * Created by weili on 25/09/2017.

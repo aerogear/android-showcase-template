@@ -6,6 +6,8 @@ import android.app.Application;
 
 import com.feedhenry.securenativeandroidtemplate.di.DaggerSecureApplicationComponent;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
@@ -25,6 +27,7 @@ public class SecureApplication extends Application implements HasActivityInjecto
     public void onCreate() {
         super.onCreate();
         initInjector();
+        SQLiteDatabase.loadLibs(this);
     }
 
     protected void initInjector() {
