@@ -3,10 +3,12 @@ package com.feedhenry.securenativeandroidtemplate.navigation;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 
 import com.feedhenry.securenativeandroidtemplate.BaseActivity;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
@@ -14,9 +16,13 @@ import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
+import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
 import net.openid.appauth.TokenResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 
@@ -24,6 +30,9 @@ import javax.inject.Inject;
  * A class to control the navigation of the app.
  */
 public class Navigator {
+
+    @Inject
+    Context context;
 
     @Inject
     public Navigator() {
@@ -36,13 +45,25 @@ public class Navigator {
     }
 
     public void navigateToAuthenticationView(BaseActivity activity) {
+        // initialise the authhelper with a context
+        AuthHelper.init(context);
         AuthenticationFragment authFragment = new AuthenticationFragment();
-        loadFragment(activity, authFragment, AuthenticationFragment.TAG);
+        if(AuthHelper.isAuthorized()) {
+            Identity identity = null;
+            try {
+                identity = Identity.fromJson(AuthHelper.getIdentityInfomation());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            navigateToAuthenticateDetailsView(activity, identity);
+        } else {
+            loadFragment(activity, authFragment, AuthenticationFragment.TAG);
+        }
     }
 
-    public void navigateToAuthenticateDetailsView(BaseActivity activity, TokenResponse token) {
-        AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forToken(token);
-        loadFragment(activity, authDetailsView, AuthenticationFragment.TAG);
+    public void navigateToAuthenticateDetailsView(BaseActivity activity, Identity identityData) {
+        AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(identityData);
+        loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
     }
 
     public void navigateToStorageView(BaseActivity activity) {

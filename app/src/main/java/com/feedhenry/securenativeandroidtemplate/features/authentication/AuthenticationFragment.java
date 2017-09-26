@@ -7,12 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.feedhenry.securenativeandroidtemplate.R;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationViewImpl;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
-import net.openid.appauth.TokenResponse;
+import net.openid.appauth.AuthState;
 
 import javax.inject.Inject;
 
@@ -29,13 +30,9 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     public interface AuthenticationListener {
 
-        void onAuthSuccess(TokenResponse token);
+        void onAuthSuccess(Identity identityData);
 
         void onAuthError(Exception error);
-
-        void onLogoutSuccess();
-
-        void onLogoutError();
     }
 
     @Inject
@@ -82,10 +79,10 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     protected AuthenticationView initView() {
         return new AuthenticationViewImpl(this) {
             @Override
-            public void renderTokenInfo(TokenResponse token) {
-                showMessage(R.string.token_save_success);
+            public void renderIdentityInfo(Identity identity) {
+                showMessage(R.string.authentication_success);
                 if (authenticationListener != null) {
-                    authenticationListener.onAuthSuccess(token);
+                    authenticationListener.onAuthSuccess(identity);
                 }
             }
 
@@ -94,22 +91,6 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
                 showMessage(R.string.authentication_failed);
                 if (authenticationListener != null) {
                     authenticationListener.onAuthError(error);
-                }
-            }
-
-            @Override
-            public void logoutSuccess() {
-                showMessage(R.string.logged_out);
-                if (authenticationListener != null) {
-                    authenticationListener.onLogoutSuccess();
-                }
-            }
-
-            @Override
-            public void logoutFailure() {
-                showMessage(R.string.logged_out_failed);
-                if (authenticationListener != null) {
-                    authenticationListener.onLogoutError();
                 }
             }
         };
@@ -126,13 +107,5 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
             authenticationViewPresenter.doLogin();
         }
     }
-
-    @OnClick(R.id.keycloakLogout)
-    public void doLogout() {
-        if (authenticationViewPresenter != null) {
-            authenticationViewPresenter.doLogout();
-        }
-    }
-
 
 }

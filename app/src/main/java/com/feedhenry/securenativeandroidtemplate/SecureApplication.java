@@ -5,7 +5,6 @@ import android.app.Application;
 
 
 import com.feedhenry.securenativeandroidtemplate.di.DaggerSecureApplicationComponent;
-import com.feedhenry.securenativeandroidtemplate.di.SecureApplicationModule;
 
 import javax.inject.Inject;
 

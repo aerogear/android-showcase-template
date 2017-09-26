@@ -1,14 +1,11 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.presenters;
 
 import com.feedhenry.securenativeandroidtemplate.MainActivity;
-import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
-import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
-
-import net.openid.appauth.TokenResponse;
 
 import javax.inject.Inject;
 
@@ -28,12 +25,10 @@ public class AuthenticationViewPresenter extends BasePresenter<AuthenticationVie
     }
 
     public void doLogin() {
-        //TODO: if user is already logged in, render the user token right away
-        authProvider.performAuthRequest(mainActivity, new Callback() {
+        authProvider.performAuthRequest(mainActivity, new Callback<Identity>() {
             @Override
-            public void onSuccess(Object response) {
-                TokenResponse token = (TokenResponse) response;
-                view.renderTokenInfo(token);
+            public void onSuccess(Identity identity) {
+                view.renderIdentityInfo(identity);
             }
 
             @Override
@@ -43,17 +38,4 @@ public class AuthenticationViewPresenter extends BasePresenter<AuthenticationVie
         });
     }
 
-    public void doLogout() {
-        authProvider.logout(new Callback() {
-            @Override
-            public void onSuccess(Object models) {
-                view.logoutSuccess();
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                view.logoutFailure();
-            }
-        });
-    }
 }

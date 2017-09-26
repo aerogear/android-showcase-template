@@ -1,8 +1,7 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.views;
 
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
-
-import net.openid.appauth.TokenResponse;
 
 /**
  * Created by weili on 12/09/2017.
@@ -10,11 +9,7 @@ import net.openid.appauth.TokenResponse;
 
 public interface AuthenticationView extends AppView {
 
-    public void renderTokenInfo(TokenResponse token);
+    public void renderIdentityInfo(Identity identity);
 
     public void showAuthError(Exception error);
-
-    public void logoutSuccess();
-
-    public void logoutFailure();
 }
