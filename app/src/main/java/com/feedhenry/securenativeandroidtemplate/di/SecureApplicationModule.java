@@ -66,8 +66,8 @@ public class SecureApplicationModule {
     }
 
     @Provides @Singleton @Named("sqliteStore")
-    NoteDataStore providesSqliteNoteDataStore(Context context) {
-        return new SqliteNoteStore(context);
+    NoteDataStore providesSqliteNoteDataStore(Context context, AesGcmCrypto aesGcmCrypto) {
+        return new SqliteNoteStore(context, aesGcmCrypto);
     }
 
     @Provides @Singleton
