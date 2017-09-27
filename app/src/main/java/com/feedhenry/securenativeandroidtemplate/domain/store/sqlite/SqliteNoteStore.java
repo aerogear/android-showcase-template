@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
 
-import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesGcmCrypto;
-import com.feedhenry.securenativeandroidtemplate.domain.crypto.SecureKeyStore;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.RsaCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteStoreException;
@@ -16,12 +15,10 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.Key;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.SecretKey;
 import javax.inject.Inject;
 
 /**
@@ -36,32 +33,37 @@ public class SqliteNoteStore implements NoteDataStore {
 
     private static final String DB_KEY_PREFS = "dbprefs";
     private static final String DB_KEY_PREF_NAME = "dbkey";
-    private static final String SECRET_KEY_ALIAS = "database_key";
+    private static final String ENCRYPT_KEY_ALIAS = "database_key";
 
     private static final int PASSWORD_BYTES = 64;
 
-    AesGcmCrypto aesGcmCrypto;
+    RsaCrypto rsaCrypto;
     SharedPreferences sharedPreferences;
 
     @Inject
-    public SqliteNoteStore(Context context, AesGcmCrypto aesGcmCrypto) {
+    public SqliteNoteStore(Context context, RsaCrypto rsaCrypto) {
         this.dbHelper = new NoteDbHelper(context);
-        this.aesGcmCrypto = aesGcmCrypto;
+        this.rsaCrypto = rsaCrypto;
         this.sharedPreferences = context.getSharedPreferences(DB_KEY_PREFS, Context.MODE_PRIVATE);
+    }
+
+    private String randomPassword() {
+        byte[] passwordBytes = new byte[PASSWORD_BYTES];
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(passwordBytes);
+        String password = Base64.encodeToString(passwordBytes, Base64.NO_WRAP);
+        return password;
     }
 
     private String getDbPassword() throws GeneralSecurityException, IOException {
         String encryptedDbPass = this.sharedPreferences.getString(DB_KEY_PREF_NAME, null);
         if (encryptedDbPass == null) {
-            byte[] passwordBytes = new byte[PASSWORD_BYTES];
-            SecureRandom secureRandom = new SecureRandom();
-            secureRandom.nextBytes(passwordBytes);
-            String passwordToEncrypt = Base64.encodeToString(passwordBytes, Base64.NO_WRAP);
-            encryptedDbPass = aesGcmCrypto.encryptString(SECRET_KEY_ALIAS, passwordToEncrypt, "utf-8");
+            String passwordToEncrypt = randomPassword();
+            encryptedDbPass = Base64.encodeToString(rsaCrypto.encrypt(ENCRYPT_KEY_ALIAS, passwordToEncrypt.getBytes("utf-8")), Base64.NO_WRAP);
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
             editor.putString(DB_KEY_PREF_NAME, encryptedDbPass).commit();
         }
-        String password = aesGcmCrypto.decryptString(SECRET_KEY_ALIAS, encryptedDbPass, "utf-8");
+        String password = new String(rsaCrypto.decrypt(ENCRYPT_KEY_ALIAS, Base64.decode(encryptedDbPass, Base64.NO_WRAP)), "utf-8");
         return password;
     }
 

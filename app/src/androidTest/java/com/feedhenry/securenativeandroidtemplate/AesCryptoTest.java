@@ -3,7 +3,7 @@ package com.feedhenry.securenativeandroidtemplate;
 import android.support.test.InstrumentationRegistry;
 
 import com.feedhenry.securenativeandroidtemplate.di.SecureTestApplication;
-import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesGcmCrypto;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.utils.StreamUtils;
 
 import org.junit.Before;
@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 
-import javax.crypto.CipherInputStream;
 import javax.inject.Inject;
 
 import static junit.framework.Assert.assertEquals;
@@ -25,10 +24,10 @@ import static junit.framework.Assert.assertEquals;
  * Created by weili on 22/09/2017.
  */
 
-public class AesGcmCryptoTest {
+public class AesCryptoTest {
 
     @Inject
-    AesGcmCrypto cryptoToTest;
+    AesCrypto cryptoToTest;
 
     @Before
     public void setUp() {

@@ -3,13 +3,12 @@ package com.feedhenry.securenativeandroidtemplate.di;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesGcmCrypto;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.crypto.PreAndroidMSecureKeyStore;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.RsaCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.crypto.SecureKeyStore;
-import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepositoryImpl;
-import com.feedhenry.securenativeandroidtemplate.domain.store.InMemoryNoteStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
 import com.feedhenry.securenativeandroidtemplate.domain.store.SecureFileNoteStore;
@@ -41,13 +40,13 @@ public class SecureApplicationTestModule {
     }
 
     @Provides @Singleton @Named("fileStore")
-    NoteDataStore providesNoteDataStore(Context context, AesGcmCrypto aesGcmCrypto) {
-        return new SecureFileNoteStore(context, aesGcmCrypto);
+    NoteDataStore providesNoteDataStore(Context context, AesCrypto aesCrypto) {
+        return new SecureFileNoteStore(context, aesCrypto);
     }
 
     @Provides @Singleton @Named("sqliteStore")
-    NoteDataStore providesSqliteNoteDataStore(Context context,  AesGcmCrypto aesGcmCrypto) {
-        return new SqliteNoteStore(context, aesGcmCrypto);
+    NoteDataStore providesSqliteNoteDataStore(Context context,  RsaCrypto rsaCrypto) {
+        return new SqliteNoteStore(context, rsaCrypto);
     }
 
     @Provides @Singleton
@@ -73,7 +72,7 @@ public class SecureApplicationTestModule {
     }
 
     @Provides @Singleton
-    AesGcmCrypto provideAesGcmCrypto(SecureKeyStore keyStore) {
-        return new AesGcmCrypto(keyStore);
+    AesCrypto provideAesGcmCrypto(SecureKeyStore keyStore) {
+        return new AesCrypto(keyStore);
     }
 }

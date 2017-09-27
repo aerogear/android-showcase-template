@@ -4,10 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 
-import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesGcmCrypto;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.crypto.AndroidMSecureKeyStore;
 import com.feedhenry.securenativeandroidtemplate.domain.crypto.NullAndroidSecureKeyStore;
 import com.feedhenry.securenativeandroidtemplate.domain.crypto.PreAndroidMSecureKeyStore;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.RsaCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.crypto.SecureKeyStore;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepositoryImpl;
@@ -56,18 +57,23 @@ public class SecureApplicationModule {
     }
 
     @Provides @Singleton
-    AesGcmCrypto provideAesGcmCrypto(SecureKeyStore keyStore) {
-        return new AesGcmCrypto(keyStore);
+    AesCrypto provideAesCrypto(SecureKeyStore keyStore) {
+        return new AesCrypto(keyStore);
+    }
+
+    @Provides @Singleton
+    RsaCrypto provideRsaCrypto(SecureKeyStore keyStore) {
+        return new RsaCrypto(keyStore);
     }
 
     @Provides @Singleton @Named("fileStore")
-    NoteDataStore providesNoteDataStore(Context context, AesGcmCrypto aesGcmCrypto) {
-        return new SecureFileNoteStore(context, aesGcmCrypto);
+    NoteDataStore providesNoteDataStore(Context context, AesCrypto aesCrypto) {
+        return new SecureFileNoteStore(context, aesCrypto);
     }
 
     @Provides @Singleton @Named("sqliteStore")
-    NoteDataStore providesSqliteNoteDataStore(Context context, AesGcmCrypto aesGcmCrypto) {
-        return new SqliteNoteStore(context, aesGcmCrypto);
+    NoteDataStore providesSqliteNoteDataStore(Context context, RsaCrypto rsaCrypto) {
+        return new SqliteNoteStore(context, rsaCrypto);
     }
 
     @Provides @Singleton

@@ -3,6 +3,7 @@ package com.feedhenry.securenativeandroidtemplate.domain.crypto;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.security.KeyStore;
 
 /**
  * A implementation of the SecureKeyStore interface that will only throw exceptions.
@@ -11,17 +12,42 @@ import java.security.Key;
 
 public class NullAndroidSecureKeyStore extends SecureKeyStoreImpl implements SecureKeyStore {
     @Override
-    public boolean hasKeyAlias(String keyAlias) throws GeneralSecurityException, IOException {
+    public String getSupportedAESMode() {
+        return null;
+    }
+
+    @Override
+    public String getSupportedRSAMode() {
+        return null;
+    }
+
+    @Override
+    public boolean hasSecretKey(String keyAlias) throws GeneralSecurityException, IOException {
         throw new GeneralSecurityException("This version of Android is not supported");
     }
 
     @Override
-    public Key getKey(String keyAlias) throws GeneralSecurityException, IOException {
+    public Key getSecretKey(String keyAlias) throws GeneralSecurityException, IOException {
         throw new GeneralSecurityException("This version of Android is not supported");
     }
 
     @Override
     public void generateAESKey(String keyAlias) throws GeneralSecurityException, IOException {
+        throw new GeneralSecurityException("This version of Android is not supported");
+    }
+
+    @Override
+    public void generatePrivateKeyPair(String keyAlias) throws GeneralSecurityException, IOException {
+        throw new GeneralSecurityException("This version of Android is not supported");
+    }
+
+    @Override
+    public KeyStore.Entry getKeyPairEntry(String keyAlias) throws GeneralSecurityException, IOException {
+        throw new GeneralSecurityException("This version of Android is not supported");
+    }
+
+    @Override
+    public boolean hasKeyPair(String keyAlias) throws GeneralSecurityException, IOException {
         throw new GeneralSecurityException("This version of Android is not supported");
     }
 

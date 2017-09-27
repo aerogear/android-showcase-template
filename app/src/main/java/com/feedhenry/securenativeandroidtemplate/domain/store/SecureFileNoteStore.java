@@ -2,7 +2,7 @@ package com.feedhenry.securenativeandroidtemplate.domain.store;
 
 import android.content.Context;
 
-import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesGcmCrypto;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.utils.StreamUtils;
 
@@ -31,15 +31,15 @@ public class SecureFileNoteStore implements NoteDataStore {
     private static final String NOTES_METADATA_FILENAME = "notes_meta.json";
 
     Context context;
-    AesGcmCrypto aesGcmCrypto;
+    AesCrypto aesCrypto;
 
     private JSONObject notesMetadata = new JSONObject();
     private boolean metadataLoaded = false;
 
     @Inject
-    public SecureFileNoteStore(Context context, AesGcmCrypto aesGcmCrypto) {
+    public SecureFileNoteStore(Context context, AesCrypto aesCrypto) {
         this.context = context;
-        this.aesGcmCrypto = aesGcmCrypto;
+        this.aesCrypto = aesCrypto;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SecureFileNoteStore implements NoteDataStore {
         writeFileWithEncryption(NOTES_METADATA_FILENAME, notesMetadata.toString());
 
         removeFile(note.getId());
-        aesGcmCrypto.deleteSecretKey(note.getId());
+        aesCrypto.deleteSecretKey(note.getId());
         return note;
     }
 
@@ -122,7 +122,7 @@ public class SecureFileNoteStore implements NoteDataStore {
         if (!outputFile.exists()) {
             outputFile.createNewFile();
         }
-        OutputStream outStream = aesGcmCrypto.encryptStream(fileName, new FileOutputStream(outputFile));
+        OutputStream outStream = aesCrypto.encryptStream(fileName, new FileOutputStream(outputFile));
         outStream.write(fileContent.getBytes("utf-8"));
         outStream.flush();
         outStream.close();
@@ -130,7 +130,7 @@ public class SecureFileNoteStore implements NoteDataStore {
 
     private String readFileWithDecryption(String fileName) throws IOException, GeneralSecurityException {
         InputStream inputStream = context.openFileInput(fileName);
-        InputStream decryptedStream = aesGcmCrypto.decryptStream(fileName, inputStream);
+        InputStream decryptedStream = aesCrypto.decryptStream(fileName, inputStream);
 
         return StreamUtils.readStream(decryptedStream);
     }
