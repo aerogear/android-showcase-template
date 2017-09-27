@@ -15,7 +15,6 @@ import javax.inject.Singleton;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
-import dagger.android.AndroidInjector;
 
 /**
  * Define the dependencies of the app. Used by Dagger2 to build dependency graph.

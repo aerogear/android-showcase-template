@@ -1,18 +1,25 @@
 package com.feedhenry.securenativeandroidtemplate.domain.crypto;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
+import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import android.support.annotation.RequiresApi;
 import android.util.Base64;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.security.KeyPairGenerator;
 import java.security.KeyStore;
+import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -21,50 +28,23 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.inject.Inject;
+import javax.security.auth.x500.X500Principal;
 
 /**
- * Perform data encryption and decryption using AES/GCM/NoPadding alg. At the moment, it requires API level 23.
- * TODO: add support for older API versions.
+ * Perform data encryption and decryption using AES/GCM/NoPadding alg. It requires at least API level 19.
+ * To support lower versions (the total of which are less than 10% of the android market share), take a look at using https://github.com/tozny/java-aes-crypto/blob/master/aes-crypto/src/main/java/com/tozny/crypto/android/AesCbcWithIntegrity.java.
  */
-
+@RequiresApi(Build.VERSION_CODES.KITKAT)
 public class AesGcmCrypto {
 
-    private static final String ANDROID_KEY_STORE = "AndroidKeyStore";
-    private static final int AES_KEYSIZE_128 = 128;
     private static final String ALG_AES_GCM_NOPADDING = "AES/GCM/NoPadding";
     private static final int BASE64_FLAG = Base64.NO_WRAP;
 
-    private String keyStoreType;
-
-    public AesGcmCrypto(String keyStoreType) {
-        this.keyStoreType = keyStoreType;
-    }
+    private SecureKeyStore secureKeyStore;
 
     @Inject
-    public AesGcmCrypto() {
-        this.keyStoreType = ANDROID_KEY_STORE;
-    }
-
-    /**
-     * Generate a secret key and save it in the keystore with the given alias. The key will be generated using AES/GCM/NoPadding, and it's size is 128.
-     * Note: This can only be used on Android M (API level 23) and later versions.
-     * @param keyAlias the alias of the key entry. Can be used to retrieve the key from the keystore later on.
-     * @throws GeneralSecurityException
-     */
-    @TargetApi(Build.VERSION_CODES.M)
-    public void generateAESKey(String keyAlias) throws GeneralSecurityException, IOException {
-        KeyStore keyStore = KeyStore.getInstance(this.keyStoreType);
-        keyStore.load(null);
-        KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, this.keyStoreType);
-        //TODO: further control if user authentication is required for accessing the keys
-        KeyGenParameterSpec keyGenerationParameters = new KeyGenParameterSpec.Builder(keyAlias, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
-                .setKeySize(AES_KEYSIZE_128)
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .setRandomizedEncryptionRequired(true)
-                .build();
-        keyGenerator.init(keyGenerationParameters);
-        keyGenerator.generateKey();
+    public AesGcmCrypto(SecureKeyStore secureKeyStore) {
+        this.secureKeyStore = secureKeyStore;
     }
 
     /**
@@ -75,16 +55,14 @@ public class AesGcmCrypto {
      * @throws IOException
      */
     private SecretKey loadOrGenerateSecretKey(String keyAlias, boolean doGenerate) throws GeneralSecurityException, IOException {
-        KeyStore keyStore = KeyStore.getInstance(this.keyStoreType);
-        keyStore.load(null);
-        if (!keyStore.containsAlias(keyAlias)) {
+        if (!this.secureKeyStore.hasKeyAlias(keyAlias)) {
             if (doGenerate) {
-                generateAESKey(keyAlias);
+                this.secureKeyStore.generateAESKey(keyAlias);
             } else {
                 throw new GeneralSecurityException("missing alias " + keyAlias);
             }
         }
-        SecretKey secretKey = (SecretKey) keyStore.getKey(keyAlias, null);
+        SecretKey secretKey = (SecretKey) this.secureKeyStore.getKey(keyAlias);
         return secretKey;
 
     }
@@ -153,6 +131,9 @@ public class AesGcmCrypto {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         //get the iv that is being used
         byte[] iv = cipher.getIV();
+        //need to write down the size of the iv as different provider will generate iv with different size
+        byte[] ivLengthBytes = ByteBuffer.allocate(4).putInt(iv.length).array();
+        outputStream.write(ivLengthBytes);
         outputStream.write(iv);
         CipherOutputStream cipherStream = new CipherOutputStream(outputStream, cipher);
         return cipherStream;
@@ -168,7 +149,10 @@ public class AesGcmCrypto {
      */
     public InputStream decryptStream(String keyAlias, InputStream inputStream) throws GeneralSecurityException, IOException {
         SecretKey secretKey = loadOrGenerateSecretKey(keyAlias, false);
-        byte[] iv = new byte[12];
+        byte[] ivLengthBytes = new byte[4];
+        inputStream.read(ivLengthBytes);
+        int ivLength = ByteBuffer.wrap(ivLengthBytes).getInt();
+        byte[] iv = new byte[ivLength];
         inputStream.read(iv);
         Cipher cipher = Cipher.getInstance(ALG_AES_GCM_NOPADDING);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(GCMEncrypted.GCM_TAG_LENGTH, iv));
@@ -196,14 +180,14 @@ public class AesGcmCrypto {
      * @throws IOException
      */
     public void deleteSecretKey(String keyAlias) throws GeneralSecurityException, IOException {
-        KeyStore keyStore = KeyStore.getInstance(this.keyStoreType);
-        keyStore.load(null);
-        keyStore.deleteEntry(keyAlias);
+        this.secureKeyStore.deleteKey(keyAlias);
     }
 
     static class GCMEncrypted {
         private static final int GCM_TAG_LENGTH = 128;
         private byte[] iv;
+        //apparently different providers could generate IVs with different length
+        private int ivLength;
         private byte[] encryptedData;
 
         private GCMEncrypted() {
@@ -212,25 +196,31 @@ public class AesGcmCrypto {
 
         GCMEncrypted(byte[] iv, byte[] data) {
             this.iv = iv;
+            this.ivLength = iv.length;
             this.encryptedData = data;
         }
 
         public byte[] toByteArray() {
-            ByteBuffer bb = ByteBuffer.allocate(this.iv.length + this.encryptedData.length);
+            ByteBuffer bb = ByteBuffer.allocate(4 + this.iv.length + this.encryptedData.length);
+            bb.put(ByteBuffer.allocate(4).putInt(this.ivLength).array());
             bb.put(this.iv);
             bb.put(this.encryptedData);
             return bb.array();
         }
 
         public static GCMEncrypted parse(byte[] encrypted) {
+            int ivLength = ByteBuffer.wrap(Arrays.copyOfRange(encrypted, 0, 4)).getInt();
             ByteBuffer bb = ByteBuffer.wrap(encrypted);
             GCMEncrypted gcmData = new GCMEncrypted();
-            byte[] ivArr = new byte[12];
-            byte[] dataArr = new byte[encrypted.length - 12];
+            byte[] ivLengthBytes = new byte[4];
+            byte[] ivArr = new byte[ivLength];
+            byte[] dataArr = new byte[encrypted.length - ivLength - 4];
+            bb.get(ivLengthBytes);
             bb.get(ivArr);
             bb.get(dataArr);
             gcmData.iv = ivArr;
             gcmData.encryptedData = dataArr;
+            gcmData.ivLength = ivLength;
             return gcmData;
         }
     }

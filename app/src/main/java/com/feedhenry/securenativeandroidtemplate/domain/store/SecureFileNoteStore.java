@@ -31,15 +31,15 @@ public class SecureFileNoteStore implements NoteDataStore {
     private static final String NOTES_METADATA_FILENAME = "notes_meta.json";
 
     Context context;
-    AesGcmCrypto aesCrypto;
+    AesGcmCrypto aesGcmCrypto;
 
     private JSONObject notesMetadata = new JSONObject();
     private boolean metadataLoaded = false;
 
     @Inject
-    public SecureFileNoteStore(Context context, AesGcmCrypto aesCrypto) {
+    public SecureFileNoteStore(Context context, AesGcmCrypto aesGcmCrypto) {
         this.context = context;
-        this.aesCrypto = aesCrypto;
+        this.aesGcmCrypto = aesGcmCrypto;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SecureFileNoteStore implements NoteDataStore {
         writeFileWithEncryption(NOTES_METADATA_FILENAME, notesMetadata.toString());
 
         removeFile(note.getId());
-        aesCrypto.deleteSecretKey(note.getId());
+        aesGcmCrypto.deleteSecretKey(note.getId());
         return note;
     }
 
@@ -116,7 +116,7 @@ public class SecureFileNoteStore implements NoteDataStore {
         if (!outputFile.exists()) {
             outputFile.createNewFile();
         }
-        OutputStream outStream = aesCrypto.encryptStream(fileName, new FileOutputStream(outputFile));
+        OutputStream outStream = aesGcmCrypto.encryptStream(fileName, new FileOutputStream(outputFile));
         outStream.write(fileContent.getBytes("utf-8"));
         outStream.flush();
         outStream.close();
@@ -124,7 +124,7 @@ public class SecureFileNoteStore implements NoteDataStore {
 
     private String readFileWithDecryption(String fileName) throws IOException, GeneralSecurityException {
         InputStream inputStream = context.openFileInput(fileName);
-        InputStream decryptedStream = aesCrypto.decryptStream(fileName, inputStream);
+        InputStream decryptedStream = aesGcmCrypto.decryptStream(fileName, inputStream);
 
         return StreamUtils.readStream(decryptedStream);
     }

@@ -17,14 +17,19 @@ public class StreamUtils {
      * @throws IOException
      */
     public static String readStream(InputStream in) throws IOException {
+        byte[] bytes = readStreamBytes(in);
+        String content = new String(bytes, "utf-8");
+        return content;
+    }
+
+    public static byte[] readStreamBytes(InputStream in) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] b = new byte[1024];
         int numberOfBytesRead;
         while ((numberOfBytesRead = in.read(b)) >= 0) {
             baos.write(b, 0, numberOfBytesRead);
         }
-        String content = new String(baos.toByteArray(), "utf-8");
-        return content;
+        return baos.toByteArray();
     }
 
 }

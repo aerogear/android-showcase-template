@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesGcmCrypto;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.PreAndroidMSecureKeyStore;
+import com.feedhenry.securenativeandroidtemplate.domain.crypto.SecureKeyStore;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepositoryImpl;
 import com.feedhenry.securenativeandroidtemplate.domain.store.InMemoryNoteStore;
@@ -45,7 +47,12 @@ public class SecureApplicationTestModule {
     }
 
     @Provides @Singleton
-    AesGcmCrypto provideAesGcmCrypto() {
-        return new AesGcmCrypto();
+    SecureKeyStore provideSecureKeyStore(Context context) {
+        return new PreAndroidMSecureKeyStore(context);
+    }
+
+    @Provides @Singleton
+    AesGcmCrypto provideAesGcmCrypto(SecureKeyStore keyStore) {
+        return new AesGcmCrypto(keyStore);
     }
 }
