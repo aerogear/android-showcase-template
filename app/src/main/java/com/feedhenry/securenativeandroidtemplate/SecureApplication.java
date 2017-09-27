@@ -27,7 +27,12 @@ public class SecureApplication extends Application implements HasActivityInjecto
     public void onCreate() {
         super.onCreate();
         initInjector();
-        SQLiteDatabase.loadLibs(this);
+        try {
+            SQLiteDatabase.loadLibs(this);
+        } catch (UnsatisfiedLinkError e) {
+            //only thrown during tests, ignore it
+        }
+
     }
 
     protected void initInjector() {
