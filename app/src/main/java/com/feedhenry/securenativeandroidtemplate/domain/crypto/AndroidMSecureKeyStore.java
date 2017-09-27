@@ -27,7 +27,7 @@ public class AndroidMSecureKeyStore extends SecureKeyStoreImpl implements Secure
 
     @Override
     public String getSupportedRSAMode() {
-        return ALG_RSA_ECB_OAEPPadding;
+        return ALG_RSA_ECB_PCKS1Padding;
     }
 
     @Override
@@ -73,8 +73,7 @@ public class AndroidMSecureKeyStore extends SecureKeyStoreImpl implements Secure
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, ANDROID_KEY_STORE);
         KeyGenParameterSpec keyPairGenerationParameters = new KeyGenParameterSpec.Builder(keyAlias, KeyProperties.PURPOSE_DECRYPT)
                 .setKeySize(RSA_KEY_SIZE)
-                .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
                 .build();
         keyPairGenerator.initialize(keyPairGenerationParameters);
         keyPairGenerator.generateKeyPair();

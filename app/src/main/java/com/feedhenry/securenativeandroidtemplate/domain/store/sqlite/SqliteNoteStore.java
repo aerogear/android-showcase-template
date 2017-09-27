@@ -35,7 +35,7 @@ public class SqliteNoteStore implements NoteDataStore {
     private static final String DB_KEY_PREF_NAME = "dbkey";
     private static final String ENCRYPT_KEY_ALIAS = "database_key";
 
-    private static final int PASSWORD_BYTES = 64;
+    private static final int PASSWORD_BYTES = 24;
 
     RsaCrypto rsaCrypto;
     SharedPreferences sharedPreferences;
