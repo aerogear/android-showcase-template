@@ -14,9 +14,12 @@ import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Calendar;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 import javax.security.auth.x500.X500Principal;
@@ -116,11 +119,11 @@ public class PreAndroidMSecureKeyStore extends SecureKeyStoreImpl implements Sec
         }
     }
 
-    private byte[] generateSecretKey(int size) {
-        byte[] secretKey = new byte[size/BIT_PER_BYTE];
-        SecureRandom secureRandom = new SecureRandom();
-        secureRandom.nextBytes(secretKey);
-        return secretKey;
+    private byte[] generateSecretKey(int size) throws NoSuchAlgorithmException {
+        KeyGenerator keyGen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES);
+        keyGen.init(size);
+        SecretKey secretKey = keyGen.generateKey();
+        return secretKey.getEncoded();
     }
 
     private byte[] rsaEncrypt(byte[] keyToEncrypt) throws GeneralSecurityException, IOException {
