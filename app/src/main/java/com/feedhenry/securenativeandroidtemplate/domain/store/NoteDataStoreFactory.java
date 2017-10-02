@@ -1,9 +1,19 @@
 package com.feedhenry.securenativeandroidtemplate.domain.store;
 
 import android.content.Context;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 
+import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
+import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.SqliteNoteStore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 /**
@@ -13,15 +23,29 @@ import javax.inject.Singleton;
 public class NoteDataStoreFactory {
 
     private Context context;
-    private NoteDataStore dataStore;
+    private Map<Integer, NoteDataStore> allStores;
 
     @Inject
-    public NoteDataStoreFactory(@NonNull Context context, NoteDataStore dataStore) {
+    public NoteDataStoreFactory(@NonNull Context context, List<NoteDataStore> stores) {
         this.context = context;
-        this.dataStore = dataStore;
+        allStores = new HashMap<Integer, NoteDataStore>();
+        for (NoteDataStore store: stores) {
+            allStores.put(store.getType(), store);
+        }
     }
 
-    public NoteDataStore getDataStore() {
-        return this.dataStore;
+    public List<NoteDataStore> getAllStores() {
+        List<NoteDataStore> dataStores = new ArrayList<NoteDataStore>();
+        dataStores.addAll(allStores.values());
+        return dataStores;
+    }
+
+    public NoteDataStore getDataStoreForNote(Note note) {
+        return getDataStoreByType(note.getStoreType());
+    }
+
+    public NoteDataStore getDataStoreByType(int storeType) {
+        NoteDataStore store = allStores.get(storeType);
+        return store;
     }
 }

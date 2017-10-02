@@ -1,5 +1,7 @@
 package com.feedhenry.securenativeandroidtemplate.domain.models;
 
+import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,6 +19,8 @@ public class Note {
     private String content;
     protected Date createdAt;
 
+    private int storeType = NoteDataStore.STORE_TYPE_FILE;
+
     public Note(String title, String content) {
         this.createdAt = new Date();
         this.id = UUID.randomUUID().toString();
@@ -24,7 +28,7 @@ public class Note {
         this.content = content;
     }
 
-    private Note(String id, String title, String content, long createAt) {
+    public Note(String id, String title, String content, long createAt) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -53,6 +57,14 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getStoreType() {
+        return this.storeType;
+    }
+
+    public void setStoreType(int storeType) {
+        this.storeType = storeType;
     }
 
     public JSONObject toJson(boolean withContent) throws JSONException {

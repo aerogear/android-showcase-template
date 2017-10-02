@@ -1,5 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -10,7 +11,10 @@ import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
+import com.feedhenry.securenativeandroidtemplate.domain.store.SecureFileNoteStoreTest;
+import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.NoteDbHelper;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,6 +30,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
@@ -58,6 +63,12 @@ public class StorageFeatureTest {
     public void setUp() {
         SecureTestApplication application = (SecureTestApplication) InstrumentationRegistry.getTargetContext().getApplicationContext();
         application.getComponent().inject(this);
+        clearData();
+    }
+
+    @After
+    public void tearDown() {
+        clearData();
     }
 
     @Test
@@ -75,7 +86,7 @@ public class StorageFeatureTest {
         onView(withId(R.id.note_title_field)).perform(typeText(TEST_TITLE), closeSoftKeyboard());
         onView(withId(R.id.note_content_field)).perform(typeText(TEST_CONTENT), closeSoftKeyboard());
         //save
-        onView(withId(R.id.save_note_btn)).perform(click());
+        onView(withId(R.id.save_note_btn)).perform(scrollTo(), click());
         //the list view should show again, and it should have the new note
         onView(withId(R.id.notes_list_view)).check(matches(isDisplayed()));
         onView(withId(R.id.notes_list_view)).check(matches(hasDescendant(withText(TEST_TITLE))));
@@ -87,8 +98,14 @@ public class StorageFeatureTest {
         onView(withId(R.id.note_content_field)).check(matches(withText(TEST_CONTENT)));
         //update the title and save
         onView(withId(R.id.note_title_field)).perform(clearText(), typeText(TEST_TITLE_UPDATED), closeSoftKeyboard());
-        onView(withId(R.id.save_note_btn)).perform(click());
+        onView(withId(R.id.save_note_btn)).perform(scrollTo(), click());
         //title should be updated on the list view
         onView(withId(R.id.notes_list_view)).check(matches(hasDescendant(withText(TEST_TITLE_UPDATED))));
+    }
+
+    private void clearData() {
+        Context context = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        context.deleteDatabase(NoteDbHelper.DATABASE_NAME);
+        SecureFileNoteStoreTest.removeFiles(context);
     }
 }

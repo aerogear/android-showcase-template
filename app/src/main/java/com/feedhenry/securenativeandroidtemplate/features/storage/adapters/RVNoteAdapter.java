@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
+import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +30,12 @@ public class RVNoteAdapter extends RecyclerView.Adapter<RVNoteAdapter.NoteViewHo
 
         @BindView(R.id.singleNoteView)
         CardView noteCardView;
+
         @BindView(R.id.noteTitle)
         TextView noteTitle;
+
+        @BindView(R.id.noteStore)
+        TextView noteStore;
 
         NoteViewHolder(View itemView) {
             super(itemView);
@@ -64,6 +69,7 @@ public class RVNoteAdapter extends RecyclerView.Adapter<RVNoteAdapter.NoteViewHo
     public void onBindViewHolder(NoteViewHolder holder, int position) {
         final Note selectedNote = notes.get(position);
         holder.noteTitle.setText(selectedNote.getTitle());
+        holder.noteStore.setText("Storage: " + getStoreName(selectedNote.getStoreType()));
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -72,6 +78,14 @@ public class RVNoteAdapter extends RecyclerView.Adapter<RVNoteAdapter.NoteViewHo
                 }
             }
         });
+    }
+
+    private String getStoreName(int storeType) {
+        if (storeType == NoteDataStore.STORE_TYPE_FILE) {
+            return "File System";
+        } else {
+            return "SQLite Database";
+        }
     }
 
     @Override

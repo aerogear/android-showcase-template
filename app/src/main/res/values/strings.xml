@@ -9,8 +9,12 @@
     <string name="popup_title">Information</string>
     <string name="popup_home_fragment">Welcome. Clicking this button on each view inside the App will give you more information about the different security measures implemented.</string>
     <string name="popup_authentication_fragment">The Authentication and Access Control is provided by the OpenID Connect standard. The Open Source Identity and Access Management Server, Keycloak, is being used as the Identity Provider.  \n\nThis App uses the Authorization Code flow and saves the tokens to Shared Preferences.</string>
-    <string name="popup_storage_fragment">The notes are encrypted automatically when saved locally. Each note is saved in its own file, and encrypted with its own secret key. The secret keys are persisted in the Android Keystore.
-        \n\nTo encrypt the files, AES is used. The key size is 128 bit, with GCM mode to ensure the integrity of the data.</string>
+    <string name="popup_storage_fragment">The notes are encrypted automatically when saved locally. It supports 2 storage options, using file system or sqlite. \n\n When saved in the file system, each note is saved in its own file, and encrypted with its own secret key. The secret keys are persisted in the Android Keystore.
+        \nTo encrypt the files, AES is used. The key size is 128 bit, with GCM mode to ensure the integrity of the data.
+        \n\n When saved in sqlite database, SqlCipher library is used to encrypt the whole database.
+        \n\n For Android versions below 23, the secret keys can not be generated using the keystore. Instead, a KeyPair is generated in the keystore, and the secret key is generated separately. Then the public key is used to encrypt the secret key and the encrypted secret key is persisted using the private SharedPrefereneces of the app.
+           To load the encrypted files, the encrypted secret key will be decrypted first using the private key.
+    </string>
     <string name="popup_authentication_details_fragment">The Users Identity and Access Data is being retrieved from the OpenID Connect Access Token. \n\nThe remote	endpoint terminates the	existing session when the user logs out.</string>
 
     <!-- Strings related to Navigation -->
@@ -50,7 +54,9 @@
     <string name="error_failed_save_note">Failed to save note</string>
     <string name="error_failed_read_note">Failed to read note</string>
     <string name="error_failed_delete_note">Failed to delete note</string>
-
+    <string name="fragment_store_type">Store Type</string>
+    <string name="store_type_file_system">File System</string>
+    <string name="store_type_sqlite">SQLite Database</string>
     <!-- Strings related to Network -->
     <string name="fragment_title_network">Network</string>
     <string name="network_request_failed">Network Request Failed</string>

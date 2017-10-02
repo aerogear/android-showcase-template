@@ -48,6 +48,36 @@
                 android:inputType="textMultiLine"
                 android:minHeight="@dimen/note_content_edit_min_height" />
 
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_marginTop"
+                android:text="@string/fragment_store_type" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_marginTop"
+                android:id="@+id/store_type_choice"
+                android:checkedButton="@+id/store_type_file_system">
+
+                <RadioButton
+                    android:id="@+id/store_type_file_system"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/store_type_file_system" />
+
+                <RadioButton
+                    android:id="@+id/store_type_sqlite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/store_type_sqlite" />
+            </RadioGroup>
+
             <Button
                 android:id="@+id/save_note_btn"
                 android:layout_width="match_parent"

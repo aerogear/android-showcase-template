@@ -23,10 +23,20 @@ public interface NoteRepository {
     Note readNote(String noteId) throws Exception;
 
     /**
+     * Read the details about a note with the given noteId from the given storage.
+     * @param noteId the id of the note
+     * @param storeType the type of the storage.
+     * @return the note instance
+     * @throws Exception
+     */
+    Note readNote(String noteId, int storeType) throws Exception;
+
+    /**
      * Create a new note
      * @param noteModel the note to be created
+     * @param storeType the stype of storage for the note
      */
-    Note createNote(Note noteModel) throws Exception;
+    Note createNote(Note noteModel, int storeType) throws Exception;
 
     /**
      * Update the given note

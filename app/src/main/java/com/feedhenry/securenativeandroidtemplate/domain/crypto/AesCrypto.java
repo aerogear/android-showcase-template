@@ -1,49 +1,36 @@
 package com.feedhenry.securenativeandroidtemplate.domain.crypto;
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.os.Build;
-import android.security.KeyPairGeneratorSpec;
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyProperties;
 import android.support.annotation.RequiresApi;
 import android.util.Base64;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
 import java.util.Arrays;
-import java.util.Calendar;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.inject.Inject;
-import javax.security.auth.x500.X500Principal;
 
 /**
  * Perform data encryption and decryption using AES/GCM/NoPadding alg. It requires at least API level 19.
  * To support lower versions (the total of which are less than 10% of the android market share), take a look at using https://github.com/tozny/java-aes-crypto/blob/master/aes-crypto/src/main/java/com/tozny/crypto/android/AesCbcWithIntegrity.java.
  */
 @RequiresApi(Build.VERSION_CODES.KITKAT)
-public class AesGcmCrypto {
+public class AesCrypto {
 
-    private static final String ALG_AES_GCM_NOPADDING = "AES/GCM/NoPadding";
     private static final int BASE64_FLAG = Base64.NO_WRAP;
 
     private SecureKeyStore secureKeyStore;
 
     @Inject
-    public AesGcmCrypto(SecureKeyStore secureKeyStore) {
+    public AesCrypto(SecureKeyStore secureKeyStore) {
         this.secureKeyStore = secureKeyStore;
     }
 
@@ -55,14 +42,14 @@ public class AesGcmCrypto {
      * @throws IOException
      */
     private SecretKey loadOrGenerateSecretKey(String keyAlias, boolean doGenerate) throws GeneralSecurityException, IOException {
-        if (!this.secureKeyStore.hasKeyAlias(keyAlias)) {
+        if (!this.secureKeyStore.hasSecretKey(keyAlias)) {
             if (doGenerate) {
                 this.secureKeyStore.generateAESKey(keyAlias);
             } else {
                 throw new GeneralSecurityException("missing alias " + keyAlias);
             }
         }
-        SecretKey secretKey = (SecretKey) this.secureKeyStore.getKey(keyAlias);
+        SecretKey secretKey = (SecretKey) this.secureKeyStore.getSecretKey(keyAlias);
         return secretKey;
 
     }
@@ -77,7 +64,7 @@ public class AesGcmCrypto {
      */
     public byte[] encrypt(String keyAlias, byte[] plainText) throws GeneralSecurityException, IOException {
         SecretKey secretKey = loadOrGenerateSecretKey(keyAlias, true);
-        Cipher cipher = Cipher.getInstance(ALG_AES_GCM_NOPADDING);
+        Cipher cipher = Cipher.getInstance(secureKeyStore.getSupportedAESMode());
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         //get the iv that is being used
         byte[] iv = cipher.getIV();
@@ -97,7 +84,7 @@ public class AesGcmCrypto {
     public byte[] decrypt(String keyAlias, byte[] encryptedText) throws GeneralSecurityException, IOException {
         GCMEncrypted encryptedData = GCMEncrypted.parse(encryptedText);
         SecretKey secretKey = loadOrGenerateSecretKey(keyAlias, false);
-        Cipher cipher = Cipher.getInstance(ALG_AES_GCM_NOPADDING);
+        Cipher cipher = Cipher.getInstance(secureKeyStore.getSupportedAESMode());
         cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(GCMEncrypted.GCM_TAG_LENGTH, encryptedData.iv));
         byte[] plainText = cipher.doFinal(encryptedData.encryptedData);
         return plainText;
@@ -127,7 +114,7 @@ public class AesGcmCrypto {
      */
     public OutputStream encryptStream(String keyAlias, OutputStream outputStream) throws GeneralSecurityException, IOException {
         SecretKey secretKey = loadOrGenerateSecretKey(keyAlias, true);
-        Cipher cipher = Cipher.getInstance(ALG_AES_GCM_NOPADDING);
+        Cipher cipher = Cipher.getInstance(secureKeyStore.getSupportedAESMode());
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         //get the iv that is being used
         byte[] iv = cipher.getIV();
@@ -154,7 +141,7 @@ public class AesGcmCrypto {
         int ivLength = ByteBuffer.wrap(ivLengthBytes).getInt();
         byte[] iv = new byte[ivLength];
         inputStream.read(iv);
-        Cipher cipher = Cipher.getInstance(ALG_AES_GCM_NOPADDING);
+        Cipher cipher = Cipher.getInstance(secureKeyStore.getSupportedAESMode());
         cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(GCMEncrypted.GCM_TAG_LENGTH, iv));
         CipherInputStream cipherStream = new CipherInputStream(inputStream, cipher);
         return cipherStream;
