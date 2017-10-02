@@ -1,6 +1,4 @@
 image:https://circleci.com/gh/feedhenry/mobile-security-android-template.svg?style=svg["CircleCI", link="https://circleci.com/gh/feedhenry/mobile-security-android-template"]
-image:https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp/badge.svg?style=svg["Known Vulnerabilities", link="https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp"]
-
 
 = Secure Native Android Template
 
@@ -21,3 +19,14 @@ git checkout master
 git tag release-1.0.0 #change the release version based on the current release
 git push origin --tags
 ```
+
+== Dependency Check
+image:https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp/badge.svg?style=svg["Known Vulnerabilities", link="https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp"]
+
+The Apache HTTP client can be seen as both an API and an implementation. The OkHttp dependency doesn’t use the vulnerable implementation. 
+
+* SNYK-JAVA-ORGAPACHEHTTPCOMPONENTS-30647 (CVE-2015-5262)- Not Affected
+* SNYK-JAVA-ORGAPACHEHTTPCOMPONENTS-31517 (CWE-23) - Not Affected
+* SNYK-JAVA-ORGAPACHEHTTPCOMPONENTS-30645 (CVE-2012-6153) - Not Affected
+* SNYK-JAVA-ORGAPACHEHTTPCOMPONENTS-30644 (CVE-2011-1498) - Not Affected
+* SNYK-JAVA-ORGAPACHEHTTPCOMPONENTS-30646 (CVE-2014-3577) - Not Affected
