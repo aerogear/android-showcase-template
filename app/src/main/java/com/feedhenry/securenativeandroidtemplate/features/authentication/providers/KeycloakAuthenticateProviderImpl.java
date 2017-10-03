@@ -43,11 +43,15 @@ import okhttp3.Response;
 @Singleton
 public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationProvider {
 
-    private static final Uri AUTHORIZATION_ENDPOINT = Constants.KEYCLOAK_CONFIG.AUTHORIZATION_ENDPOINT;
-    private static final Uri TOKEN_ENDPOINT = Constants.KEYCLOAK_CONFIG.TOKEN_ENDPOINT;
-    private static final String CLIENT_ID = Constants.KEYCLOAK_CONFIG.CLIENT_ID;
-    private static final Uri REDIRECT_URI = Constants.KEYCLOAK_CONFIG.REDIRECT_URI;
-    private static final String OPEN_ID_SCOPE = Constants.KEYCLOAK_CONFIG.OPEN_ID_SCOPE;
+    private static final Uri AUTHORIZATION_ENDPOINT = Constants.OPEN_ID_CONNECT_CONFIG.AUTHORIZATION_ENDPOINT;
+    private static final Uri TOKEN_ENDPOINT = Constants.OPEN_ID_CONNECT_CONFIG.TOKEN_ENDPOINT;
+    private static final String CLIENT_ID = Constants.OPEN_ID_CONNECT_CONFIG.CLIENT_ID;
+    private static final Uri REDIRECT_URI = Constants.OPEN_ID_CONNECT_CONFIG.REDIRECT_URI;
+    private static final String OPEN_ID_SCOPE = Constants.OPEN_ID_CONNECT_CONFIG.OPEN_ID_SCOPE;
+    private static final String baseLogoutEndpoint = Constants.OPEN_ID_CONNECT_CONFIG.LOGOUT_ENDPOINT;
+    private static final String redirectUri = Constants.OPEN_ID_CONNECT_CONFIG.REDIRECT_URI.toString();
+    private static final String tokenHintFragment = Constants.OPEN_ID_CONNECT_CONFIG.TOKEN_HINT_FRAGMENT;
+    private static final String redirectFragment = Constants.OPEN_ID_CONNECT_CONFIG.REDIRECT_FRAGMENT;
 
     private AuthState authState;
     private AuthorizationService authService;
@@ -64,6 +68,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         this.context = context;
     }
 
+    // tag::performAuthRequest[]
     /**
      * Create the config for the initial Keycloak auth request to get a temporary token and create an intent to handle the response
      */
@@ -100,9 +105,10 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         // perform the auth request
         Intent authIntent = authService.getAuthorizationRequestIntent(authRequest);
         fromActivity.startActivityForResult(authIntent, Constants.REQUEST_CODES.AUTH_CODE);
-
     }
+    // end::performAuthRequest[]
 
+    // tag::onAuthResult[]
     /**
      * Checks if the incoming intent matches the Keycloak Auth response intent
      *
@@ -113,7 +119,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             handleAuthorizationResponse(intent);
         }
     }
+    // end::onAuthResult[]
 
+    // tag::handleAuthorizationResponse[]
     /**
      * Handles the initial auth response and create a new request to the token endpoint to get the actual tokens
      *
@@ -132,7 +140,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             authFailed(error);
         }
     }
+    // end::handleAuthorizationResponse[]
 
+    // tag::exchangeTokens[]
     /**
      * Token exchange against the token endpoint
      *
@@ -146,7 +156,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
                     authState.update(tokenResponse, exception);
                     AuthHelper.writeAuthState(authState);
 
-                    JSONObject decodedIdentityData = AuthHelper.getIdentityInfomation();
+                    JSONObject decodedIdentityData = AuthHelper.getIdentityInformation();
                     Identity newIdentity = new Identity("", "", "", new ArrayList<String>());
 
                     try {
@@ -162,19 +172,16 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             }
         });
     }
+    // end::exchangeTokens[]
 
+    // tag::logout[]
     /**
      * Perform a logout request against the openid connect server
      * @param logoutCallback - the logout callback
      */
     public void logout(Callback logoutCallback) {
         this.logoutCallback = logoutCallback;
-
-        String baseLogoutEndpoint = Constants.KEYCLOAK_CONFIG.LOGOUT_ENDPOINT;
         String identityToken = AuthHelper.getIdentityToken();
-        String redirectUri = Constants.KEYCLOAK_CONFIG.REDIRECT_URI.toString();
-        String tokenHintFragment = Constants.KEYCLOAK_CONFIG.TOKEN_HINT_FRAGMENT;
-        String redirectFragment = Constants.KEYCLOAK_CONFIG.REDIRECT_FRAGMENT;
 
         // Construct the Keycloak logout URL
         String logoutRequestUri = baseLogoutEndpoint +
@@ -197,6 +204,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             }
         });
     }
+    // end::logout[]
 
     private void logoutSuccess() {
         if (this.logoutCallback != null) {

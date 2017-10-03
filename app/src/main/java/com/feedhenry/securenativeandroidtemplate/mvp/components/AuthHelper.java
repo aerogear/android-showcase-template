@@ -2,7 +2,6 @@ package com.feedhenry.securenativeandroidtemplate.mvp.components;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
@@ -34,6 +33,7 @@ public class AuthHelper {
         mPrefs = context.getSharedPreferences(STORE_NAME, MODE_PRIVATE);
     }
 
+    // tag::readAuthState[]
     /**
      * Read the auth state from shared preferences
      */
@@ -49,7 +49,9 @@ public class AuthHelper {
             return new AuthState();
         }
     }
+    // end::readAuthState[]
 
+    // tag::writeAuthState[]
     /**
      * Write the auth state to shared preferences
      * @param state - The Authstate to write to shared preferences
@@ -65,6 +67,7 @@ public class AuthHelper {
             }
         }
     }
+    // end::writeAuthState[]
 
     /**
      * Check if the user is authenticated/authorized
@@ -87,10 +90,11 @@ public class AuthHelper {
         return readAuthState().getIdToken();
     }
 
+    // tag::getIdentityInformation[]
     /**
      * Get the authenticated users identity information
      */
-    public static JSONObject getIdentityInfomation() {
+    public static JSONObject getIdentityInformation() {
         String accessToken = getAccessToken();
         JSONObject decodedIdentityData = new JSONObject();
 
@@ -110,6 +114,7 @@ public class AuthHelper {
         }
         return decodedIdentityData;
     }
+    // end::getIdentityInformation[]
 
     /**
      * Check if a new access token needs to be required
@@ -125,6 +130,7 @@ public class AuthHelper {
         readAuthState().setNeedsTokenRefresh(true);
     }
 
+    // tag::makeBearerRequest[]
     /**
      * Make a request to a resource that requires the access token to be sent with the request
      */
@@ -147,4 +153,5 @@ public class AuthHelper {
         call.enqueue(callback);
         return call;
     }
+    // end::makeBearerRequest[]
 }

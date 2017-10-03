@@ -51,7 +51,7 @@ public class Navigator {
         if(AuthHelper.isAuthorized()) {
             Identity identity = null;
             try {
-                identity = Identity.fromJson(AuthHelper.getIdentityInfomation());
+                identity = Identity.fromJson(AuthHelper.getIdentityInformation());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

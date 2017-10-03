@@ -17,7 +17,7 @@ public class Constants {
         public static final String IDENTITY_DATA = "identityData";
     }
 
-    public static final class KEYCLOAK_CONFIG {
+    public static final class OPEN_ID_CONNECT_CONFIG {
         public static final String BASE_SERVER_URI = "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com/auth/realms/secure-app/protocol/openid-connect";
         public static final Uri AUTHORIZATION_ENDPOINT = Uri.parse(BASE_SERVER_URI + "/auth");
         public static final Uri TOKEN_ENDPOINT = Uri.parse(BASE_SERVER_URI + "/token");
