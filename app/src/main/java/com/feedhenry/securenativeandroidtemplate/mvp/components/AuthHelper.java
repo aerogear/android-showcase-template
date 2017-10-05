@@ -121,6 +121,7 @@ public class AuthHelper {
     }
     // end::getIdentityInformation[]
 
+    // tag::hasRole[]
     /**
      * Check if the user has the specified role
      * @param role - the role to check
@@ -138,6 +139,7 @@ public class AuthHelper {
         }
         return hasRole;
     }
+    // end::hasRole[]
 
 
     /**
