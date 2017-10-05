@@ -3,7 +3,6 @@ package com.feedhenry.securenativeandroidtemplate.features.authentication;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,6 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.present
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsViewImpl;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 

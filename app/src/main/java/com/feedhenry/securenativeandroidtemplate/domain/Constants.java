@@ -29,6 +29,12 @@ public class Constants {
         public static final String REDIRECT_FRAGMENT = "&redirect_uri=";
     }
 
+    public static final class ACCESS_CONTROL_ROLES {
+        public static final String ROLE_MOBILE_USER = "mobile-user";
+        public static final String ROLE_API_ACCESS = "api-access";
+        public static final String ROLE_SUPERUSER = "superuser";
+    }
+
     public static final class NOTE_FIELDS {
         public static final String ID_FIELD = "id";
         public static final String TITLE_FIELD = "title";

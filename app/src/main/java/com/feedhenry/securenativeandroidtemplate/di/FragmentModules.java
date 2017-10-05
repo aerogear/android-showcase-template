@@ -1,5 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate.di;
 
+import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.AccessControlFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
@@ -24,6 +25,9 @@ public abstract class FragmentModules {
 
     @ContributesAndroidInjector
     abstract AuthenticationFragment contributeAuthenticationFragmentInjector();
+
+    @ContributesAndroidInjector
+    abstract AccessControlFragment contributeAccessControlFragmentInjector();
 
     @ContributesAndroidInjector
     abstract AuthenticationDetailsFragment contributeAuthenticationDetailsFragmentInjector();

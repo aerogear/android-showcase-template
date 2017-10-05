@@ -2,6 +2,7 @@ package com.feedhenry.securenativeandroidtemplate;
 
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,7 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.Authent
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
+import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
 import javax.inject.Inject;
@@ -53,6 +55,9 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
+    @Inject
+    Context context;
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      * @param savedInstanceState - the saved instance state
@@ -71,6 +76,10 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        // initialise the authhelper with a context
+        AuthHelper.init(context);
+
         // load the main menu fragment
         navigator.navigateToHomeView(this);
     }
@@ -108,10 +117,15 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_authentication) {
             navigator.navigateToAuthenticationView(this);
         }
+        // Visit the Access Control Screen
+        if (id == R.id.nav_accesscontrol) {
+            navigator.navigateToAccessControlView(this);
+        }
         // Visit the Storage Screen
         if (id == R.id.nav_storage) {
             navigator.navigateToStorageView(this);
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

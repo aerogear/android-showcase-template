@@ -5,11 +5,16 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
+
+import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
+
 import net.openid.appauth.AuthState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -115,6 +120,25 @@ public class AuthHelper {
         return decodedIdentityData;
     }
     // end::getIdentityInformation[]
+
+    /**
+     * Check if the user has the specified role
+     * @param role - the role to check
+     */
+    public static boolean hasRole(String role) {
+        boolean hasRole = false;
+        try {
+            Identity identity = Identity.fromJson(AuthHelper.getIdentityInformation());
+            ArrayList userRoles = identity.getRealmRoles();
+            if(userRoles.contains(role)) {
+                hasRole = true;
+            }
+        } catch (JSONException e) {
+            Log.e("", "Error - JSON Exception", e);
+        }
+        return hasRole;
+    }
+
 
     /**
      * Check if a new access token needs to be required

@@ -1,14 +1,14 @@
 package com.feedhenry.securenativeandroidtemplate.navigation;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 
 import com.feedhenry.securenativeandroidtemplate.BaseActivity;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
+import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.AccessControlFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
@@ -18,12 +18,7 @@ import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFra
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
-
-import net.openid.appauth.TokenResponse;
-
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import javax.inject.Inject;
 
 /**
@@ -45,8 +40,6 @@ public class Navigator {
     }
 
     public void navigateToAuthenticationView(BaseActivity activity) {
-        // initialise the authhelper with a context
-        AuthHelper.init(context);
         AuthenticationFragment authFragment = new AuthenticationFragment();
         if(AuthHelper.isAuthorized()) {
             Identity identity = null;
@@ -64,6 +57,16 @@ public class Navigator {
     public void navigateToAuthenticateDetailsView(BaseActivity activity, Identity identityData) {
         AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(identityData);
         loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
+    }
+
+    public void navigateToAccessControlView(BaseActivity activity) {
+        if (AuthHelper.isAuthorized() && AuthHelper.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
+            AccessControlFragment accessControView = new AccessControlFragment();
+            loadFragment(activity, accessControView, AccessControlFragment.TAG);
+        } else {
+            Snackbar.make(activity.findViewById(android.R.id.content), R.string.not_authenticated, Snackbar.LENGTH_LONG).show();
+            navigateToAuthenticationView(activity);
+        }
     }
 
     public void navigateToStorageView(BaseActivity activity) {
@@ -96,5 +99,6 @@ public class Navigator {
         FragmentManager fm = activity.getFragmentManager();
         fm.popBackStack();
     }
+
 
 }

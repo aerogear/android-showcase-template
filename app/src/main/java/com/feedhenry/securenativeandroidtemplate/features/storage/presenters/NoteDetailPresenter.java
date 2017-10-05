@@ -3,7 +3,6 @@ package com.feedhenry.securenativeandroidtemplate.features.storage.presenters;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
-import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.features.storage.views.NoteDetailAppView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
