@@ -10,6 +10,12 @@
             android:id="@+id/nav_authentication"
             android:icon="@drawable/ic_lock_open"
             android:title="@string/fragment_title_authenticate" />
+
+        <item
+            android:id="@+id/nav_accesscontrol"
+            android:icon="@drawable/ic_security_black_24dp"
+            android:title="@string/fragment_title_accesscontrol" />
+
         <item
             android:id="@+id/nav_storage"
             android:icon="@drawable/ic_storage"
@@ -26,6 +32,10 @@
             android:id="@+id/nav_cryptography"
             android:icon="@drawable/ic_crypto"
             android:title="@string/fragment_title_cryptography" />
+        <item
+            android:id="@+id/nav_memory"
+            android:icon="@drawable/ic_memory"
+            android:title="@string/fragment_title_memory" />
         <item
             android:id="@+id/nav_configuration"
             android:icon="@drawable/ic_config"

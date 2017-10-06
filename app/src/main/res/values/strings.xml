@@ -16,6 +16,7 @@
            To load the encrypted files, the encrypted secret key will be decrypted first using the private key.
     </string>
     <string name="popup_authentication_details_fragment">The Users Identity and Access Data is being retrieved from the OpenID Connect Access Token. \n\nThe remote	endpoint terminates the	existing session when the user logs out.</string>
+    <string name="popup_accesscontrol_fragment">There are a number of role checks performed here to indicate if the users Access Token grants them access to a number of predefined roles in the mobile app. \n\nTo enter this view, the user must at least possess the mobile-user role.</string>
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -42,6 +43,15 @@
     <string name="unknown_email">Unknown Email</string>
     <string name="unknown_name">Unknown Name</string>
 
+    <!-- Strings related to Access Control -->
+    <string name="fragment_title_accesscontrol">Access Control</string>
+    <string name="not_authenticated">Insufficient Privileges</string>
+    <string name="role_mobile_user_label">Mobile User Role</string>
+    <string name="role_api_access_label">API Access Role</string>
+    <string name="role_superuser_label">Superuser Role</string>
+    <string name="access_granted">Access Granted</string>
+    <string name="access_denied">Access Denied</string>
+
     <!-- Strings related to Storage -->
     <string name="fragment_title_storage">Storage</string>
     <string name="fragment_note_title">Title</string>
@@ -57,6 +67,7 @@
     <string name="fragment_store_type">Store Type</string>
     <string name="store_type_file_system">File System</string>
     <string name="store_type_sqlite">SQLite Database</string>
+
     <!-- Strings related to Network -->
     <string name="fragment_title_network">Network</string>
     <string name="network_request_failed">Network Request Failed</string>
@@ -66,6 +77,9 @@
 
     <!-- Strings related to Cryptography -->
     <string name="fragment_title_cryptography">Cryptography</string>
+
+    <!-- Strings related to Memory -->
+    <string name="fragment_title_memory">Memory</string>
 
     <!-- Strings related to Configuration -->
     <string name="fragment_title_configuration">Configuration</string>
