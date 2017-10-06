@@ -78,6 +78,9 @@
     <!-- Strings related to Cryptography -->
     <string name="fragment_title_cryptography">Cryptography</string>
 
+    <!-- Strings related to Memory -->
+    <string name="fragment_title_memory">Memory</string>
+
     <!-- Strings related to Configuration -->
     <string name="fragment_title_configuration">Configuration</string>
 
