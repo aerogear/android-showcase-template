@@ -6,10 +6,6 @@ A Native Android Application that demonstrates Secure Mobile Development Practis
 
 For more information, please check the https://github.com/feedhenry/mobile-security[Mobile Security Project].
 
-== Requirements
-* Minimum SDK Version: 22
-* Target SDK Version: 25
-
 == Binary Scanning with Kryptowire
 
 If you need to push the built binary to https://www.kryptowire.com/[Kryptowire] for a security scan, you can create a git tag like `release-*`. This will trigger a build in CircleCI, which will push the built release binary to the Kryptowire platform automatically.

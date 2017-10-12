@@ -6,14 +6,25 @@ import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 
+import com.datatheorem.android.trustkit.TrustKit;
+import com.feedhenry.securenativeandroidtemplate.R;
+import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 
 import net.openid.appauth.AuthState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -36,6 +47,9 @@ public class AuthHelper {
 
     public static void init(Context context) {
         mPrefs = context.getSharedPreferences(STORE_NAME, MODE_PRIVATE);
+
+        // Initialize TrustKit
+        TrustKit.initializeWithNetworkSecurityConfiguration(context, R.xml.network_security_config);
     }
 
     // tag::readAuthState[]
@@ -160,16 +174,39 @@ public class AuthHelper {
     /**
      * Make a request to a resource that requires the access token to be sent with the request
      */
-    public static Call makeBearerRequest(String url, okhttp3.Callback callback) {
+    public static Call makeBearerRequest(String requestUrl, okhttp3.Callback callback) {
 
         // Ensure that a non-expired access token is being used for the request
         if (getNeedsTokenRefresh()) {
             setNeedsTokenRefresh();
         }
 
+        URL url = null;
+        try {
+            url = new URL(requestUrl);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        String serverHostname = url.getHost();
+
+        HttpsURLConnection connection = null;
+        try {
+            connection = (HttpsURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         String accessToken = getAccessToken();
 
-        OkHttpClient httpClient = new OkHttpClient();
+        SSLSocketFactory sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(serverHostname);
+        X509TrustManager trustManager = TrustKit.getInstance().getTrustManager(serverHostname);
+        connection.setSSLSocketFactory(sslSocketFactory);
+
+        OkHttpClient httpClient = HttpHelper.getHttpClient()
+                .sslSocketFactory(sslSocketFactory, trustManager)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .build();
+
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Authorization", String.format("Bearer %s", accessToken))
@@ -180,4 +217,48 @@ public class AuthHelper {
         return call;
     }
     // end::makeBearerRequest[]
+
+
+    // tag::performCertificateVerification[]
+    /**
+     * Make a request to the server endpoint to check if pinning verification fails
+     * @param callback - the okhttp callback
+     */
+    public static Call performCertificateVerification(okhttp3.Callback callback) {
+        String pinnedHost = Constants.CERTIFICATE_PINNING_HOSTS.OSM1;
+
+        URL url = null;
+        try {
+            url = new URL(pinnedHost);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        String serverHostname = url.getHost();
+
+        HttpsURLConnection connection = null;
+        try {
+            connection = (HttpsURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SSLSocketFactory sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(serverHostname);
+        X509TrustManager trustManager = TrustKit.getInstance().getTrustManager(serverHostname);
+        connection.setSSLSocketFactory(sslSocketFactory);
+
+        OkHttpClient httpClient = HttpHelper.getHttpClient()
+                .sslSocketFactory(sslSocketFactory, trustManager)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(pinnedHost)
+                .build();
+
+        Call call = httpClient.newCall(request);
+        call.enqueue(callback);
+        return call;
+    }
+    // end::performCertificateVerification[]
+
 }
