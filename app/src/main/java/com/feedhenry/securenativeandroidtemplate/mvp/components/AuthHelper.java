@@ -47,9 +47,6 @@ public class AuthHelper {
 
     public static void init(Context context) {
         mPrefs = context.getSharedPreferences(STORE_NAME, MODE_PRIVATE);
-
-        // Initialize TrustKit
-        TrustKit.initializeWithNetworkSecurityConfiguration(context, R.xml.network_security_config);
     }
 
     // tag::readAuthState[]
