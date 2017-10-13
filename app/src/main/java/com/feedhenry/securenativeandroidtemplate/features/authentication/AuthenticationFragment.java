@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.feedhenry.securenativeandroidtemplate.R;
+import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
@@ -147,14 +148,17 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     }
 
     /**
-     * Perform certfication pinning verification before allowing a user to login to the application using a secure channel
+     * Perform certificate pinning verification before allowing a user to login to the application using a secure channel
      */
     public void performCertPinningVerification() {
 
         // disable allowing a user to login until the channel is secure
         keycloakLogin.setEnabled(false);
 
-        AuthHelper.performCertificateVerification(new okhttp3.Callback() {
+        String hostURL = Constants.CERTIFICATE_PINNING_HOSTS.OSM1;
+        boolean sendAccessToken = false;
+
+        AuthHelper.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
@@ -171,6 +175,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
                             // hide the authentication button
                             keycloakLogin.setVisibility(view.GONE);
 
+                            // update the UI to state the connection is insecure
                             authMessage.setText(R.string.insecure_connection);
                             background.setImageResource(R.drawable.ic_error_background);
                             logo.setImageResource(R.drawable.ic_lock);

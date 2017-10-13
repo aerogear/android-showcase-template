@@ -8,10 +8,10 @@ import android.util.Log;
 
 import com.datatheorem.android.trustkit.TrustKit;
 import com.feedhenry.securenativeandroidtemplate.R;
-import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 
 import net.openid.appauth.AuthState;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,6 +53,7 @@ public class AuthHelper {
     }
 
     // tag::readAuthState[]
+
     /**
      * Read the auth state from shared preferences
      */
@@ -71,8 +72,10 @@ public class AuthHelper {
     // end::readAuthState[]
 
     // tag::writeAuthState[]
+
     /**
      * Write the auth state to shared preferences
+     *
      * @param state - The Authstate to write to shared preferences
      */
     public static void writeAuthState(@Nullable AuthState state) {
@@ -110,6 +113,7 @@ public class AuthHelper {
     }
 
     // tag::getIdentityInformation[]
+
     /**
      * Get the authenticated users identity information
      */
@@ -136,8 +140,10 @@ public class AuthHelper {
     // end::getIdentityInformation[]
 
     // tag::hasRole[]
+
     /**
      * Check if the user has the specified role
+     *
      * @param role - the role to check
      */
     public static boolean hasRole(String role) {
@@ -145,7 +151,7 @@ public class AuthHelper {
         try {
             Identity identity = Identity.fromJson(AuthHelper.getIdentityInformation());
             ArrayList userRoles = identity.getRealmRoles();
-            if(userRoles.contains(role)) {
+            if (userRoles.contains(role)) {
                 hasRole = true;
             }
         } catch (JSONException e) {
@@ -171,10 +177,11 @@ public class AuthHelper {
     }
 
     // tag::makeBearerRequest[]
+
     /**
      * Make a request to a resource that requires the access token to be sent with the request
      */
-    public static Call makeBearerRequest(String requestUrl, okhttp3.Callback callback) {
+    public static Call createRequest(String requestUrl, boolean sendAccessToken, okhttp3.Callback callback) {
 
         // Ensure that a non-expired access token is being used for the request
         if (getNeedsTokenRefresh()) {
@@ -196,8 +203,6 @@ public class AuthHelper {
             e.printStackTrace();
         }
 
-        String accessToken = getAccessToken();
-
         SSLSocketFactory sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(serverHostname);
         X509TrustManager trustManager = TrustKit.getInstance().getTrustManager(serverHostname);
         connection.setSSLSocketFactory(sslSocketFactory);
@@ -207,58 +212,25 @@ public class AuthHelper {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .build();
 
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", String.format("Bearer %s", accessToken))
-                .build();
+        Request request;
+
+        if (sendAccessToken) {
+            String accessToken = getAccessToken();
+            request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Authorization", String.format("Bearer %s", accessToken))
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .build();
+        }
+
 
         Call call = httpClient.newCall(request);
         call.enqueue(callback);
         return call;
     }
     // end::makeBearerRequest[]
-
-
-    // tag::performCertificateVerification[]
-    /**
-     * Make a request to the server endpoint to check if pinning verification fails
-     * @param callback - the okhttp callback
-     */
-    public static Call performCertificateVerification(okhttp3.Callback callback) {
-        String pinnedHost = Constants.CERTIFICATE_PINNING_HOSTS.OSM1;
-
-        URL url = null;
-        try {
-            url = new URL(pinnedHost);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        String serverHostname = url.getHost();
-
-        HttpsURLConnection connection = null;
-        try {
-            connection = (HttpsURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        SSLSocketFactory sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(serverHostname);
-        X509TrustManager trustManager = TrustKit.getInstance().getTrustManager(serverHostname);
-        connection.setSSLSocketFactory(sslSocketFactory);
-
-        OkHttpClient httpClient = HttpHelper.getHttpClient()
-                .sslSocketFactory(sslSocketFactory, trustManager)
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .build();
-
-        Request request = new Request.Builder()
-                .url(pinnedHost)
-                .build();
-
-        Call call = httpClient.newCall(request);
-        call.enqueue(callback);
-        return call;
-    }
-    // end::performCertificateVerification[]
 
 }
