@@ -1,25 +1,40 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.feedhenry.securenativeandroidtemplate.R;
+import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationViewImpl;
+import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
+import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
 import net.openid.appauth.AuthState;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.AndroidInjection;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * A login screen that offers login via Keycloak.
@@ -36,7 +51,22 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     }
 
     @Inject
+    Navigator navigator;
+
+    @Inject
     AuthenticationViewPresenter authenticationViewPresenter;
+
+    @BindView(R.id.keycloakLogin)
+    TextView keycloakLogin;
+
+    @BindView(R.id.auth_message)
+    TextView authMessage;
+
+    @BindView(R.id.background)
+    ImageView background;
+
+    @BindView(R.id.logo)
+    ImageView logo;
 
     private View view;
     private AuthenticationListener authenticationListener;
@@ -67,6 +97,10 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         // Inflate the layout for this fragment - Set the view as the authenticate fragment
         view = inflater.inflate(R.layout.fragment_authentication, container, false);
         ButterKnife.bind(this, view);
+
+        // Check for a valid server certificate before allow a user to authenticate on the server
+        performCertPinningVerification();
+
         return view;
     }
 
@@ -87,10 +121,15 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
             }
 
             @Override
-            public void showAuthError(Exception error) {
-                showMessage(R.string.authentication_failed);
+            public void showAuthError(Exception e) {
+                if (AuthHelper.checkCertificateVerificationError(e)) {
+                    showMessage(R.string.cert_pin_verification_failed);
+                } else {
+                    showMessage(R.string.authentication_failed);
+                }
+
                 if (authenticationListener != null) {
-                    authenticationListener.onAuthError(error);
+                    authenticationListener.onAuthError(e);
                 }
             }
         };
@@ -106,6 +145,61 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         if (authenticationViewPresenter != null) {
             authenticationViewPresenter.doLogin();
         }
+    }
+
+    /**
+     * Perform certificate pinning verification before allowing a user to login to the application using a secure channel
+     */
+    public void performCertPinningVerification() {
+
+        // disable allowing a user to login until the channel is secure
+        keycloakLogin.setEnabled(false);
+
+        String hostURL = Constants.CERTIFICATE_PINNING_HOSTS.OSM1;
+        boolean sendAccessToken = false;
+
+        AuthHelper.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
+
+                if (AuthHelper.checkCertificateVerificationError(e)) {
+
+                    // run the UI updates on the UI thread
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            // hide the authentication button
+                            keycloakLogin.setVisibility(view.GONE);
+
+                            // update the UI to state the connection is insecure
+                            authMessage.setText(R.string.insecure_connection);
+                            background.setImageResource(R.drawable.ic_error_background);
+                            logo.setImageResource(R.drawable.ic_lock);
+
+                            // Show a warning message to the user
+                            Snackbar.make(view, R.string.insecure_connection_prevent_auth, Snackbar.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                // No Certificate Pinning Errors, allow a user to login
+
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        keycloakLogin.setEnabled(true);
+                    }
+                });
+
+            }
+        });
     }
 
 }

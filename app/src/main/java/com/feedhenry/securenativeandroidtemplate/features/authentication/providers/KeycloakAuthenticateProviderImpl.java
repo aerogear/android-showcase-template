@@ -190,7 +190,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
                 redirectFragment +
                 redirectUri;
 
-        AuthHelper.makeBearerRequest(logoutRequestUri, new okhttp3.Callback() {
+        boolean sendAccessToken = false;
+
+        AuthHelper.createRequest(logoutRequestUri, sendAccessToken, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 logoutFailed(e);

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">osm1.skunkhenry.com</domain>
+        <pin-set>
+            // primary
+            <pin digest="SHA-256">jAoDAV3WG9IKcu0YJ1ZVTuEVqdcglfiQRqmfy3+ieoc=</pin>
+            // backup
+            <pin digest="SHA-256">XAoDAV3WG9IKcu0YJ1ZVTuEVqdcglfiQRqmfy3+ieoc=</pin>
+        </pin-set>
+
+        // Set this to true for production, at least 2 unique pins must be provided above!
+        <trustkit-config enforcePinning="true"></trustkit-config>
+    </domain-config>
+</network-security-config>
+
+
+

@@ -124,6 +124,7 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
 
             @Override
             public void logoutFailure(Exception error) {
+                showMessage(R.string.logout_failed + ": " + error.getCause());
                 if (authenticationDetailsListener != null) {
                     authenticationDetailsListener.onLogoutError(error);
                 }

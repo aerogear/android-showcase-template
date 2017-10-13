@@ -17,6 +17,10 @@ public class Constants {
         public static final String IDENTITY_DATA = "identityData";
     }
 
+    public static final class CERTIFICATE_PINNING_HOSTS {
+        public static final String OSM1 = "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com";
+    }
+
     public static final class OPEN_ID_CONNECT_CONFIG {
         public static final String BASE_SERVER_URI = "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com/auth/realms/secure-app/protocol/openid-connect";
         public static final Uri AUTHORIZATION_ENDPOINT = Uri.parse(BASE_SERVER_URI + "/auth");

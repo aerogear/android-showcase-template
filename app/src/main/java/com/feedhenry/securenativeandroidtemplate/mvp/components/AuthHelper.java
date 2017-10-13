@@ -6,14 +6,25 @@ import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 
+import com.datatheorem.android.trustkit.TrustKit;
+import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 
 import net.openid.appauth.AuthState;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -39,6 +50,7 @@ public class AuthHelper {
     }
 
     // tag::readAuthState[]
+
     /**
      * Read the auth state from shared preferences
      */
@@ -57,8 +69,10 @@ public class AuthHelper {
     // end::readAuthState[]
 
     // tag::writeAuthState[]
+
     /**
      * Write the auth state to shared preferences
+     *
      * @param state - The Authstate to write to shared preferences
      */
     public static void writeAuthState(@Nullable AuthState state) {
@@ -96,6 +110,7 @@ public class AuthHelper {
     }
 
     // tag::getIdentityInformation[]
+
     /**
      * Get the authenticated users identity information
      */
@@ -122,8 +137,10 @@ public class AuthHelper {
     // end::getIdentityInformation[]
 
     // tag::hasRole[]
+
     /**
      * Check if the user has the specified role
+     *
      * @param role - the role to check
      */
     public static boolean hasRole(String role) {
@@ -131,7 +148,7 @@ public class AuthHelper {
         try {
             Identity identity = Identity.fromJson(AuthHelper.getIdentityInformation());
             ArrayList userRoles = identity.getRealmRoles();
-            if(userRoles.contains(role)) {
+            if (userRoles.contains(role)) {
                 hasRole = true;
             }
         } catch (JSONException e) {
@@ -157,27 +174,77 @@ public class AuthHelper {
     }
 
     // tag::makeBearerRequest[]
+
     /**
      * Make a request to a resource that requires the access token to be sent with the request
      */
-    public static Call makeBearerRequest(String url, okhttp3.Callback callback) {
+    public static Call createRequest(String requestUrl, boolean sendAccessToken, okhttp3.Callback callback) {
 
         // Ensure that a non-expired access token is being used for the request
         if (getNeedsTokenRefresh()) {
             setNeedsTokenRefresh();
         }
 
-        String accessToken = getAccessToken();
+        URL url = null;
+        try {
+            url = new URL(requestUrl);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        String serverHostname = url.getHost();
 
-        OkHttpClient httpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", String.format("Bearer %s", accessToken))
+        HttpsURLConnection connection = null;
+        try {
+            connection = (HttpsURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SSLSocketFactory sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(serverHostname);
+        X509TrustManager trustManager = TrustKit.getInstance().getTrustManager(serverHostname);
+        connection.setSSLSocketFactory(sslSocketFactory);
+
+        OkHttpClient httpClient = HttpHelper.getHttpClient()
+                .sslSocketFactory(sslSocketFactory, trustManager)
+                .connectTimeout(10, TimeUnit.SECONDS)
                 .build();
+
+        Request request;
+
+        if (sendAccessToken) {
+            String accessToken = getAccessToken();
+            request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Authorization", String.format("Bearer %s", accessToken))
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .build();
+        }
+
 
         Call call = httpClient.newCall(request);
         call.enqueue(callback);
         return call;
     }
     // end::makeBearerRequest[]
+
+    // tag::checkCertificateVerificationError[]
+    /**
+     * Check if an exception is caused by a certificate verification error
+     * @param e
+     * @return
+     */
+    public static boolean checkCertificateVerificationError(Exception e) {
+        boolean certificateVerificationError = false;
+        if (e.getCause() != null &&
+                e.getCause().toString().contains("Certificate validation failed") ||
+                e.getCause().toString().contains("Pin verification failed")) {
+            certificateVerificationError = true;
+        }
+        return certificateVerificationError;
+    }
+    // end::checkCertificateVerificationError[]
+
 }
