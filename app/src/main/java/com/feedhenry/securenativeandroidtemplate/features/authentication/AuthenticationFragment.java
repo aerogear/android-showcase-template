@@ -121,15 +121,15 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
             }
 
             @Override
-            public void showAuthError(Exception error) {
-                if (error.getCause() != null && error.getCause().toString().contains("Pin verification failed")) {
+            public void showAuthError(Exception e) {
+                if (AuthHelper.checkCertificateVerificationError(e)) {
                     showMessage(R.string.cert_pin_verification_failed);
                 } else {
                     showMessage(R.string.authentication_failed);
                 }
 
                 if (authenticationListener != null) {
-                    authenticationListener.onAuthError(error);
+                    authenticationListener.onAuthError(e);
                 }
             }
         };
@@ -163,9 +163,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
             public void onFailure(Call call, IOException e) {
                 Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
 
-                if (e.getCause() != null &&
-                        e.getCause().toString().contains("Certificate validation failed") ||
-                        e.getCause().toString().contains("Pin verification failed")) {
+                if (AuthHelper.checkCertificateVerificationError(e)) {
 
                     // run the UI updates on the UI thread
                     getActivity().runOnUiThread(new Runnable()

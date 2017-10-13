@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.datatheorem.android.trustkit.TrustKit;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
@@ -34,7 +33,6 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
-import okhttp3.OkHttpClient;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, NotesDetailFragment.SaveNoteListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
@@ -85,9 +83,6 @@ public class MainActivity extends BaseActivity
 
         // initialise the authhelper with a context
         AuthHelper.init(context);
-
-        // Initialize TrustKit for Certificate Pinning
-        TrustKit.initializeWithNetworkSecurityConfiguration(context, R.xml.network_security_config);
 
         // load the main menu fragment
         navigator.navigateToHomeView(this);

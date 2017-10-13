@@ -230,4 +230,21 @@ public class AuthHelper {
     }
     // end::makeBearerRequest[]
 
+    // tag::checkCertificateVerificationError[]
+    /**
+     * Check if an exception is caused by a certificate verification error
+     * @param e
+     * @return
+     */
+    public static boolean checkCertificateVerificationError(Exception e) {
+        boolean certificateVerificationError = false;
+        if (e.getCause() != null &&
+                e.getCause().toString().contains("Certificate validation failed") ||
+                e.getCause().toString().contains("Pin verification failed")) {
+            certificateVerificationError = true;
+        }
+        return certificateVerificationError;
+    }
+    // end::checkCertificateVerificationError[]
+
 }
