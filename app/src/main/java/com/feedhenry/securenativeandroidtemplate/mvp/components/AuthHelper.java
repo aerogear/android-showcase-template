@@ -173,17 +173,12 @@ public class AuthHelper {
         readAuthState().setNeedsTokenRefresh(true);
     }
 
-    // tag::makeBearerRequest[]
+    // tag::createRequest[]
 
     /**
      * Make a request to a resource that requires the access token to be sent with the request
      */
     public static Call createRequest(String requestUrl, boolean sendAccessToken, okhttp3.Callback callback) {
-
-        // Ensure that a non-expired access token is being used for the request
-        if (getNeedsTokenRefresh()) {
-            setNeedsTokenRefresh();
-        }
 
         URL url = null;
         try {
@@ -212,6 +207,11 @@ public class AuthHelper {
         Request request;
 
         if (sendAccessToken) {
+            // Ensure that a non-expired access token is being used for the request
+            if (getNeedsTokenRefresh()) {
+                setNeedsTokenRefresh();
+            }
+            
             String accessToken = getAccessToken();
             request = new Request.Builder()
                     .url(url)
@@ -228,7 +228,7 @@ public class AuthHelper {
         call.enqueue(callback);
         return call;
     }
-    // end::makeBearerRequest[]
+    // end::createRequest[]
 
     // tag::checkCertificateVerificationError[]
     /**
