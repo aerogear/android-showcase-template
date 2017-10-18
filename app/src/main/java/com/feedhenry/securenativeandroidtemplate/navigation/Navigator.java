@@ -6,11 +6,13 @@ import android.content.Context;
 import android.support.design.widget.Snackbar;
 
 import com.feedhenry.securenativeandroidtemplate.BaseActivity;
+import com.feedhenry.securenativeandroidtemplate.MainActivity;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.AccessControlFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
+import com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
@@ -79,6 +81,11 @@ public class Navigator {
         loadFragment(activity, noteDetails, NotesDetailFragment.TAG);
     }
 
+    public void navigateToDeviceView(MainActivity activity) {
+        DeviceFragment deviceFragment = new DeviceFragment();
+        loadFragment(activity, deviceFragment, DeviceFragment.TAG);
+    }
+
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {
         activity.setInformationTextResourceId(fragment.getHelpMessageResourceId());
         FragmentManager fm = activity.getFragmentManager();
@@ -99,6 +106,7 @@ public class Navigator {
         FragmentManager fm = activity.getFragmentManager();
         fm.popBackStack();
     }
+
 
 
 }

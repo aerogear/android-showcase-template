@@ -6,7 +6,7 @@
     <application
         android:name=".SecureApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/fh_icon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/fh_icon"
         android:supportsRtl="true"

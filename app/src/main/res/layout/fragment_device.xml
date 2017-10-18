@@ -1,0 +1,72 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_layout"
+        android:layout_marginTop="5dp"
+        android:background="#f4f4f4"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/emulatorAccess"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:button="@drawable/ic_emulator"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:textColor="@color/green"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:text="@string/emulator_detected_negative" />
+
+        <RadioButton
+            android:id="@+id/debuggerAccess"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:button="@drawable/ic_debug"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:textColor="@color/green"
+            android:padding="20dp"
+            android:text="@string/debugger_detected_negative" />
+
+        <RadioButton
+            android:id="@+id/rootAccess"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:button="@drawable/ic_root"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:textColor="@color/green"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:text="@string/root_detected_negative" />
+
+        <RadioButton
+            android:id="@+id/hookingDetected"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:button="@drawable/ic_hooking"
+            android:textColor="@color/green"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:text="@string/hooking_detected_negative" />
+
+        <RadioButton
+            android:id="@+id/lockScreenSetup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:button="@drawable/ic_lock_screen"
+            android:textColor="@color/green"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:text="@string/device_lock_detected_positive" />
+
+    </LinearLayout>
+
+</FrameLayout>

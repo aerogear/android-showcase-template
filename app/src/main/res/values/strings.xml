@@ -17,6 +17,12 @@
     </string>
     <string name="popup_authentication_details_fragment">The Users Identity and Access Data is being retrieved from the OpenID Connect Access Token. \n\nThe remote	endpoint terminates the	existing session when the user logs out.</string>
     <string name="popup_accesscontrol_fragment">There are a number of role checks performed here to indicate if the users Access Token grants them access to a number of predefined roles in the mobile app. \n\nTo enter this view, the user must at least possess the mobile-user role.</string>
+    <string name="popup_device_fragment">The Application assesses the environment around it to learn how the Application is being run.
+    \n\nThe application can detect if it is being run in an emulator by looking for evidence in the system properties.
+    \n\nThe application also detects if an Android debugger is attached to the application.
+    \n\nRoot Access is detected using a number of techniques including checking for root management apps, root cloaking apps, busybox binaries etc.
+    \n\nThe app will also detect if a user has setup a device lock screen using a pin, password, pattern etc.
+    \n\nHooking framework binaries like Cydia Substrate and the Xposed Framework will also be scanned for.</string>
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -77,6 +83,16 @@
 
     <!-- Strings related to Device -->
     <string name="fragment_title_device">Device</string>
+    <string name="root_detected_positive">Root Access Detected</string>
+    <string name="root_detected_negative">No Root Access Detected</string>
+    <string name="emulator_detected_positive">Emulator Access Detected</string>
+    <string name="emulator_detected_negative">No Emulator Access Detected</string>
+    <string name="debugger_detected_positive">Debugger Detected</string>
+    <string name="debugger_detected_negative">No Debugger Detected</string>
+    <string name="device_lock_detected_positive">Device Lock Enabled</string>
+    <string name="device_lock_detected_negative">No Device Lock Enabled</string>
+    <string name="hooking_detected_positive">Hooking Framework Detected</string>
+    <string name="hooking_detected_negative">No Hooking Framework Detected</string>
 
     <!-- Strings related to Cryptography -->
     <string name="fragment_title_cryptography">Cryptography</string>

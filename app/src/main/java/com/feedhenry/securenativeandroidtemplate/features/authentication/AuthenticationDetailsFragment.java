@@ -100,6 +100,8 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         }
     }
 
+
+
     @Override
     public void onDetach() {
         super.onDetach();
