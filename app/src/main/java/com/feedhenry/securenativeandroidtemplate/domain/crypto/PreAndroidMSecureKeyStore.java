@@ -60,6 +60,7 @@ public class PreAndroidMSecureKeyStore extends SecureKeyStoreImpl implements Sec
         return this.sharedPreferences.contains(keyAlias);
     }
 
+    // tag::getSecretKey[]
     @Override
     public Key getSecretKey(String keyAlias) throws GeneralSecurityException, IOException {
         String encodedKey = this.sharedPreferences.getString(keyAlias, null);
@@ -70,7 +71,9 @@ public class PreAndroidMSecureKeyStore extends SecureKeyStoreImpl implements Sec
         }
         return null;
     }
+    // end::getSecretKey[]
 
+    // tag::generateAESKey[]
     @Override
     public void generateAESKey(String keyAlias) throws GeneralSecurityException, IOException {
         byte[] secretKey = generateSecretKey(AES_KEYSIZE_128);
@@ -80,7 +83,9 @@ public class PreAndroidMSecureKeyStore extends SecureKeyStoreImpl implements Sec
         editor.putString(keyAlias, encodedSecretKey);
         editor.commit();
     }
+    // end::generateAESKey[]
 
+    // tag::generatePrivateKeyPair[]
     @Override
     public void generatePrivateKeyPair(String keyAlias) throws GeneralSecurityException, IOException {
         //pre android-M, the keystore only support RSA key generation. So here we will generate a RSA keypair first, then generate the AES key.
@@ -100,6 +105,7 @@ public class PreAndroidMSecureKeyStore extends SecureKeyStoreImpl implements Sec
         generator.initialize(generatorSpec);
         generator.generateKeyPair();
     }
+    // end::generatePrivateKeyPair[]
 
     @Override
     public boolean hasKeyPair(String keyAlias) throws GeneralSecurityException, IOException {
@@ -119,12 +125,14 @@ public class PreAndroidMSecureKeyStore extends SecureKeyStoreImpl implements Sec
         }
     }
 
+    // tag::generateSecretKey[]
     private byte[] generateSecretKey(int size) throws NoSuchAlgorithmException {
         KeyGenerator keyGen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES);
         keyGen.init(size);
         SecretKey secretKey = keyGen.generateKey();
         return secretKey.getEncoded();
     }
+    // end::generateSecretKey[]
 
     private byte[] rsaEncrypt(byte[] keyToEncrypt) throws GeneralSecurityException, IOException {
         KeyStore keyStore = loadKeyStore();

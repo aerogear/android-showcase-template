@@ -42,6 +42,7 @@ public class AndroidMSecureKeyStore extends SecureKeyStoreImpl implements Secure
         return loadKeyStore().getKey(keyAlias, null);
     }
 
+    // tag::generateAESKey[]
     /**
      * Generate the AES key for encryption/decryption. The key will be 128bit and it can only be used with AES/GCM/NoPadding mode.
      * @param keyAlias the key alias
@@ -61,6 +62,7 @@ public class AndroidMSecureKeyStore extends SecureKeyStoreImpl implements Secure
         keyGenerator.init(keyGenerationParameters);
         keyGenerator.generateKey();
     }
+    // end::generateAESKey[]
 
     /**
      * Generate a public/private key pair for encryption/decryption purpose only. The key will be 2048bit and it can only be used with RSA/ECB/PKCS1Padding mode.

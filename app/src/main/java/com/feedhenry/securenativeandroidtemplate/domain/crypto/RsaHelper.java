@@ -17,6 +17,18 @@ import javax.crypto.CipherOutputStream;
  */
 
 public class RsaHelper {
+
+
+    // tag::encrypt[]
+    /**
+     * Perform encryption using RSA
+     * @param mode the RSA encryption alg
+     * @param keyEntry the private/public key entry
+     * @param text the data to encrypt
+     * @return the encrypted ddata
+     * @throws GeneralSecurityException
+     * @throws IOException
+     */
     public static byte[] encrypt(String mode, KeyStore.PrivateKeyEntry keyEntry, byte[] text) throws GeneralSecurityException, IOException {
         // Encrypt the text
         Cipher inputCipher = Cipher.getInstance(mode);
@@ -30,7 +42,18 @@ public class RsaHelper {
         byte[] vals = outputStream.toByteArray();
         return vals;
     }
+    // end::encrypt[]
 
+    // tag::decrypt[]
+    /**
+     * Perform decryption using RSA
+     * @param mode the RSA decryption alg
+     * @param keyEntry the private/public key entry
+     * @param toDecrypt the encrypted data
+     * @return the decrypted data
+     * @throws GeneralSecurityException
+     * @throws IOException
+     */
     public static byte[] decrypt(String mode, KeyStore.PrivateKeyEntry keyEntry, byte[] toDecrypt) throws GeneralSecurityException, IOException {
         Cipher output = Cipher.getInstance(mode);
         output.init(Cipher.DECRYPT_MODE, keyEntry.getPrivateKey());
@@ -38,4 +61,5 @@ public class RsaHelper {
         CipherInputStream cipherInputStream = new CipherInputStream(inputStream, output);
         return StreamUtils.readStreamBytes(cipherInputStream);
     }
+    // end::decrypt[]
 }

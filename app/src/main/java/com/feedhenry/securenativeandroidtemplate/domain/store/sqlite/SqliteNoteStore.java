@@ -55,6 +55,13 @@ public class SqliteNoteStore implements NoteDataStore {
         return password;
     }
 
+    // tag::getDbPassword[]
+    /**
+     * Get the password to protect the database
+     * @return the password
+     * @throws GeneralSecurityException
+     * @throws IOException
+     */
     private String getDbPassword() throws GeneralSecurityException, IOException {
         String encryptedDbPass = this.sharedPreferences.getString(DB_KEY_PREF_NAME, null);
         if (encryptedDbPass == null) {
@@ -66,6 +73,7 @@ public class SqliteNoteStore implements NoteDataStore {
         String password = new String(rsaCrypto.decrypt(ENCRYPT_KEY_ALIAS, Base64.decode(encryptedDbPass, Base64.NO_WRAP)), "utf-8");
         return password;
     }
+    // end::getDbPassword[]
 
     private SQLiteDatabase getWritableDatabase() throws GeneralSecurityException, IOException {
         if (this.writableDb == null) {

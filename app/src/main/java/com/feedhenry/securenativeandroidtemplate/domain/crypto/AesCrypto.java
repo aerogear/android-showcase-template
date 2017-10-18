@@ -54,6 +54,7 @@ public class AesCrypto {
 
     }
 
+    // tag::encrypt[]
     /**
      * Encrypt the given text.
      * @param keyAlias The alias of the key in the keystore that will be used for the encryption.
@@ -72,7 +73,9 @@ public class AesCrypto {
         GCMEncrypted encryptedData = new GCMEncrypted(iv, encrypted);
         return encryptedData.toByteArray();
     }
+    // end::encrypt[]
 
+    // tag::decrypt[]
     /**
      * Decrypt the given encrypted data
      * @param keyAlias The alias of the key in the keystore that will be used for the decryption.
@@ -89,6 +92,7 @@ public class AesCrypto {
         byte[] plainText = cipher.doFinal(encryptedData.encryptedData);
         return plainText;
     }
+    // end::decrypt[]
 
     /**
      * Encrypt the given string. The encrypted data will be returned as a base64-encoded string.

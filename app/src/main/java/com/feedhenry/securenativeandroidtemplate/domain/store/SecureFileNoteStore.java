@@ -117,6 +117,14 @@ public class SecureFileNoteStore implements NoteDataStore {
         }
     }
 
+    // tag::writeFileWithEncryption[]
+    /**
+     * Encrypt the file when saving to the file system
+     * @param fileName the name of the file
+     * @param fileContent the content of the file
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
     private void writeFileWithEncryption(String fileName, String fileContent) throws IOException, GeneralSecurityException {
         File outputFile = new File(context.getFilesDir(), fileName);
         if (!outputFile.exists()) {
@@ -127,13 +135,23 @@ public class SecureFileNoteStore implements NoteDataStore {
         outStream.flush();
         outStream.close();
     }
+    // end::writeFileWithEncryption[]
 
+    // tag::readFileWithDecryption[]
+    /**
+     * Read the content of the file, and decrypt it automatically
+     * @param fileName the name of the file
+     * @return the decrypted file content
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
     private String readFileWithDecryption(String fileName) throws IOException, GeneralSecurityException {
         InputStream inputStream = context.openFileInput(fileName);
         InputStream decryptedStream = aesCrypto.decryptStream(fileName, inputStream);
 
         return StreamUtils.readStream(decryptedStream);
     }
+    // end::readFileWithDecryption[]
 
     private void removeFile(String fileName) {
         File target = new File(context.getFilesDir(), fileName);
