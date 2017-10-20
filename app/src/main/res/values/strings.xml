@@ -93,6 +93,8 @@
     <string name="device_lock_detected_negative">No Device Lock Enabled</string>
     <string name="hooking_detected_positive">Hooking Framework Detected</string>
     <string name="hooking_detected_negative">No Hooking Framework Detected</string>
+    <string name="allow_backup_detected_positive">Allow Backup Flag Enabled</string>
+    <string name="allow_backup_detected_negative">Allow Backup Flag Disabled</string>
 
     <!-- Strings related to Cryptography -->
     <string name="fragment_title_cryptography">Cryptography</string>

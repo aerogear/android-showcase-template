@@ -1,18 +1,20 @@
 package com.feedhenry.securenativeandroidtemplate.features.device;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.features.device.presenters.DevicePresenter;
@@ -21,18 +23,12 @@ import com.feedhenry.securenativeandroidtemplate.features.device.views.DeviceVie
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.scottyab.rootbeer.RootBeer;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 
-import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.KEYGUARD_SERVICE;
 
 /**
@@ -64,7 +60,23 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     @BindView(R.id.hookingDetected)
     RadioButton hookingDetected;
 
+    @BindView(R.id.allowBackup)
+    RadioButton allowBackup;
+
+    @BindView(R.id.trustScore)
+    ProgressBar trustScore;
+
+    @BindView(R.id.trustScoreText)
+    TextView trustScoreText;
+
+    @BindView(R.id.trustScoreHeader)
+    TextView trustScoreHeader;
+
     View view;
+
+    // Used to calculate trust store percentage
+    private float totalTests = 0;
+    private float totalTestFailures = 0;
 
     public DeviceFragment() {
         // Required empty public constructor
@@ -84,6 +96,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         detectEmulator();
         debuggerDetected();
         detectHookingFramework();
+        detectBackupEnabled();
+        setTrustScore();
+
         return view;
     }
 
@@ -120,6 +135,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      * Detect if the device is rooted.
      */
     public void detectRoot() {
+        totalTests++;
         RootBeer rootBeer = new RootBeer(context);
         if (rootBeer.isRooted()) {
             setDetected(rootAccess, R.string.root_detected_positive);
@@ -131,6 +147,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      */
     public void detectDeviceLock() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            totalTests++;
             KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
             if (!keyguardManager.isDeviceSecure()) {
                 setDetected(lockScreenSetup, R.string.device_lock_detected_negative);
@@ -144,6 +161,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      * Detect if a debugger is attached to the application.
      */
     public void debuggerDetected() {
+        totalTests++;
         if (Debug.isDebuggerConnected()) {
             setDetected(debuggerAccess, R.string.debugger_detected_positive);
         }
@@ -153,6 +171,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      * Detect if the application is being run in an emulator.
      */
     public void detectEmulator() {
+        totalTests++;
         if (isEmulator()) {
             setDetected(emulatorAccess, R.string.emulator_detected_positive);
         }
@@ -179,6 +198,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      * Detect if a hooking framework application is installed on the device
      */
     public void detectHookingFramework() {
+        totalTests++;
         String xposedPackageName = "de.robv.android.xposed.installer";
         String substratePackageName = "com.saurik.substrate";
 
@@ -204,12 +224,44 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     }
 
     /**
-     *
+     * Function to check if the backup flag is enabled in the application manifest file
+     */
+    public void detectBackupEnabled() {
+        totalTests++;
+        try {
+            PackageInfo packageInfo;
+            packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_ALLOW_BACKUP) != 0) {
+                setDetected(allowBackup, R.string.allow_backup_detected_positive);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Function to allow updates to the radio buttons UI
      * @param uiElement - the UI element to update
      * @param textResource - the text resource to set the updates text for
      */
     public void setDetected(RadioButton uiElement, int textResource) {
+        totalTestFailures++;
         uiElement.setText(textResource);
         uiElement.setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    /**
+     * Set the trust score colouring as an indicator
+     */
+    public void setTrustScore() {
+        int score = 100 - Math.round(((totalTestFailures/totalTests) * 100));
+        trustScore.setProgress(score);
+        trustScoreText.setText(score + "%");
+
+        // change the score percentage colour depending on the trust score
+        if (trustScore.getProgress() == 100) {
+            trustScoreHeader.setBackgroundColor(getResources().getColor(R.color.green));
+            trustScoreText.setBackgroundColor(getResources().getColor(R.color.green));
+        }
     }
 }
