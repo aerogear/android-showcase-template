@@ -2,6 +2,7 @@ package com.feedhenry.securenativeandroidtemplate.features.device;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -9,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 
 import static android.content.Context.KEYGUARD_SERVICE;
@@ -63,6 +67,15 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     @BindView(R.id.allowBackup)
     RadioButton allowBackup;
 
+    @BindView(R.id.deviceEncrypted)
+    RadioButton deviceEncrypted;
+
+    @BindView(R.id.deviceOS)
+    RadioButton deviceOS;
+
+    @BindView(R.id.developerOptions)
+    RadioButton developerOptions;
+
     @BindView(R.id.trustScore)
     ProgressBar trustScore;
 
@@ -90,14 +103,8 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         view = inflater.inflate(R.layout.fragment_device, container, false);
         ButterKnife.bind(this, view);
 
-        // perform detections
-        detectRoot();
-        detectDeviceLock();
-        detectEmulator();
-        debuggerDetected();
-        detectHookingFramework();
-        detectBackupEnabled();
-        setTrustScore();
+        // run the detection tests on load
+        runTests();
 
         return view;
     }
@@ -129,6 +136,23 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     @Override
     public int getHelpMessageResourceId() {
         return R.string.popup_device_fragment;
+    }
+
+    public void runTests() {
+
+        // perform detections
+        detectRoot();
+        detectDeviceLock();
+        detectEmulator();
+        debuggerDetected();
+        detectHookingFramework();
+        detectBackupEnabled();
+        detectDeviceEncryptionStatus();
+        detectLatestOS();
+        detectDeveloperOptions();
+
+        // get trust score
+        setTrustScore();
     }
 
     /**
@@ -240,6 +264,47 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     }
 
     /**
+     * Function to check if the devices filesystem is encrypted
+     */
+    public void detectDeviceEncryptionStatus() {
+        if (Build.VERSION.SDK_INT >= 11) {
+            totalTests++;
+            final DevicePolicyManager policyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+            if (policyManager != null) {
+                int isEncrypted = policyManager.getStorageEncryptionStatus();
+                if (isEncrypted != DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE) {
+                    setDetected(deviceEncrypted, R.string.device_encrypted_negative);
+                }
+            }
+        }
+    }
+
+    /**
+     * Function to check if the device is running the latest Android OS
+     */
+    public void detectLatestOS() {
+        // todo: find if there is a better way to define what the latest android version is
+        int latestOsApiLevel = Build.VERSION_CODES.M;
+        totalTests++;
+
+        if (Build.VERSION.SDK_INT < latestOsApiLevel) {
+            setDetected(deviceOS, R.string.device_os_latest_negative);
+        }
+    }
+
+    public void detectDeveloperOptions() {
+        totalTests++;
+        int devOptionsEnabled = Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED ,
+                0);
+
+        if (devOptionsEnabled > 0)
+        {
+            setDetected(developerOptions, R.string.developer_options_positive);
+        }
+    }
+
+    /**
      * Function to allow updates to the radio buttons UI
      * @param uiElement - the UI element to update
      * @param textResource - the text resource to set the updates text for
@@ -257,6 +322,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         int score = 100 - Math.round(((totalTestFailures/totalTests) * 100));
         trustScore.setProgress(score);
         trustScoreText.setText(score + "%");
+        trustScoreHeader.setText(getText(R.string.trust_score_header_title) + "\n(" + Math.round(totalTests) + " Tests)");
 
         // change the score percentage colour depending on the trust score
         if (trustScore.getProgress() == 100) {

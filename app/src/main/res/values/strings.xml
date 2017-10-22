@@ -22,7 +22,8 @@
     \n\nThe application also detects if an Android debugger is attached to the application.
     \n\nRoot Access is detected using a number of techniques including checking for root management apps, root cloaking apps, busybox binaries etc.
     \n\nThe app will also detect if a user has setup a device lock screen using a pin, password, pattern etc.
-    \n\nHooking framework binaries like Cydia Substrate and the Xposed Framework will also be scanned for.</string>
+    \n\nHooking framework binaries like Cydia Substrate and the Xposed Framework will also be scanned for.
+    \n\nA number of other checks are performed to see if it is possible to recover application data using the android backup function, check if device encryption is being used, check that the device is using the latest Android version and detecting if the developer mode is enabled.</string>
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -83,6 +84,7 @@
 
     <!-- Strings related to Device -->
     <string name="fragment_title_device">Device</string>
+    <string name="trust_score_header_title">Device Trust Score</string>
     <string name="root_detected_positive">Root Access Detected</string>
     <string name="root_detected_negative">No Root Access Detected</string>
     <string name="emulator_detected_positive">Emulator Access Detected</string>
@@ -93,8 +95,14 @@
     <string name="device_lock_detected_negative">No Device Lock Enabled</string>
     <string name="hooking_detected_positive">Hooking Framework Detected</string>
     <string name="hooking_detected_negative">No Hooking Framework Detected</string>
-    <string name="allow_backup_detected_positive">Allow Backup Flag Enabled</string>
-    <string name="allow_backup_detected_negative">Allow Backup Flag Disabled</string>
+    <string name="allow_backup_detected_positive">App Data Backup Recovery Enabled</string>
+    <string name="allow_backup_detected_negative">App Data Backup Recovery Disabled</string>
+    <string name="device_encrypted_positive">Device Encryption Active</string>
+    <string name="device_encrypted_negative">Device Encryption Inactive</string>
+    <string name="device_os_latest_positive">Device Running Latest OS</string>
+    <string name="device_os_latest_negative">Device OS Outdated</string>
+    <string name="developer_options_positive">Developer Options Enabled</string>
+    <string name="developer_options_negative">Developer Options Disabled</string>
 
     <!-- Strings related to Cryptography -->
     <string name="fragment_title_cryptography">Cryptography</string>
