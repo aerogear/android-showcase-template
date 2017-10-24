@@ -295,18 +295,18 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void detectDeveloperOptions() {
         totalTests++;
         int devOptionsEnabled = Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED ,
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
                 0);
 
-        if (devOptionsEnabled > 0)
-        {
+        if (devOptionsEnabled > 0) {
             setDetected(developerOptions, R.string.developer_options_positive);
         }
     }
 
     /**
      * Function to allow updates to the radio buttons UI
-     * @param uiElement - the UI element to update
+     *
+     * @param uiElement    - the UI element to update
      * @param textResource - the text resource to set the updates text for
      */
     public void setDetected(RadioButton uiElement, int textResource) {
@@ -319,7 +319,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      * Set the trust score colouring as an indicator
      */
     public void setTrustScore() {
-        int score = 100 - Math.round(((totalTestFailures/totalTests) * 100));
+        int score = 100 - Math.round(((totalTestFailures / totalTests) * 100));
         trustScore.setProgress(score);
         trustScoreText.setText(score + "%");
         trustScoreHeader.setText(getText(R.string.trust_score_header_title) + "\n(" + Math.round(totalTests) + " Tests)");
