@@ -129,6 +129,10 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_storage) {
             navigator.navigateToStorageView(this);
         }
+        // Visit the Device Screen
+        if (id == R.id.nav_device) {
+            navigator.navigateToDeviceView(this);
+        }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

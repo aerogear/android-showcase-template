@@ -239,8 +239,8 @@ public class AuthHelper {
     public static boolean checkCertificateVerificationError(Exception e) {
         boolean certificateVerificationError = false;
         if (e.getCause() != null &&
-                e.getCause().toString().contains("Certificate validation failed") ||
-                e.getCause().toString().contains("Pin verification failed")) {
+                (e.getCause().toString().contains("Certificate validation failed") ||
+                e.getCause().toString().contains("Pin verification failed"))) {
             certificateVerificationError = true;
         }
         return certificateVerificationError;
