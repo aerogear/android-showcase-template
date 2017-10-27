@@ -1,0 +1,5 @@
+{
+  "auth-server-url": "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com",
+  "realm-id": "secure-app",
+  "client-id": "client-app"
+}

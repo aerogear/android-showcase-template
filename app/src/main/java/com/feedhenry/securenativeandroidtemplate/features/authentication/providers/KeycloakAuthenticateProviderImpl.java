@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.datatheorem.android.trustkit.TrustKit;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
@@ -23,15 +25,19 @@ import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenResponse;
 import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
+import net.openid.appauth.connectivity.ConnectionBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.net.ssl.HttpsURLConnection;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -43,15 +49,10 @@ import okhttp3.Response;
 @Singleton
 public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationProvider {
 
-    private static final Uri AUTHORIZATION_ENDPOINT = Constants.OPEN_ID_CONNECT_CONFIG.AUTHORIZATION_ENDPOINT;
-    private static final Uri TOKEN_ENDPOINT = Constants.OPEN_ID_CONNECT_CONFIG.TOKEN_ENDPOINT;
-    private static final String CLIENT_ID = Constants.OPEN_ID_CONNECT_CONFIG.CLIENT_ID;
     private static final Uri REDIRECT_URI = Constants.OPEN_ID_CONNECT_CONFIG.REDIRECT_URI;
     private static final String OPEN_ID_SCOPE = Constants.OPEN_ID_CONNECT_CONFIG.OPEN_ID_SCOPE;
-    private static final String baseLogoutEndpoint = Constants.OPEN_ID_CONNECT_CONFIG.LOGOUT_ENDPOINT;
-    private static final String redirectUri = Constants.OPEN_ID_CONNECT_CONFIG.REDIRECT_URI.toString();
-    private static final String tokenHintFragment = Constants.OPEN_ID_CONNECT_CONFIG.TOKEN_HINT_FRAGMENT;
-    private static final String redirectFragment = Constants.OPEN_ID_CONNECT_CONFIG.REDIRECT_FRAGMENT;
+
+    private AuthenticationConfiguration authenticationConfiguration;
 
     private AuthState authState;
     private AuthorizationService authService;
@@ -64,8 +65,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     Context context;
 
     @Inject
-    public KeycloakAuthenticateProviderImpl(@NonNull Context context) {
+    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AuthenticationConfiguration authenticationConfiguration) {
         this.context = context;
+        this.authenticationConfiguration = authenticationConfiguration;
     }
 
     // tag::performAuthRequest[]
@@ -75,11 +77,15 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     @Override
     public void performAuthRequest(Activity fromActivity, Callback authCallback) {
         this.authCallback = authCallback;
+        if (!this.authenticationConfiguration.isValid()) {
+            this.authCallback.onError(this.authenticationConfiguration.getConfigurationError());
+            return;
+        }
         // Setup the config for the AuthorizationService
         serviceConfig =
                 new AuthorizationServiceConfiguration(
-                        AUTHORIZATION_ENDPOINT, // the clients keycloak authorization endpoint
-                        TOKEN_ENDPOINT); // the clients keycloak token endpoint
+                        this.authenticationConfiguration.getAuthenticationEndpoint(), // the clients keycloak authorization endpoint
+                        this.authenticationConfiguration.getTokenEndpoint()); // the clients keycloak token endpoint
 
         // Persist the AuthorizationServiceConfiguration
         authState = new AuthState(serviceConfig);
@@ -96,7 +102,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         AuthorizationRequest.Builder authRequestBuilder =
                 new AuthorizationRequest.Builder(
                         serviceConfig, // the authorization service configuration
-                        CLIENT_ID, // the client ID, typically pre-registered and static
+                        this.authenticationConfiguration.getClientId(), // the client ID, typically pre-registered and static
                         ResponseTypeValues.CODE, // the response_type value: we want a code
                         REDIRECT_URI) // the redirect URI to which the auth response is sent
                         .setScopes(OPEN_ID_SCOPE);
@@ -184,11 +190,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         String identityToken = AuthHelper.getIdentityToken();
 
         // Construct the Keycloak logout URL
-        String logoutRequestUri = baseLogoutEndpoint +
-                tokenHintFragment +
-                identityToken +
-                redirectFragment +
-                redirectUri;
+        String logoutRequestUri = this.authenticationConfiguration.getLogoutUrl(identityToken, REDIRECT_URI.toString());
 
         boolean sendAccessToken = false;
 

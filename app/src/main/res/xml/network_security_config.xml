@@ -12,6 +12,14 @@
         // Set this to true for production, at least 2 unique pins must be provided above!
         <trustkit-config enforcePinning="true"></trustkit-config>
     </domain-config>
+    <debug-overrides>
+        <trust-anchors>
+            <!-- Trust preinstalled CAs -->
+            <certificates src="system" />
+            <!-- Additionally trust user added CAs -->
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
 </network-security-config>
 
 

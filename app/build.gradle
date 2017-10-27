@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.feedhenry.securenativeandroidtemplate"
         minSdkVersion 19
@@ -24,6 +24,11 @@ android {
         }
     }
     buildTypes {
+        local {
+            initWith debug
+            debuggable true
+        }
+
         release {
             versionNameSuffix System.getenv("CIRCLE_BUILD_NUM")
             signingConfig signingConfigs.release

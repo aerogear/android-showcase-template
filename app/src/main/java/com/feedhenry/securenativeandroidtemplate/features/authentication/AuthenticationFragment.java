@@ -17,6 +17,7 @@ import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
+import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.AuthenticationConfiguration;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationViewImpl;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
@@ -52,6 +53,9 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     @Inject
     Navigator navigator;
+
+    @Inject
+    AuthenticationConfiguration authenticationConfiguration;
 
     @Inject
     AuthenticationViewPresenter authenticationViewPresenter;
@@ -155,7 +159,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         // disable allowing a user to login until the channel is secure
         keycloakLogin.setEnabled(false);
 
-        String hostURL = Constants.CERTIFICATE_PINNING_HOSTS.OSM1;
+        String hostURL = authenticationConfiguration.getHostUrl();
         boolean sendAccessToken = false;
 
         AuthHelper.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {

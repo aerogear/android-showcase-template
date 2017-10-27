@@ -17,20 +17,10 @@ public class Constants {
         public static final String IDENTITY_DATA = "identityData";
     }
 
-    public static final class CERTIFICATE_PINNING_HOSTS {
-        public static final String OSM1 = "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com";
-    }
 
     public static final class OPEN_ID_CONNECT_CONFIG {
-        public static final String BASE_SERVER_URI = "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com/auth/realms/secure-app/protocol/openid-connect";
-        public static final Uri AUTHORIZATION_ENDPOINT = Uri.parse(BASE_SERVER_URI + "/auth");
-        public static final Uri TOKEN_ENDPOINT = Uri.parse(BASE_SERVER_URI + "/token");
-        public static final String CLIENT_ID = "client-app";
         public static final Uri REDIRECT_URI = Uri.parse("com.feedhenry.securenativeandroidtemplate:/callback");
         public static final String OPEN_ID_SCOPE = "openid";
-        public static final String LOGOUT_ENDPOINT = BASE_SERVER_URI + "/logout";
-        public static final String TOKEN_HINT_FRAGMENT = "?id_token_hint=";
-        public static final String REDIRECT_FRAGMENT = "&redirect_uri=";
     }
 
     public static final class ACCESS_CONTROL_ROLES {
