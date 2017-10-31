@@ -195,7 +195,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             setDetected(debuggerAccess, R.string.debugger_detected_positive);
         }
     }
-    // end::detectDeviceLock[]
+    // end::debuggerDetected[]
 
     /**
      * Detect if the application is being run in an emulator.
