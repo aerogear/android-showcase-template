@@ -164,10 +164,13 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
         AuthHelper.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
+            public void onFailure(Call call, final IOException e) {
+
+                Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG)
+                        .show();
 
                 if (AuthHelper.checkCertificateVerificationError(e)) {
+                    Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
 
                     // run the UI updates on the UI thread
                     getActivity().runOnUiThread(new Runnable()
@@ -178,7 +181,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
                             keycloakLogin.setVisibility(view.GONE);
 
                             // update the UI to state the connection is insecure
-                            authMessage.setText(R.string.insecure_connection);
+                            authMessage.setText(getString(R.string.cert_pin_verification_failed) + e.getMessage());
                             background.setImageResource(R.drawable.ic_error_background);
                             logo.setImageResource(R.drawable.ic_lock);
 
