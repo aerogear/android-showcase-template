@@ -155,6 +155,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         setTrustScore();
     }
 
+    // tag::detectRoot[]
     /**
      * Detect if the device is rooted.
      */
@@ -165,7 +166,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             setDetected(rootAccess, R.string.root_detected_positive);
         }
     }
+    // end::detectRoot[]
 
+    // tag::detectDeviceLock[]
     /**
      * Detect if the device has a lock screen setup (pin, password etc).
      */
@@ -180,7 +183,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             lockScreenSetup.setVisibility(View.GONE);
         }
     }
+    // end::detectDeviceLock[]
 
+    // tag::debuggerDetected[]
     /**
      * Detect if a debugger is attached to the application.
      */
@@ -190,6 +195,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             setDetected(debuggerAccess, R.string.debugger_detected_positive);
         }
     }
+    // end::detectDeviceLock[]
 
     /**
      * Detect if the application is being run in an emulator.
@@ -201,6 +207,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         }
     }
 
+    // tag::isEmulator[]
     /**
      * Helper function to detect if the host is an emulator
      *
@@ -217,7 +224,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
                 || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
                 || "google_sdk".equals(Build.PRODUCT);
     }
+    // end::isEmulator[]
 
+    // tag::detectHookingFramework[]
     /**
      * Detect if a hooking framework application is installed on the device
      */
@@ -230,6 +239,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             setDetected(hookingDetected, R.string.hooking_detected_positive);
         }
     }
+    // end::detectHookingFramework[]
 
     /**
      * Function to check if an app is installed on the device based on a package name.
@@ -247,6 +257,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         }
     }
 
+    // tag::detectBackupEnabled[]
     /**
      * Function to check if the backup flag is enabled in the application manifest file
      */
@@ -262,7 +273,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             e.printStackTrace();
         }
     }
+    // end::detectBackupEnabled[]
 
+    // tag::detectDeviceEncryptionStatus[]
     /**
      * Function to check if the devices filesystem is encrypted
      */
@@ -278,7 +291,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             }
         }
     }
+    // end::detectDeviceEncryptionStatus[]
 
+    // tag::detectLatestOS[]
     /**
      * Function to check if the device is running the latest Android OS
      */
@@ -291,7 +306,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             setDetected(deviceOS, R.string.device_os_latest_negative);
         }
     }
+    // end::detectLatestOS[]
 
+    // tag::detectDeveloperOptions[]
     public void detectDeveloperOptions() {
         totalTests++;
         int devOptionsEnabled = Settings.Secure.getInt(context.getContentResolver(),
@@ -302,6 +319,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             setDetected(developerOptions, R.string.developer_options_positive);
         }
     }
+    // end::detectDeveloperOptions[]
 
     /**
      * Function to allow updates to the radio buttons UI
