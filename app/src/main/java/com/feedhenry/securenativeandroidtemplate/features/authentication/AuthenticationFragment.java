@@ -1,11 +1,8 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,17 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.feedhenry.securenativeandroidtemplate.R;
-import com.feedhenry.securenativeandroidtemplate.domain.Constants;
+import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
-import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.AuthenticationConfiguration;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationViewImpl;
-import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
+import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
-
-import net.openid.appauth.AuthState;
 
 import java.io.IOException;
 
@@ -55,10 +49,13 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     Navigator navigator;
 
     @Inject
-    AuthenticationConfiguration authenticationConfiguration;
+    AppConfiguration appConfiguration;
 
     @Inject
     AuthenticationViewPresenter authenticationViewPresenter;
+
+    @Inject
+    AuthStateService authStateService;
 
     @BindView(R.id.keycloakLogin)
     TextView keycloakLogin;
@@ -126,7 +123,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
             @Override
             public void showAuthError(Exception e) {
-                if (AuthHelper.checkCertificateVerificationError(e)) {
+                if (authStateService.checkCertificateVerificationError(e)) {
                     showMessage(R.string.cert_pin_verification_failed);
                 } else {
                     showMessage(R.string.authentication_failed);
@@ -159,17 +156,17 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         // disable allowing a user to login until the channel is secure
         keycloakLogin.setEnabled(false);
 
-        String hostURL = authenticationConfiguration.getHostUrl();
+        String hostURL = appConfiguration.getAuthConfiguration().getHostUrl();
         boolean sendAccessToken = false;
 
-        AuthHelper.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
+        authStateService.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
 
                 Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG)
                         .show();
 
-                if (AuthHelper.checkCertificateVerificationError(e)) {
+                if (authStateService.checkCertificateVerificationError(e)) {
                     Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
 
                     // run the UI updates on the UI thread

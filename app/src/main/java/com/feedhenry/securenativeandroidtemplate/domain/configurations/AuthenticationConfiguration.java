@@ -1,16 +1,9 @@
-package com.feedhenry.securenativeandroidtemplate.features.authentication.providers;
+package com.feedhenry.securenativeandroidtemplate.domain.configurations;
 
-import android.content.Context;
 import android.net.Uri;
-
-import com.feedhenry.securenativeandroidtemplate.R;
-import com.feedhenry.securenativeandroidtemplate.domain.utils.StreamUtils;
 
 import org.json.JSONObject;
 
-import java.io.InputStream;
-
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
@@ -27,7 +20,6 @@ public class AuthenticationConfiguration {
     private static final String TOKEN_HINT_FRAGMENT = "id_token_hint";
     private static final String REDIRECT_FRAGMENT = "redirect_uri";
 
-    private Context context;
     private JSONObject authConfig;
     private Exception configurationError;
 
@@ -37,31 +29,18 @@ public class AuthenticationConfiguration {
 
     private String baseUrl;
 
-    @Inject
-    public AuthenticationConfiguration(Context context) {
-        this.context = context;
-        try {
-            readConfigurations();
-        } catch (Exception e) {
-            configurationError = e;
-        }
-    }
+    AuthenticationConfiguration(JSONObject authConfigJson) {
+        authConfig = authConfigJson;
 
-    private void readConfigurations() throws Exception {
-        InputStream in = context.getResources().openRawResource(R.raw.auth_config);
         try {
-            String content = StreamUtils.readStream(in);
-            authConfig = new JSONObject(content);
-
             serverUrl = authConfig.getString(SERVER_URL_NAME);
             realmId = authConfig.getString(REALM_ID_NAME);
             clientId = authConfig.getString(CLIENT_ID_NAME);
-
-            baseUrl = String.format("%s/auth/realms/%s/protocol/openid-connect", serverUrl, realmId);
-
-        } finally {
-            in.close();
+        } catch (Exception e) {
+            this.configurationError = e;
         }
+
+        baseUrl = String.format("%s/auth/realms/%s/protocol/openid-connect", serverUrl, realmId);
     }
 
     public boolean isValid() {
@@ -69,7 +48,7 @@ public class AuthenticationConfiguration {
     }
 
     public Exception getConfigurationError() {
-        return configurationError;
+        return this.configurationError;
     }
 
     public Uri getAuthenticationEndpoint() {

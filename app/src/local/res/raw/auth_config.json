@@ -1,5 +1,0 @@
-{
-  "auth-server-url": "https://www.rhdev.me:9443",
-  "realm-id": "secure-app",
-  "client-id": "client-app"
-}

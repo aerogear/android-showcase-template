@@ -1,4 +1,4 @@
-package com.feedhenry.securenativeandroidtemplate.mvp.components;
+package com.feedhenry.securenativeandroidtemplate.domain.services;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,8 +7,8 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.datatheorem.android.trustkit.TrustKit;
-import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
+import com.feedhenry.securenativeandroidtemplate.mvp.components.HttpHelper;
 
 import net.openid.appauth.AuthState;
 
@@ -22,6 +22,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
@@ -36,17 +38,18 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by tjackman on 9/16/17.
  */
 
-public class AuthHelper {
+@Singleton
+public class AuthStateService {
 
     private static final String STORE_NAME = "AuthState";
     private static final String KEY_STATE = "state";
-    private static SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
+    private AuthState authState;
 
-    public AuthHelper() {
-    }
-
-    public static void init(Context context) {
+    @Inject
+    public AuthStateService(Context context) {
         mPrefs = context.getSharedPreferences(STORE_NAME, MODE_PRIVATE);
+        authState = readAuthState();
     }
 
     // tag::readAuthState[]
@@ -54,7 +57,7 @@ public class AuthHelper {
     /**
      * Read the auth state from shared preferences
      */
-    public static AuthState readAuthState() {
+    private AuthState readAuthState() {
         String currentState = mPrefs.getString(KEY_STATE, null);
         if (currentState == null) {
             return new AuthState();
@@ -75,13 +78,15 @@ public class AuthHelper {
      *
      * @param state - The Authstate to write to shared preferences
      */
-    public static void writeAuthState(@Nullable AuthState state) {
-        if (state == null) {
+    public void writeAuthState(@Nullable AuthState state) {
+        this.authState = state;
+        if (this.authState == null) {
+            this.authState = new AuthState();
             if (!mPrefs.edit().remove(KEY_STATE).commit()) {
                 throw new IllegalStateException("Failed to write state to shared prefs");
             }
         } else {
-            if (!mPrefs.edit().putString(KEY_STATE, state.jsonSerializeString()).commit()) {
+            if (!mPrefs.edit().putString(KEY_STATE, this.authState.jsonSerializeString()).commit()) {
                 throw new IllegalStateException("Failed to write state to shared prefs");
             }
         }
@@ -91,22 +96,22 @@ public class AuthHelper {
     /**
      * Check if the user is authenticated/authorized
      */
-    public static boolean isAuthorized() {
-        return readAuthState().isAuthorized();
+    public boolean isAuthorized() {
+        return authState.isAuthorized();
     }
 
     /**
      * Get the access token
      */
-    public static String getAccessToken() {
-        return readAuthState().getAccessToken();
+    public String getAccessToken() {
+        return authState.getAccessToken();
     }
 
     /**
      * Get the identity token
      */
-    public static String getIdentityToken() {
-        return readAuthState().getIdToken();
+    public String getIdentityToken() {
+        return authState.getIdToken();
     }
 
     // tag::getIdentityInformation[]
@@ -114,7 +119,7 @@ public class AuthHelper {
     /**
      * Get the authenticated users identity information
      */
-    public static JSONObject getIdentityInformation() {
+    public JSONObject getIdentityInformation() {
         String accessToken = getAccessToken();
         JSONObject decodedIdentityData = new JSONObject();
 
@@ -143,16 +148,16 @@ public class AuthHelper {
      *
      * @param role - the role to check
      */
-    public static boolean hasRole(String role) {
+    public boolean hasRole(String role) {
         boolean hasRole = false;
         try {
-            Identity identity = Identity.fromJson(AuthHelper.getIdentityInformation());
+            Identity identity = Identity.fromJson(getIdentityInformation());
             ArrayList userRoles = identity.getRealmRoles();
             if (userRoles.contains(role)) {
                 hasRole = true;
             }
-        } catch (JSONException e) {
-            Log.e("", "Error - JSON Exception", e);
+        } catch (Exception e) {
+            Log.e("", "Error - Exception", e);
         }
         return hasRole;
     }
@@ -162,15 +167,15 @@ public class AuthHelper {
     /**
      * Check if a new access token needs to be required
      */
-    public static boolean getNeedsTokenRefresh() {
-        return readAuthState().getNeedsTokenRefresh();
+    public boolean getNeedsTokenRefresh() {
+        return authState.getNeedsTokenRefresh();
     }
 
     /**
      * Request a new access token
      */
-    public static void setNeedsTokenRefresh() {
-        readAuthState().setNeedsTokenRefresh(true);
+    public void setNeedsTokenRefresh() {
+        authState.setNeedsTokenRefresh(true);
     }
 
     // tag::createRequest[]
@@ -178,7 +183,7 @@ public class AuthHelper {
     /**
      * Make a request to a resource that requires the access token to be sent with the request
      */
-    public static Call createRequest(String requestUrl, boolean sendAccessToken, okhttp3.Callback callback) {
+    public Call createRequest(String requestUrl, boolean sendAccessToken, okhttp3.Callback callback) {
 
         URL url = null;
         try {
@@ -236,7 +241,7 @@ public class AuthHelper {
      * @param e
      * @return
      */
-    public static boolean checkCertificateVerificationError(Exception e) {
+    public boolean checkCertificateVerificationError(Exception e) {
         boolean certificateVerificationError = false;
         if (e.getCause() != null &&
                 (e.getCause().toString().contains("Certificate validation failed") ||

@@ -29,4 +29,11 @@ public interface AppView {
      * @param messageResourceId the resource id of the message
      */
     void showMessage(int messageResourceId);
+
+    /**
+     * Show a message using snackbar
+     * @param messageResourceId the resource id of the message
+     * @param formatArgs format arguments
+     */
+    void showMessage(int messageResourceId, Object... formatArgs);
 }

@@ -52,4 +52,9 @@ public class InMemoryNoteStore implements NoteDataStore {
     public int getType() {
         return STORE_TYPE_INMEMORY;
     }
+
+    @Override
+    public long count() throws Exception {
+        return inMemoryStore.values().size();
+    }
 }

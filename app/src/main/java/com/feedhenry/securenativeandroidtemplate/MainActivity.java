@@ -21,7 +21,7 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.Authent
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
-import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
+import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.HttpHelper;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
@@ -81,9 +81,6 @@ public class MainActivity extends BaseActivity
         // initialise the httphelper
         HttpHelper.init();
 
-        // initialise the authhelper with a context
-        AuthHelper.init(context);
-
         // load the main menu fragment
         navigator.navigateToHomeView(this);
     }
@@ -133,7 +130,10 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_device) {
             navigator.navigateToDeviceView(this);
         }
-
+        // Visit the Network Screen
+        if (id == R.id.nav_network) {
+            navigator.navigateToNetworkView(this);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

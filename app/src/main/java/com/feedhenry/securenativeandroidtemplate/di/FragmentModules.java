@@ -5,6 +5,7 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.Authent
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
 import com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
+import com.feedhenry.securenativeandroidtemplate.features.network.NetworkFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 
@@ -38,4 +39,7 @@ public abstract class FragmentModules {
 
     @ContributesAndroidInjector
     abstract DeviceFragment contributeDeviceFragmentInjector();
+
+    @ContributesAndroidInjector
+    abstract NetworkFragment contributeNetworkFragmentInjector();
 }

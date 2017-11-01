@@ -11,6 +11,7 @@ import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteStoreException;
 
 import net.sqlcipher.Cursor;
+import net.sqlcipher.DatabaseUtils;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import java.io.IOException;
@@ -194,5 +195,12 @@ public class SqliteNoteStore implements NoteDataStore {
     @Override
     public int getType() {
         return STORE_TYPE_SQL;
+    }
+
+    @Override
+    public long count() throws Exception {
+        SQLiteDatabase db = getReadableDb();
+        long count = DatabaseUtils.queryNumEntries(db, NoteContract.NoteEntry.TABLE_NAME);
+        return count;
     }
 }

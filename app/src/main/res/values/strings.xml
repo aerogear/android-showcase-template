@@ -62,7 +62,7 @@
     <string name="access_denied">Access Denied</string>
 
     <!-- Strings related to Storage -->
-    <string name="fragment_title_storage">Storage</string>
+    <string name="fragment_title_storage">Secure Storage</string>
     <string name="fragment_note_title">Title</string>
     <string name="fragment_note_content">Content</string>
     <string name="action_save">Save</string>
@@ -80,6 +80,15 @@
     <!-- Strings related to Network -->
     <string name="fragment_title_network">Network</string>
     <string name="network_request_failed">Network Request Failed</string>
+    <string name="upload_notes">Upload Notes</string>
+    <string name="no_notes_info">You do not have any note to upload. Please create one first.</string>
+    <string name="notes_info">You have %1$d notes to upload.</string>
+    <string name="permission_info">You %1$s have the required %2$s role to upload notes.</string>
+    <string name="upload_complete">Uploaded %1$d notes.</string>
+    <string name="upload_prepare">Preparing for upload...</string>
+    <string name="upload_progress">Uploaded %1$d/%2$d</string>
+    <string name="cancel_upload">Cancel Upload</string>
+    <string name="upload_cancelled">Upload cancelled. Completed %1$d.</string>
 
     <!-- Strings related to Device -->
     <string name="fragment_title_device">Device</string>

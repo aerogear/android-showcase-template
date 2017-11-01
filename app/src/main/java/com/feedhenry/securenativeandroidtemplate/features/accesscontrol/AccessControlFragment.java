@@ -4,24 +4,20 @@ package com.feedhenry.securenativeandroidtemplate.features.accesscontrol;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.feedhenry.securenativeandroidtemplate.BaseActivity;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.presenters.AccessControlViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.views.AccessControlView;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.views.AccessControlViewImpl;
-import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
+import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -38,6 +34,9 @@ public class AccessControlFragment extends BaseFragment<AccessControlViewPresent
 
     @Inject
     AccessControlViewPresenter accessControlViewPresenter;
+
+    @Inject
+    AuthStateService authState;
 
     @Inject
     Navigator navigator;
@@ -93,15 +92,15 @@ public class AccessControlFragment extends BaseFragment<AccessControlViewPresent
      */
     public void performAccessControl() {
         int color = Color.argb(50, 89, 151, 93);
-        if (AuthHelper.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
+        if (authState.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
             setGranted(R.string.role_mobile_user_label, roleMobileUser);
             roleMobileUser.setBackgroundColor(color);
         }
-        if (AuthHelper.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
+        if (authState.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
             setGranted(R.string.role_api_access_label, roleApiAccess);
             roleApiAccess.setBackgroundColor(color);
         }
-        if (AuthHelper.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_SUPERUSER)) {
+        if (authState.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_SUPERUSER)) {
             setGranted(R.string.role_superuser_label, roleSuperuser);
             roleSuperuser.setBackgroundColor(color);
         }

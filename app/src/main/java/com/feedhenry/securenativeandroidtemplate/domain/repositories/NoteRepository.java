@@ -50,4 +50,11 @@ public interface NoteRepository {
      */
     Note deleteNote(Note noteModel) throws Exception;
 
+    /**
+     * Return the total counts of notes
+     * @return the total number of notes
+     * @throws Exception
+     */
+    long count() throws Exception;
+
 }

@@ -16,9 +16,10 @@ import com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
+import com.feedhenry.securenativeandroidtemplate.features.network.NetworkFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
-import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
+import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import org.json.JSONException;
 import javax.inject.Inject;
@@ -32,6 +33,9 @@ public class Navigator {
     Context context;
 
     @Inject
+    AuthStateService authStateService;
+
+    @Inject
     public Navigator() {
 
     }
@@ -43,10 +47,10 @@ public class Navigator {
 
     public void navigateToAuthenticationView(BaseActivity activity) {
         AuthenticationFragment authFragment = new AuthenticationFragment();
-        if(AuthHelper.isAuthorized()) {
+        if(this.authStateService.isAuthorized()) {
             Identity identity = null;
             try {
-                identity = Identity.fromJson(AuthHelper.getIdentityInformation());
+                identity = Identity.fromJson(this.authStateService.getIdentityInformation());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -62,7 +66,7 @@ public class Navigator {
     }
 
     public void navigateToAccessControlView(BaseActivity activity) {
-        if (AuthHelper.isAuthorized() && AuthHelper.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
+        if (this.authStateService.isAuthorized() && this.authStateService.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
             AccessControlFragment accessControView = new AccessControlFragment();
             loadFragment(activity, accessControView, AccessControlFragment.TAG);
         } else {
@@ -84,6 +88,11 @@ public class Navigator {
     public void navigateToDeviceView(MainActivity activity) {
         DeviceFragment deviceFragment = new DeviceFragment();
         loadFragment(activity, deviceFragment, DeviceFragment.TAG);
+    }
+
+    public void navigateToNetworkView(MainActivity activity) {
+        NetworkFragment networkFragment = new NetworkFragment();
+        loadFragment(activity, networkFragment, NetworkFragment.TAG);
     }
 
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {

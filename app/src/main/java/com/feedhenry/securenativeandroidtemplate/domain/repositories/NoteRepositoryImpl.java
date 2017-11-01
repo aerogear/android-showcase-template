@@ -92,4 +92,17 @@ public class NoteRepositoryImpl implements NoteRepository {
             throw new NoteStoreException("invalid store type " + storeType);
         }
     }
+
+    @Override
+    public long count() throws Exception {
+        List<Note> notes = new ArrayList<Note>();
+        List<NoteDataStore> stores = this.noteStoreFactory.getAllStores();
+        int total = 0;
+        for (NoteDataStore store : stores) {
+            total += store.count();
+        }
+        return total;
+    }
+
+
 }

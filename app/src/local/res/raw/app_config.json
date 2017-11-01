@@ -1,0 +1,10 @@
+{
+  "auth-server": {
+    "auth-server-url": "https://www.rhdev.me:9443",
+    "realm-id": "secure-app",
+    "client-id": "client-app"
+  },
+  "api-server": {
+    "server-url": "http://www.rhdev.me:8080"
+  }
+}

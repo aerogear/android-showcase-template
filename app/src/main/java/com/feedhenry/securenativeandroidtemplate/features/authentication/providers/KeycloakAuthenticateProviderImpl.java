@@ -8,12 +8,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.datatheorem.android.trustkit.TrustKit;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
+import com.feedhenry.securenativeandroidtemplate.domain.configurations.AuthenticationConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
-import com.feedhenry.securenativeandroidtemplate.mvp.components.AuthHelper;
+import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -25,19 +26,15 @@ import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenResponse;
 import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
-import net.openid.appauth.connectivity.ConnectionBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.net.ssl.HttpsURLConnection;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -60,14 +57,16 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private AuthorizationServiceConfiguration serviceConfig;
     private Callback authCallback;
     private Callback logoutCallback;
+    private AuthStateService authStateService;
 
     @Inject
     Context context;
 
     @Inject
-    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AuthenticationConfiguration authenticationConfiguration) {
+    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AppConfiguration appConfiguration, AuthStateService authStateService) {
         this.context = context;
-        this.authenticationConfiguration = authenticationConfiguration;
+        this.authenticationConfiguration = appConfiguration.getAuthConfiguration();
+        this.authStateService = authStateService;
     }
 
     // tag::performAuthRequest[]
@@ -160,9 +159,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
                 if (tokenResponse != null) {
                     authState.update(tokenResponse, exception);
-                    AuthHelper.writeAuthState(authState);
+                    authStateService.writeAuthState(authState);
 
-                    JSONObject decodedIdentityData = AuthHelper.getIdentityInformation();
+                    JSONObject decodedIdentityData = authStateService.getIdentityInformation();
                     Identity newIdentity = new Identity("", "", "", new ArrayList<String>());
 
                     try {
@@ -187,14 +186,14 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      */
     public void logout(Callback logoutCallback) {
         this.logoutCallback = logoutCallback;
-        String identityToken = AuthHelper.getIdentityToken();
+        String identityToken = authStateService.getIdentityToken();
 
         // Construct the Keycloak logout URL
         String logoutRequestUri = this.authenticationConfiguration.getLogoutUrl(identityToken, REDIRECT_URI.toString());
 
         boolean sendAccessToken = false;
 
-        AuthHelper.createRequest(logoutRequestUri, sendAccessToken, new okhttp3.Callback() {
+        authStateService.createRequest(logoutRequestUri, sendAccessToken, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 logoutFailed(e);
@@ -203,7 +202,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 // nullify the auth state
-                AuthHelper.writeAuthState(null);
+                authStateService.writeAuthState(null);
                 logoutSuccess();
             }
         });

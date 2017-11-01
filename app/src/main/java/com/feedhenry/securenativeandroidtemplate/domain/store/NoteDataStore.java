@@ -51,4 +51,10 @@ public interface NoteDataStore {
      * @return
      */
     public int getType();
+
+    /**
+     * Return the total number of notes in the store
+     * @return the total number of notes
+     */
+    public long count() throws Exception;
 }

@@ -49,6 +49,12 @@ public abstract class BaseAppView implements AppView {
         showMessage(ctx.getString(messageResId));
     }
 
+    @Override
+    public void showMessage(int messageResourceId, Object... formatArgs) {
+        Context ctx = getContext();
+        showMessage(ctx.getString(messageResourceId, formatArgs));
+    }
+
     private Context getContext() {
         return this.fragment.getActivity();
     }

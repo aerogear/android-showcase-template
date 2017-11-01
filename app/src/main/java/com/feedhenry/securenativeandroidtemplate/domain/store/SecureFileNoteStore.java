@@ -6,6 +6,7 @@ import com.feedhenry.securenativeandroidtemplate.domain.crypto.AesCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.utils.StreamUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -96,6 +97,17 @@ public class SecureFileNoteStore implements NoteDataStore {
     @Override
     public int getType() {
         return STORE_TYPE_FILE;
+    }
+
+    @Override
+    public long count() throws Exception {
+        loadMetadata();
+        JSONArray names = notesMetadata.names();
+        if (names != null) {
+            return names.length();
+        } else {
+            return 0;
+        }
     }
 
     private void loadMetadata() throws GeneralSecurityException, IOException {
