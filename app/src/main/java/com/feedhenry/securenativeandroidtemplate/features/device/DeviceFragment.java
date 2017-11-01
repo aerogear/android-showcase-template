@@ -309,6 +309,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     // end::detectLatestOS[]
 
     // tag::detectDeveloperOptions[]
+    /**
+     * Detect if the developer options mode is enabled on the device
+     */
     public void detectDeveloperOptions() {
         totalTests++;
         int devOptionsEnabled = Settings.Secure.getInt(context.getContentResolver(),
