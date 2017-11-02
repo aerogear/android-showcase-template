@@ -92,6 +92,7 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
             }
         }
 
+        // tag::checkPermission[]
         @Override
         protected ClientStatus doInBackground(Void... voids) {
             ClientStatus status = null;
@@ -106,6 +107,7 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
             }
             return status;
         }
+        // end::checkPermission[]
 
         @Override
         protected void onPostExecute(ClientStatus clientStatus) {
@@ -132,6 +134,7 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
             }
         }
 
+        // tag::invokeAPI[]
         @Override
         protected Long doInBackground(Void... voids) {
             String apiUrl = apiServerConfiguration.getNoteAPIUrl();
@@ -178,6 +181,7 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
             }
             return uploaded;
         }
+        // end::invokeAPI[]
 
         @Override
         protected void onPostExecute(Long completed) {

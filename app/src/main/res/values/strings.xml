@@ -24,6 +24,9 @@
     \n\nThe app will also detect if a user has setup a device lock screen using a pin, password, pattern etc.
     \n\nHooking framework binaries like Cydia Substrate and the Xposed Framework will also be scanned for.
     \n\nA number of other checks are performed to see if it is possible to recover application data using the android backup function, check if device encryption is being used, check that the device is using the latest Android version and detecting if the developer mode is enabled.</string>
+    <string name="popup_network_fragment"> When upload notes to the remote server, the user\'s permission is checked on the client as well as the server.
+    \n\nTo ensure the security of the data during transmission, certificate pinning is used to ensure the authenticity of the server.
+    </string>
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
