@@ -178,7 +178,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
                             keycloakLogin.setVisibility(view.GONE);
 
                             // update the UI to state the connection is insecure
-                            authMessage.setText(getString(R.string.cert_pin_verification_failed) + e.getMessage());
+                            authMessage.setText(getString(R.string.cert_pin_verification_failed) + "\n\n" + e.getMessage());
                             background.setImageResource(R.drawable.ic_error_background);
                             logo.setImageResource(R.drawable.ic_lock);
 
