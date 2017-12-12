@@ -1,10 +1,10 @@
 {
   "auth-server": {
-    "auth-server-url": "https://keycloak-openshift-mobile-security.osm1.skunkhenry.com",
+    "auth-server-url": "https://keycloak.security.feedhenry.org",
     "realm-id": "secure-app",
     "client-id": "client-app"
   },
   "api-server": {
-    "server-url": "https://api-server-mobile-security.osm1.skunkhenry.com"
+    "server-url": "https://api.security.feedhenry.org"
   }
 }
