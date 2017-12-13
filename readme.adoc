@@ -17,3 +17,16 @@ git checkout master
 git tag release-1.0.0 #change the release version based on the current release
 git push origin --tags
 ```
+== Features
+- OpenID Connect Authentication
+- Mobile Access Control
+- Client Cert Authentication
+- Certificate Pinning
+- Code Obfuscation (with Proguard)
+- Secure Data Storage
+- Device Trust Checks (Root Access, Emulator Access, latest OS etc)
+- 2FA with OTP (via Keycloak)
+- Authentication Brute Force Detection (via Keycloak)
+- Account Lockout Policies (via Keycloak)
+- Authentication/Access Control Auditing & Logging (via Keycloak)
+- Authenticated Calls to Protected Endpoints (via Keycloak)
