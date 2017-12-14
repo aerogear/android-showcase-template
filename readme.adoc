@@ -10,13 +10,8 @@ For more information, please check the https://github.com/feedhenry/mobile-secur
 
 == Binary Scanning with Kryptowire
 
-If you need to push the built binary to https://www.kryptowire.com/[Kryptowire] for a security scan, you can create a git tag like `release-*`. This will trigger a build in CircleCI, which will push the built release binary to the Kryptowire platform automatically.
+Everytime when a PR is merged to master, the build script will automatically push the built binary to Kryptowire for security scanning.
 
-```bash
-git checkout master
-git tag release-1.0.0 #change the release version based on the current release
-git push origin --tags
-```
 == Features
 - OpenID Connect Authentication
 - Mobile Access Control
@@ -30,3 +25,28 @@ git push origin --tags
 - Account Lockout Policies (via Keycloak)
 - Authentication/Access Control Auditing & Logging (via Keycloak)
 - Authenticated Calls to Protected Endpoints (via Keycloak)
+
+== Build Instructions
+
+* Make sure the Android SDK and the required build tools are installed locally. Please check ./app/build.gradle[the build gradle] file for the require SDK version and build tools version.
+* To run all the tests:
+[source, bash]
+----
+./gradlew test connectedAndroidTest
+----
+* To build
+[source, bash]
+----
+/gradlew assembleDebug
+----
+* To do release build (you will need to setup the signing credential):
+[source, bash]
+----
+./gradlew aR
+----
+* To push the built binary to Kryptowire
+[source, bash]
+----
+export KRYPTOWIRE_API_KEY=<PUT YOUR API KEY HERE>
+./pushToKryptowire.sh
+----
