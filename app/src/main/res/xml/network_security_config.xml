@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">osm1.skunkhenry.com</domain>
+        <domain includeSubdomains="true">security.feedhenry.org</domain>
         <pin-set>
             // primary
-            <pin digest="SHA-256">jAoDAV3WG9IKcu0YJ1ZVTuEVqdcglfiQRqmfy3+ieoc=</pin>
+            <pin digest="SHA-256">trENjoQnbWupnAtu1/WagBE0RgJ+p7ke2ppWML8vAl0=</pin>
             // backup
-            <pin digest="SHA-256">XAoDAV3WG9IKcu0YJ1ZVTuEVqdcglfiQRqmfy3+ieoc=</pin>
+            <pin digest="SHA-256">arENjoQnbWupnAtu1/WagBE0RgJ+p7ke2ppWML8vAl0=</pin>
         </pin-set>
 
         // Set this to true for production, at least 2 unique pins must be provided above!
@@ -14,8 +14,6 @@
     </domain-config>
     <debug-overrides>
         <trust-anchors>
-            <!-- Trust preinstalled CAs -->
-            <certificates src="system" />
             <!-- Additionally trust user added CAs -->
             <certificates src="user" />
         </trust-anchors>
