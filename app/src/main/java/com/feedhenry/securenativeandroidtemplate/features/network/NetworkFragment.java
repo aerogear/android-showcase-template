@@ -161,7 +161,7 @@ public class NetworkFragment extends BaseFragment<UploadNotesPresenter, UploadNo
 
     @Override
     public int getHelpMessageResourceId() {
-        return 0;
+        return R.string.popup_network_fragment;
     }
 
 

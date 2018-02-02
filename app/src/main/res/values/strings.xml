@@ -24,8 +24,8 @@
     \n\nThe app will also detect if a user has setup a device lock screen using a pin, password, pattern etc.
     \n\nHooking framework binaries like Cydia Substrate and the Xposed Framework will also be scanned for.
     \n\nA number of other checks are performed to see if it is possible to recover application data using the android backup function, check if device encryption is being used, check that the device is using the latest Android version and detecting if the developer mode is enabled.</string>
-    <string name="popup_network_fragment"> When upload notes to the remote server, the user\'s permission is checked on the client as well as the server.
-    \n\nTo ensure the security of the data during transmission, certificate pinning is used to ensure the authenticity of the server.
+    <string name="popup_network_fragment"> Before being allowed to upload notes to the API server, the user\'s permission is checked on the client. The API server endpoints are also protected by the same role check.
+    \n\nTo ensure the security of the data during transmission, certificate pinning is used to check the identity of the server.
     </string>
 
     <!-- Strings related to Navigation -->
@@ -81,7 +81,7 @@
     <string name="store_type_sqlite">SQLite Database</string>
 
     <!-- Strings related to Network -->
-    <string name="fragment_title_network">Network</string>
+    <string name="fragment_title_network">Network Security</string>
     <string name="network_request_failed">Network Request Failed</string>
     <string name="upload_notes">Upload Notes</string>
     <string name="no_notes_info">You do not have any note to upload. Please create one first.</string>
@@ -94,7 +94,7 @@
     <string name="upload_cancelled">Upload cancelled. Completed %1$d.</string>
 
     <!-- Strings related to Device -->
-    <string name="fragment_title_device">Device</string>
+    <string name="fragment_title_device">Device Trust</string>
     <string name="trust_score_header_title">Device Trust Score</string>
     <string name="root_detected_positive">Root Access Detected</string>
     <string name="root_detected_negative">No Root Access Detected</string>
