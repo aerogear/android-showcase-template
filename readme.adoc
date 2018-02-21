@@ -50,3 +50,33 @@ Everytime when a PR is merged to master, the build script will automatically pus
 export KRYPTOWIRE_API_KEY=<PUT YOUR API KEY HERE>
 ./pushToKryptowire.sh
 ----
+
+== Work with self-signed certificate
+
+By default, the app will not work with self-signed certificate due to security reasons. However, to help with local development, you may need to support it.  Here are the steps you can follow:
+
+1. Get the CA certificate of the server. You can use this command:
++
+[source, bash]
+----
+openssl s_client -showcerts -connect host:port
+---- 
++
+It will print out the full certificate chain of the server and you should save the content of the root certificate into a file.
+
+2. Add the CA certificate to the project. It should be placed in `app/src/main/res/raw`.
+
+3. Update the `network_security_config.xml` file to add the extra trust anchor like this:
++
+[source, xml]
+----
+<domain-config>
+...
+  <trust-anchors>
+    <certificates src="@raw/ca"/>
+  </trust-anchors>
+...
+</domain-config>
+----        
++
+The file name should match the name of the CA certificate file.
