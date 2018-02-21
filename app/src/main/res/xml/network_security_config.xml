@@ -8,7 +8,6 @@
             // backup
             <pin digest="SHA-256">arENjoQnbWupnAtu1/WagBE0RgJ+p7ke2ppWML8vAl0=</pin>
         </pin-set>
-
         // Set this to true for production, at least 2 unique pins must be provided above!
         <trustkit-config enforcePinning="true"></trustkit-config>
     </domain-config>

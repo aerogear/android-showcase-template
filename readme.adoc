@@ -51,7 +51,24 @@ export KRYPTOWIRE_API_KEY=<PUT YOUR API KEY HERE>
 ./pushToKryptowire.sh
 ----
 
-== Work with self-signed certificate
+== Work with Different Backend Services
+
+By default the app will use the backend services that are running on https://security.skunkhenry.com:8443[a dedicated OpenShift cluster] for demonstration purpose. 
+
+You can also configure the app to run against different backend services:
+
+1. Update the URLs in link:app/src/main/res/raw/app_config.json[app_config.json] file.
+2. If you are using HTTPS, update the certificate pinning configuration in link:app/src/main/res/xml/network_security_config[network_security_config.xml] file
+
+To generate the hash value of the certificate, you can use this command:
+[source, bash]
+----
+openssl s_client -servername <hostname> -connect <hostname:port> | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64
+----
+
+If you are using self-signed certificate, follow the instructions in the next section.
+
+== Work with Self-signed Certificate
 
 By default, the app will not work with self-signed certificate due to security reasons. However, to help with local development, you may need to support it.  Here are the steps you can follow:
 
