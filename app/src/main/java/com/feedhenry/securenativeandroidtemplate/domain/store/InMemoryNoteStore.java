@@ -1,6 +1,5 @@
 package com.feedhenry.securenativeandroidtemplate.domain.store;
 
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 
 import java.util.ArrayList;

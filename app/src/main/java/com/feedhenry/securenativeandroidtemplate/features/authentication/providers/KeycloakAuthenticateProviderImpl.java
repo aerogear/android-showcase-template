@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AuthenticationConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
@@ -30,7 +30,10 @@ import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
 
 import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.Callback;
+import org.aerogear.mobile.auth.authenticator.OIDCAuthenticateOptions;
 import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
+import org.aerogear.mobile.auth.user.UserPrincipal;
 import org.aerogear.mobile.core.MobileCore;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,10 +63,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private AuthorizationService authService;
     private AuthorizationRequest authRequest;
     private AuthorizationServiceConfiguration serviceConfig;
-    private Callback authCallback;
-    private Callback logoutCallback;
     private AuthStateService authStateService;
     private MobileCoreService mobileCoreService;;
+    public static int LOGIN_RESULT_CODE = 1;
 
     @Inject
     Context context;
@@ -89,42 +91,26 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      * Create the config for the initial Keycloak auth request to get a temporary token and create an intent to handle the response
      */
     @Override
-    public void performAuthRequest(Activity fromActivity, Callback authCallback) {
-        this.authCallback = authCallback;
-        if (!this.authenticationConfiguration.isValid()) {
-            this.authCallback.onError(this.authenticationConfiguration.getConfigurationError());
-            return;
-        }
-        // Setup the config for the AuthorizationService
-        serviceConfig =
-                new AuthorizationServiceConfiguration(
-                        this.authenticationConfiguration.getAuthenticationEndpoint(), // the clients keycloak authorization endpoint
-                        this.authenticationConfiguration.getTokenEndpoint()); // the clients keycloak token endpoint
+    public void performAuthRequest(Activity fromActivity) {
+        // authService already initialized.
+        AuthService authService = this.mobileCoreService.getMobileCore().getInstance(AuthService.class);
 
-        // Persist the AuthorizationServiceConfiguration
-        authState = new AuthState(serviceConfig);
+        // Build the options object and start the authentication flow. Provide an activity to handle the auth response.
+        OIDCAuthenticateOptions options = new OIDCAuthenticateOptions(fromActivity, LOGIN_RESULT_CODE);
 
-        // Prevent the app opening the keycloak view in chrome custom tabs, instead open it in the native browser
-        AppAuthConfiguration appAuthConfig = new AppAuthConfiguration.Builder()
-                .setBrowserMatcher(new BrowserBlacklist(
-                        VersionedBrowserMatcher.CHROME_CUSTOM_TAB))
-                .build();
+        Callback authCallback = new Callback<UserPrincipal>() {
+            @Override
+            public void onSuccess(UserPrincipal principal) {
+                // User authenticated in, continue on..
+            }
 
-        // create a new auth service with the auth config
-        authService = new AuthorizationService(context, appAuthConfig);
+            @Override
+            public void onError(Throwable error) {
+                // An error occurred during login.
+            }
+        };
 
-        AuthorizationRequest.Builder authRequestBuilder =
-                new AuthorizationRequest.Builder(
-                        serviceConfig, // the authorization service configuration
-                        this.authenticationConfiguration.getClientId(), // the client ID, typically pre-registered and static
-                        ResponseTypeValues.CODE, // the response_type value: we want a code
-                        REDIRECT_URI) // the redirect URI to which the auth response is sent
-                        .setScopes(OPEN_ID_SCOPE);
-
-        authRequest = authRequestBuilder.build();
-        // perform the auth request
-        Intent authIntent = authService.getAuthorizationRequestIntent(authRequest);
-        fromActivity.startActivityForResult(authIntent, Constants.REQUEST_CODES.AUTH_CODE);
+        authService.login(options, authCallback);
     }
     // end::performAuthRequest[]
 
@@ -197,56 +183,55 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     // tag::logout[]
     /**
      * Perform a logout request against the openid connect server
-     * @param logoutCallback - the logout callback
      */
-    public void logout(Callback logoutCallback) {
-        this.logoutCallback = logoutCallback;
-        String identityToken = authStateService.getIdentityToken();
-
-        // Construct the Keycloak logout URL
-        String logoutRequestUri = this.authenticationConfiguration.getLogoutUrl(identityToken, REDIRECT_URI.toString());
-
-        boolean sendAccessToken = false;
-
-        authStateService.createRequest(logoutRequestUri, sendAccessToken, new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                logoutFailed(e);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                // nullify the auth state
-                authStateService.writeAuthState(null);
-                logoutSuccess();
-            }
-        });
+    public void logout() {
+//        this.logoutCallback = logoutCallback;
+//        String identityToken = authStateService.getIdentityToken();
+//
+//        // Construct the Keycloak logout URL
+//        String logoutRequestUri = this.authenticationConfiguration.getLogoutUrl(identityToken, REDIRECT_URI.toString());
+//
+//        boolean sendAccessToken = false;
+//
+//        authStateService.createRequest(logoutRequestUri, sendAccessToken, new okhttp3.Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                logoutFailed(e);
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                // nullify the auth state
+//                authStateService.writeAuthState(null);
+//                logoutSuccess();
+//            }
+//        });
     }
     // end::logout[]
 
     private void logoutSuccess() {
-        if (this.logoutCallback != null) {
-            logoutCallback.onSuccess(null);
-        }
+//        if (this.logoutCallback != null) {
+//            logoutCallback.onSuccess(null);
+//        }
     }
 
     private void logoutFailed(Exception error) {
         Log.w("", context.getString(R.string.logout_failed), error);
-        if (this.logoutCallback != null) {
-            logoutCallback.onError(error);
-        }
+//        if (this.logoutCallback != null) {
+//            logoutCallback.onError(error);
+//        }
     }
 
     private void authSuccess(Identity identity) {
-        if (this.authCallback != null) {
-            authCallback.onSuccess(identity);
-        }
+//        if (this.authCallback != null) {
+//            authCallback.onSuccess(identity);
+//        }
     }
 
     private void authFailed(Exception error) {
         Log.w("", context.getString(R.string.authentication_failed), error);
-        if (this.authCallback != null) {
-            authCallback.onError(error);
-        }
+//        if (this.authCallback != null) {
+//            authCallback.onError(error);
+//        }
     }
 }

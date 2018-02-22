@@ -16,14 +16,18 @@ import android.view.MenuItem;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
+import com.feedhenry.securenativeandroidtemplate.domain.services.MobileCoreService;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
+import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.HttpHelper;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
+
+import org.aerogear.mobile.auth.AuthService;
 
 import javax.inject.Inject;
 
@@ -43,6 +47,9 @@ public class MainActivity extends BaseActivity
 
     @Inject
     OpenIDAuthenticationProvider authProvider;
+
+    @Inject
+    MobileCoreService mobileCoreService;
 
     @Inject
     Navigator navigator;
@@ -147,8 +154,10 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODES.AUTH_CODE) {
-            authProvider.onAuthResult(data);
+        if (requestCode == KeycloakAuthenticateProviderImpl.LOGIN_RESULT_CODE) {
+            // The core will return the same instance of the auth service as before
+            AuthService authService = mobileCoreService.getMobileCore().getInstance(AuthService.class);
+            authService.handleAuthResult(data);
         }
     }
 
