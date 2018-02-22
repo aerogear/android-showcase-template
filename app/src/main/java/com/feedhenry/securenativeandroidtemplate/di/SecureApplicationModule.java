@@ -13,7 +13,6 @@ import com.feedhenry.securenativeandroidtemplate.domain.crypto.SecureKeyStore;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepositoryImpl;
 import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
-import com.feedhenry.securenativeandroidtemplate.domain.services.MobileCoreService;
 import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
@@ -108,7 +107,8 @@ public class SecureApplicationModule {
     }
 
     @Provides @Singleton
-    MobileCoreService provideMobileCore(Context context) {
-        return new MobileCoreService(context);
+    MobileCore provideMobileCore(Context context) {
+        MobileCore mobileCore = MobileCore.init(context);
+        return mobileCore;
     }
 }

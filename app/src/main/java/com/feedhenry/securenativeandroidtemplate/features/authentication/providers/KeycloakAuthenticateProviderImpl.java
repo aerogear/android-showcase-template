@@ -15,7 +15,6 @@ import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfig
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AuthenticationConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
-import com.feedhenry.securenativeandroidtemplate.domain.services.MobileCoreService;
 
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
@@ -64,20 +63,21 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private AuthorizationRequest authRequest;
     private AuthorizationServiceConfiguration serviceConfig;
     private AuthStateService authStateService;
-    private MobileCoreService mobileCoreService;;
     public static int LOGIN_RESULT_CODE = 1;
 
     @Inject
     Context context;
 
     @Inject
-    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AppConfiguration appConfiguration, AuthStateService authStateService, MobileCoreService mobileCoreService) {
+    MobileCore mobileCore;
+
+    @Inject
+    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AppConfiguration appConfiguration, AuthStateService authStateService, MobileCore mobileCore) {
         this.context = context;
         this.authenticationConfiguration = appConfiguration.getAuthConfiguration();
         this.authStateService = authStateService;
-        this.mobileCoreService = mobileCoreService;
 
-        AuthService authService = mobileCoreService.getMobileCore().getInstance(AuthService.class);
+        AuthService authService = mobileCore.getInstance(AuthService.class);
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
                 .withRedirectUri("com.feedhenry.securenativeandroidtemplate:/callback")
                 .build();
@@ -93,7 +93,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     @Override
     public void performAuthRequest(Activity fromActivity) {
         // authService already initialized.
-        AuthService authService = this.mobileCoreService.getMobileCore().getInstance(AuthService.class);
+        AuthService authService = mobileCore.getInstance(AuthService.class);
 
         // Build the options object and start the authentication flow. Provide an activity to handle the auth response.
         OIDCAuthenticateOptions options = new OIDCAuthenticateOptions(fromActivity, LOGIN_RESULT_CODE);
