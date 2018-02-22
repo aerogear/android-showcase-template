@@ -33,9 +33,7 @@ public interface SecureApplicationComponent {
 
     Context context();
     AesCrypto provideAesCrypto();
-
     NoteRepository noteRepository();
     OpenIDAuthenticationProvider authProvider();
-
     NoteCrudlService provideNoteCrudleService();
 }

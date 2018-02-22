@@ -15,6 +15,8 @@ import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfig
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AuthenticationConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
+import com.feedhenry.securenativeandroidtemplate.domain.services.MobileCoreService;
+
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -27,6 +29,9 @@ import net.openid.appauth.TokenResponse;
 import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
 
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
+import org.aerogear.mobile.core.MobileCore;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,15 +63,25 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private Callback authCallback;
     private Callback logoutCallback;
     private AuthStateService authStateService;
+    private MobileCoreService mobileCoreService;;
 
     @Inject
     Context context;
 
     @Inject
-    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AppConfiguration appConfiguration, AuthStateService authStateService) {
+    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AppConfiguration appConfiguration, AuthStateService authStateService, MobileCoreService mobileCoreService) {
         this.context = context;
         this.authenticationConfiguration = appConfiguration.getAuthConfiguration();
         this.authStateService = authStateService;
+        this.mobileCoreService = mobileCoreService;
+
+        AuthService authService = mobileCoreService.getMobileCore().getInstance(AuthService.class);
+        AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
+                .withRedirectUri("com.feedhenry.securenativeandroidtemplate:/callback")
+                .build();
+
+        // Only invoke this once, every subsequent retrieval of the AuthService will retrieve the same, already initialized, instance.
+        authService.init(context, authServiceConfig);
     }
 
     // tag::performAuthRequest[]

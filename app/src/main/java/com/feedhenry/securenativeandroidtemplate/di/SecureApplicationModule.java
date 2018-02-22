@@ -13,6 +13,7 @@ import com.feedhenry.securenativeandroidtemplate.domain.crypto.SecureKeyStore;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepositoryImpl;
 import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
+import com.feedhenry.securenativeandroidtemplate.domain.services.MobileCoreService;
 import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
@@ -20,6 +21,8 @@ import com.feedhenry.securenativeandroidtemplate.domain.store.SecureFileNoteStor
 import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.SqliteNoteStore;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
+
+import org.aerogear.mobile.core.MobileCore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,5 +105,10 @@ public class SecureApplicationModule {
     @Provides @Singleton
     AuthStateService provideAuthStateService(Context context) {
         return new AuthStateService(context);
+    }
+
+    @Provides @Singleton
+    MobileCoreService provideMobileCore(Context context) {
+        return new MobileCoreService(context);
     }
 }
