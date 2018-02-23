@@ -18,7 +18,11 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.views.A
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsViewImpl;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
+import org.aerogear.mobile.auth.user.UserPrincipal;
+import org.aerogear.mobile.auth.user.UserRole;
+
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -36,7 +40,7 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
 
     public interface AuthenticationDetailsListener {
 
-        void onLogoutSuccess(Identity authState);
+        void onLogoutSuccess(UserPrincipal user);
 
         void onLogoutError(Exception error);
     }
@@ -56,11 +60,11 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     @BindView(R.id.user_email)
     TextView user_email;
 
-    @BindView(R.id.realm_roles)
-    ListView listViewRealmRoles;
+    @BindView(R.id.roles)
+    ListView listViewRoles;
 
     View view;
-    ArrayAdapter<String> realmRolesAdapter;
+    ArrayAdapter<UserRole> roles;
 
     private AuthenticationDetailsListener authenticationDetailsListener;
 
@@ -68,11 +72,11 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         // Required empty public constructor
     }
 
-    public static AuthenticationDetailsFragment forIdentityData(Identity identityData) {
+    public static AuthenticationDetailsFragment forIdentityData(UserPrincipal user) {
         AuthenticationDetailsFragment detailsFragment = new AuthenticationDetailsFragment();
-        if (identityData != null) {
+        if (user != null) {
             Bundle args = new Bundle();
-            args.putSerializable(Constants.TOKEN_FIELDS.IDENTITY_DATA, identityData);
+            args.putSerializable(Constants.TOKEN_FIELDS.IDENTITY_DATA, user);
             detailsFragment.setArguments(args);
         }
         return detailsFragment;
@@ -117,10 +121,10 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     protected AuthenticationDetailsView initView() {
         return new AuthenticationDetailsViewImpl(this) {
             @Override
-            public void logoutSuccess(Identity identity) {
+            public void logoutSuccess(UserPrincipal user) {
                 showMessage(R.string.logout_success);
                 if (authenticationDetailsListener != null) {
-                    authenticationDetailsListener.onLogoutSuccess(identity);
+                    authenticationDetailsListener.onLogoutSuccess(user);
                 }
             }
 
@@ -145,18 +149,18 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
      * @param args
      */
     private void renderIdentityInfo(Bundle args) {
-        Identity identity = (Identity) args.get(Constants.TOKEN_FIELDS.IDENTITY_DATA);
-        if (identity != null) {
+        UserPrincipal user = (UserPrincipal) args.get(Constants.TOKEN_FIELDS.IDENTITY_DATA);
+        if (user != null) {
             // get the users name
-            user_name.setText(identity.getFullName());
+            user_name.setText(user.getName());
             // get the users email
-            user_email.setText(identity.getEmailAddress());
-            // get the users realm level roles
-            ArrayList realmRoles = identity.getRealmRoles();
-            realmRolesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, realmRoles);
-            listViewRealmRoles.setAdapter(realmRolesAdapter);
+            user_email.setText(user.getEmail());
+            // get the users roles
+            UserRole[] rolesArray = new UserRole[user.getRoles().size()];
+            rolesArray = user.getRoles().toArray(rolesArray);
+            roles = new ArrayAdapter<UserRole>(context, android.R.layout.simple_list_item_1, rolesArray);
+            listViewRoles.setAdapter(roles);
         }
-
     }
 
     @OnClick(R.id.keycloakLogout)

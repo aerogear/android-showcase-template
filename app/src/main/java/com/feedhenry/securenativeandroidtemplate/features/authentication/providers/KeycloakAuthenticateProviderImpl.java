@@ -63,6 +63,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private AuthorizationServiceConfiguration serviceConfig;
     private AuthStateService authStateService;
     public static int LOGIN_RESULT_CODE = 1;
+    private CallbackHandler logoutCallback;
 
     @Inject
     Context context;
@@ -85,25 +86,10 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      * Create the config for the initial Keycloak auth request to get a temporary token and create an intent to handle the response
      */
     @Override
-    public void performAuthRequest(Activity fromActivity) {
+    public void login(Activity fromActivity, Callback authCallback) {
 
         // Build the options object and start the authentication flow. Provide an activity to handle the auth response.
         OIDCAuthenticateOptions options = new OIDCAuthenticateOptions(fromActivity, LOGIN_RESULT_CODE);
-
-        Callback authCallback = new Callback<UserPrincipal>() {
-            @Override
-            public void onSuccess(UserPrincipal principal) {
-                System.out.println(">>> User Authenticated Successfully");
-                // User authenticated in, continue on..
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                System.out.println(">>> Login Failed");
-                // An error occurred during login.
-            }
-        };
-
         authService.login(options, authCallback);
     }
     // end::performAuthRequest[]
@@ -112,54 +98,26 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     /**
      * Perform a logout request against the openid connect server
      */
-    public void logout() {
-//        this.logoutCallback = logoutCallback;
-//        String identityToken = authStateService.getIdentityToken();
-//
-//        // Construct the Keycloak logout URL
-//        String logoutRequestUri = this.authenticationConfiguration.getLogoutUrl(identityToken, REDIRECT_URI.toString());
-//
-//        boolean sendAccessToken = false;
-//
-//        authStateService.createRequest(logoutRequestUri, sendAccessToken, new okhttp3.Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                logoutFailed(e);
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                // nullify the auth state
-//                authStateService.writeAuthState(null);
-//                logoutSuccess();
-//            }
-//        });
+    public void logout(CallbackHandler logoutCallback) {
+        this.logoutCallback = logoutCallback;
+        UserPrincipal currentUser = authService.currentUser();
+        authService.logout(currentUser);
+        logoutSuccess();
     }
     // end::logout[]
 
     private void logoutSuccess() {
-//        if (this.logoutCallback != null) {
-//            logoutCallback.onSuccess(null);
-//        }
+        Log.w("", context.getString(R.string.logout_success));
+        if (this.logoutCallback != null) {
+            logoutCallback.onSuccess(null);
+        }
     }
 
     private void logoutFailed(Exception error) {
         Log.w("", context.getString(R.string.logout_failed), error);
-//        if (this.logoutCallback != null) {
-//            logoutCallback.onError(error);
-//        }
+        if (this.logoutCallback != null) {
+            logoutCallback.onError(error);
+        }
     }
 
-    private void authSuccess(Identity identity) {
-//        if (this.authCallback != null) {
-//            authCallback.onSuccess(identity);
-//        }
-    }
-
-    private void authFailed(Exception error) {
-        Log.w("", context.getString(R.string.authentication_failed), error);
-//        if (this.authCallback != null) {
-//            authCallback.onError(error);
-//        }
-    }
 }

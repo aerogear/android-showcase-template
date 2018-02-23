@@ -73,11 +73,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/section_header_padding"
-                android:text="@string/realm_roles"
+                android:text="@string/roles"
                 android:textStyle="bold" />
 
             <ListView
-                android:id="@+id/realm_roles"
+                android:id="@+id/roles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none" />

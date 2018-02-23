@@ -20,6 +20,8 @@ import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateServic
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
+import org.aerogear.mobile.auth.user.UserPrincipal;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -40,7 +42,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     public interface AuthenticationListener {
 
-        void onAuthSuccess(Identity identityData);
+        void onAuthSuccess(UserPrincipal user);
 
         void onAuthError(Exception error);
     }
@@ -114,10 +116,10 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     protected AuthenticationView initView() {
         return new AuthenticationViewImpl(this) {
             @Override
-            public void renderIdentityInfo(Identity identity) {
+            public void renderIdentityInfo(UserPrincipal user) {
                 showMessage(R.string.authentication_success);
                 if (authenticationListener != null) {
-                    authenticationListener.onAuthSuccess(identity);
+                    authenticationListener.onAuthSuccess(user);
                 }
             }
 

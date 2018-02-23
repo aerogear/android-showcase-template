@@ -21,6 +21,9 @@ import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFra
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
+
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.user.UserPrincipal;
 import org.json.JSONException;
 import javax.inject.Inject;
 
@@ -36,6 +39,9 @@ public class Navigator {
     AuthStateService authStateService;
 
     @Inject
+    AuthService authService;
+
+    @Inject
     public Navigator() {
 
     }
@@ -47,21 +53,16 @@ public class Navigator {
 
     public void navigateToAuthenticationView(BaseActivity activity) {
         AuthenticationFragment authFragment = new AuthenticationFragment();
-        if(this.authStateService.isAuthorized()) {
-            Identity identity = null;
-            try {
-                identity = Identity.fromJson(this.authStateService.getIdentityInformation());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            navigateToAuthenticateDetailsView(activity, identity);
+        UserPrincipal user = authService.currentUser();
+        if (user != null) {
+            navigateToAuthenticateDetailsView(activity, user);
         } else {
             loadFragment(activity, authFragment, AuthenticationFragment.TAG);
         }
     }
 
-    public void navigateToAuthenticateDetailsView(BaseActivity activity, Identity identityData) {
-        AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(identityData);
+    public void navigateToAuthenticateDetailsView(BaseActivity activity, UserPrincipal user) {
+        AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(user);
         loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
     }
 

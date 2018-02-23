@@ -2,9 +2,12 @@ package com.feedhenry.securenativeandroidtemplate.features.authentication.presen
 
 import com.feedhenry.securenativeandroidtemplate.MainActivity;
 
+import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
+
+import org.aerogear.mobile.auth.user.UserPrincipal;
 
 import javax.inject.Inject;
 
@@ -23,7 +26,17 @@ public class AuthenticationDetailsPresenter extends BasePresenter<Authentication
         this.mainActivity = mainActivity;
     }
 
-    public void logout() {
-        authProvider.logout();
+    public void logout(){
+        authProvider.logout(new CallbackHandler<UserPrincipal>() {
+            @Override
+            public void onSuccess(UserPrincipal user) {
+                view.logoutSuccess(user);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                view.logoutFailure((Exception) error);
+            }
+        });
     }
 }

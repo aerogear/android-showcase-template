@@ -27,6 +27,7 @@ import com.feedhenry.securenativeandroidtemplate.mvp.components.HttpHelper;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
 import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.user.UserPrincipal;
 import org.aerogear.mobile.core.MobileCore;
 
 import javax.inject.Inject;
@@ -162,8 +163,8 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onAuthSuccess(Identity identityData) {
-        navigator.navigateToAuthenticateDetailsView(this, identityData);
+    public void onAuthSuccess(UserPrincipal user) {
+        navigator.navigateToAuthenticateDetailsView(this, user);
     }
 
     @Override
@@ -172,7 +173,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onLogoutSuccess(Identity state) {
+    public void onLogoutSuccess(UserPrincipal user) {
         navigator.navigateToAuthenticationView(this);
     }
 

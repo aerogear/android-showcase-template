@@ -5,6 +5,9 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.provide
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
 
+import org.aerogear.mobile.auth.Callback;
+import org.aerogear.mobile.auth.user.UserPrincipal;
+
 import javax.inject.Inject;
 
 /**
@@ -23,7 +26,17 @@ public class AuthenticationViewPresenter extends BasePresenter<AuthenticationVie
     }
 
     public void doLogin() {
-        authProvider.performAuthRequest(mainActivity);
+        authProvider.login(mainActivity, new Callback<UserPrincipal>() {
+            @Override
+            public void onSuccess(UserPrincipal user) {
+                view.renderIdentityInfo(user);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                view.showAuthError((Exception) error);
+            }
+        });
     }
 
 }

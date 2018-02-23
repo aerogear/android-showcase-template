@@ -48,7 +48,7 @@
     <string name="authentication_success">Authentication Success</string>
     <string name="logout_failed">Logout Failed</string>
     <string name="logout_success">Logged Out Successfully</string>
-    <string name="realm_roles">Realm Roles</string>
+    <string name="roles">Roles</string>
     <string name="resource_roles">Resource Roles</string>
     <string name="unknown_email">Unknown Email</string>
     <string name="unknown_name">Unknown Name</string>
