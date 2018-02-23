@@ -104,8 +104,8 @@ public class SecureApplicationModule {
     }
 
     @Provides @Singleton
-    AuthStateService provideAuthStateService(Context context) {
-        return new AuthStateService(context);
+    AuthStateService provideAuthStateService() {
+        return new AuthStateService();
     }
 
     @Provides @Singleton
