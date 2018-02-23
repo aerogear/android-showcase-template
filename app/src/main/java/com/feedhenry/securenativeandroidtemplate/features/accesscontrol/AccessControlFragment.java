@@ -19,6 +19,9 @@ import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateServic
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.user.UserPrincipal;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -36,7 +39,7 @@ public class AccessControlFragment extends BaseFragment<AccessControlViewPresent
     AccessControlViewPresenter accessControlViewPresenter;
 
     @Inject
-    AuthStateService authState;
+    AuthService authService;
 
     @Inject
     Navigator navigator;
@@ -91,19 +94,22 @@ public class AccessControlFragment extends BaseFragment<AccessControlViewPresent
      * Perform some access control checks a give a UI indicator if the user has a certain role.
      */
     public void performAccessControl() {
+        UserPrincipal user = authService.currentUser();
         int color = Color.argb(50, 89, 151, 93);
-        if (authState.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
-            setGranted(R.string.role_mobile_user_label, roleMobileUser);
-            roleMobileUser.setBackgroundColor(color);
-        }
-        if (authState.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
-            setGranted(R.string.role_api_access_label, roleApiAccess);
-            roleApiAccess.setBackgroundColor(color);
-        }
-        if (authState.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_SUPERUSER)) {
-            setGranted(R.string.role_superuser_label, roleSuperuser);
-            roleSuperuser.setBackgroundColor(color);
-        }
+        if (user != null) {
+            if (user.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
+                setGranted(R.string.role_mobile_user_label, roleMobileUser);
+                roleMobileUser.setBackgroundColor(color);
+            }
+            if (user.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
+                setGranted(R.string.role_api_access_label, roleApiAccess);
+                roleApiAccess.setBackgroundColor(color);
+            }
+            if (user.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_SUPERUSER)) {
+                setGranted(R.string.role_superuser_label, roleSuperuser);
+                roleSuperuser.setBackgroundColor(color);
+            }
+       }
     }
 
     /**

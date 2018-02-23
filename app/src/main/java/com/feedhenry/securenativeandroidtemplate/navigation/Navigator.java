@@ -67,7 +67,8 @@ public class Navigator {
     }
 
     public void navigateToAccessControlView(BaseActivity activity) {
-        if (this.authStateService.isAuthorized() && this.authStateService.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
+        UserPrincipal currentUser = authService.currentUser();
+        if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
             AccessControlFragment accessControView = new AccessControlFragment();
             loadFragment(activity, accessControView, AccessControlFragment.TAG);
         } else {
