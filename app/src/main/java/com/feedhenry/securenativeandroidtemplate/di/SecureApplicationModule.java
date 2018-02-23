@@ -21,6 +21,8 @@ import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.SqliteNoteS
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
 import org.aerogear.mobile.core.MobileCore;
 
 import java.util.ArrayList;
@@ -110,5 +112,17 @@ public class SecureApplicationModule {
     MobileCore provideMobileCore(Context context) {
         MobileCore mobileCore = MobileCore.init(context);
         return mobileCore;
+    }
+
+    @Provides @Singleton
+    AuthService provideAuthService(Context context, MobileCore mobileCore) {
+        AuthService authService = mobileCore.getInstance(AuthService.class);
+        AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
+                .withRedirectUri("com.feedhenry.securenativeandroidtemplate:/callback")
+                .build();
+
+        // Only invoke this once, every subsequent retrieval of the AuthService will retrieve the same, already initialized, instance.
+        authService.init(context, authServiceConfig);
+        return authService;
     }
 }

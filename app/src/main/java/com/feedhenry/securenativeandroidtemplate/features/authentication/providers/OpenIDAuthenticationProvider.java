@@ -20,17 +20,4 @@ public interface OpenIDAuthenticationProvider {
          */
         public void logout();
 
-        /**
-         * Used for check the authentication response from the browser
-         *
-         * @param intent
-         */
-        public void onAuthResult(Intent intent);
-
-        /**
-         * Handles the initial auth response and create a new request to the token endpoint to get the actual tokens
-         *
-         * @param intent
-         */
-        public void handleAuthorizationResponse(Intent intent);
 }

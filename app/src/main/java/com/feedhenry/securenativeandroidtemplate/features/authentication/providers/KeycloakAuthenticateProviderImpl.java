@@ -59,7 +59,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private AuthenticationConfiguration authenticationConfiguration;
 
     private AuthState authState;
-    private AuthorizationService authService;
     private AuthorizationRequest authRequest;
     private AuthorizationServiceConfiguration serviceConfig;
     private AuthStateService authStateService;
@@ -72,18 +71,13 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     MobileCore mobileCore;
 
     @Inject
+    AuthService authService;
+
+    @Inject
     public KeycloakAuthenticateProviderImpl(@NonNull Context context, AppConfiguration appConfiguration, AuthStateService authStateService, MobileCore mobileCore) {
         this.context = context;
         this.authenticationConfiguration = appConfiguration.getAuthConfiguration();
         this.authStateService = authStateService;
-
-        AuthService authService = mobileCore.getInstance(AuthService.class);
-        AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
-                .withRedirectUri("com.feedhenry.securenativeandroidtemplate:/callback")
-                .build();
-
-        // Only invoke this once, every subsequent retrieval of the AuthService will retrieve the same, already initialized, instance.
-        authService.init(context, authServiceConfig);
     }
 
     // tag::performAuthRequest[]
@@ -92,8 +86,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      */
     @Override
     public void performAuthRequest(Activity fromActivity) {
-        // authService already initialized.
-        AuthService authService = mobileCore.getInstance(AuthService.class);
 
         // Build the options object and start the authentication flow. Provide an activity to handle the auth response.
         OIDCAuthenticateOptions options = new OIDCAuthenticateOptions(fromActivity, LOGIN_RESULT_CODE);
@@ -101,11 +93,13 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         Callback authCallback = new Callback<UserPrincipal>() {
             @Override
             public void onSuccess(UserPrincipal principal) {
+                System.out.println(">>> User Authenticated Successfully");
                 // User authenticated in, continue on..
             }
 
             @Override
             public void onError(Throwable error) {
+                System.out.println(">>> Login Failed");
                 // An error occurred during login.
             }
         };
@@ -113,72 +107,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         authService.login(options, authCallback);
     }
     // end::performAuthRequest[]
-
-    // tag::onAuthResult[]
-    /**
-     * Checks if the incoming intent matches the Keycloak Auth response intent
-     *
-     * @param intent - the intent to check
-     */
-    public void onAuthResult(@Nullable Intent intent) {
-        if (intent != null) {
-            handleAuthorizationResponse(intent);
-        }
-    }
-    // end::onAuthResult[]
-
-    // tag::handleAuthorizationResponse[]
-    /**
-     * Handles the initial auth response and create a new request to the token endpoint to get the actual tokens
-     *
-     * @param intent - the auth response intent
-     */
-    public void handleAuthorizationResponse(Intent intent) {
-        AuthorizationResponse response = AuthorizationResponse.fromIntent(intent);
-        AuthorizationException error = AuthorizationException.fromIntent(intent);
-
-        // update the auth state
-        authState.update(response, error);
-
-        if (response != null) {
-            exchangeTokens(response);
-        } else {
-            authFailed(error);
-        }
-    }
-    // end::handleAuthorizationResponse[]
-
-    // tag::exchangeTokens[]
-    /**
-     * Token exchange against the token endpoint
-     *
-     * @param response - the auth response from the intent/server
-     */
-    private void exchangeTokens(AuthorizationResponse response) {
-        authService.performTokenRequest(response.createTokenExchangeRequest(), new AuthorizationService.TokenResponseCallback() {
-            @Override
-            public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
-                if (tokenResponse != null) {
-                    authState.update(tokenResponse, exception);
-                    authStateService.writeAuthState(authState);
-
-                    JSONObject decodedIdentityData = authStateService.getIdentityInformation();
-                    Identity newIdentity = new Identity("", "", "", new ArrayList<String>());
-
-                    try {
-                        newIdentity = Identity.fromJson(decodedIdentityData);
-                    } catch (JSONException e) {
-                        Log.i("","Decoding Access Token Failed", e);
-                    }
-
-                    authSuccess(newIdentity);
-                } else {
-                    authFailed(exception);
-                }
-            }
-        });
-    }
-    // end::exchangeTokens[]
 
     // tag::logout[]
     /**
