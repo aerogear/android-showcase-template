@@ -1,6 +1,5 @@
 package com.feedhenry.securenativeandroidtemplate.features.accesscontrol;
 
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.presenters.AccessControlViewPresenter;
@@ -17,12 +15,9 @@ import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.views.Ac
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.views.AccessControlViewImpl;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
-
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;

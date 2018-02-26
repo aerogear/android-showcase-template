@@ -1,14 +1,11 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.presenters;
 
 import com.feedhenry.securenativeandroidtemplate.MainActivity;
-
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
-
 import org.aerogear.mobile.auth.user.UserPrincipal;
-
 import javax.inject.Inject;
 
 /**

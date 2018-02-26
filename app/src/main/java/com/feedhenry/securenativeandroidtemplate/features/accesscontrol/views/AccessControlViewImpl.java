@@ -1,7 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate.features.accesscontrol.views;
 
 import android.app.Fragment;
-
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseAppView;
 
 /**

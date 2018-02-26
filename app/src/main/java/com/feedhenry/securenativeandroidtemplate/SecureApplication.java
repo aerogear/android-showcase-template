@@ -2,15 +2,10 @@ package com.feedhenry.securenativeandroidtemplate;
 
 import android.app.Activity;
 import android.app.Application;
-
-
 import com.datatheorem.android.trustkit.TrustKit;
 import com.feedhenry.securenativeandroidtemplate.di.DaggerSecureApplicationComponent;
-
 import net.sqlcipher.database.SQLiteDatabase;
-
 import javax.inject.Inject;
-
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
