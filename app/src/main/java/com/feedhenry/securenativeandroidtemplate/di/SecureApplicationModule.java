@@ -12,7 +12,6 @@ import com.feedhenry.securenativeandroidtemplate.domain.crypto.RsaCrypto;
 import com.feedhenry.securenativeandroidtemplate.domain.crypto.SecureKeyStore;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepositoryImpl;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
@@ -101,11 +100,6 @@ public class SecureApplicationModule {
     @Provides @Singleton
     NoteCrudlService provideNoteCrudleService(NoteRepositoryImpl noteRepository) {
         return new NoteCrudlService(noteRepository);
-    }
-
-    @Provides @Singleton
-    AuthStateService provideAuthStateService() {
-        return new AuthStateService();
     }
 
     @Provides @Singleton

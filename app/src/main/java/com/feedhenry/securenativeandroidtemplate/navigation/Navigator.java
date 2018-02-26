@@ -19,7 +19,6 @@ import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.features.network.NetworkFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
 import org.aerogear.mobile.auth.AuthService;
@@ -34,9 +33,6 @@ public class Navigator {
 
     @Inject
     Context context;
-
-    @Inject
-    AuthStateService authStateService;
 
     @Inject
     AuthService authService;

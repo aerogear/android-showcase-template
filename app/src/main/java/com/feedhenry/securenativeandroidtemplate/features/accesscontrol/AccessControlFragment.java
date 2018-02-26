@@ -15,7 +15,6 @@ import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.presenters.AccessControlViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.views.AccessControlView;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.views.AccessControlViewImpl;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 

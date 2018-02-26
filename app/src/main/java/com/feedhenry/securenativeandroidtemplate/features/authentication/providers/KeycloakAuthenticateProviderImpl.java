@@ -13,10 +13,9 @@ import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.Callback;
-import org.aerogear.mobile.auth.authenticator.OIDCAuthenticateOptions;
+import org.aerogear.mobile.auth.authenticator.DefaultAuthenticateOptions;
 import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
 import org.aerogear.mobile.auth.user.UserPrincipal;
 import org.aerogear.mobile.core.MobileCore;
@@ -64,7 +63,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     public void login(final Activity fromActivity, final Callback authCallback) {
 
         // Build the options object and start the authentication flow. Provide an activity to handle the auth response.
-        OIDCAuthenticateOptions options = new OIDCAuthenticateOptions(fromActivity, LOGIN_RESULT_CODE);
+        DefaultAuthenticateOptions options = new DefaultAuthenticateOptions(fromActivity, LOGIN_RESULT_CODE);
         authService.login(options, authCallback);
     }
     // end::performAuthRequest[]

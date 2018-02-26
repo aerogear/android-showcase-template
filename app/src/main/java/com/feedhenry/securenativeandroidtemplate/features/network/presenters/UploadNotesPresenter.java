@@ -2,7 +2,6 @@ package com.feedhenry.securenativeandroidtemplate.features.network.presenters;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.datatheorem.android.trustkit.TrustKit;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
@@ -10,24 +9,17 @@ import com.feedhenry.securenativeandroidtemplate.domain.configurations.ApiServer
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
-import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.features.network.views.UploadNotesView;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.HttpHelper;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
-
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
-
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -45,7 +37,6 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
             = MediaType.parse("application/json; charset=utf-8");
 
     private NoteRepository noteRepository;
-    private AuthStateService authStateService;
     private ApiServerConfiguration apiServerConfiguration;
 
     private UploadNotesTask uploadNotesTask;
@@ -54,9 +45,8 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
     AuthService authService;
 
     @Inject
-    public UploadNotesPresenter(NoteRepository noteRepos, AuthStateService authStateService, AppConfiguration appConfiguration){
+    public UploadNotesPresenter(NoteRepository noteRepos, AppConfiguration appConfiguration){
         this.noteRepository = noteRepos;
-        this.authStateService = authStateService;
         this.apiServerConfiguration = appConfiguration.getAPIServerConfiguration();
     }
 

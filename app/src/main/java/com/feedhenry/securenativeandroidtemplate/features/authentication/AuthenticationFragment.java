@@ -9,23 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationViewImpl;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
+import com.feedhenry.securenativeandroidtemplate.mvp.components.CertPinningHelper;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
-
 import org.aerogear.mobile.auth.user.UserPrincipal;
 import org.aerogear.mobile.core.MobileCore;
-
+import org.aerogear.mobile.core.configuration.ServiceConfiguration;
 import java.io.IOException;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,9 +52,6 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     @Inject
     AuthenticationViewPresenter authenticationViewPresenter;
 
-    @Inject
-    AuthStateService authStateService;
-
     @BindView(R.id.keycloakLogin)
     TextView keycloakLogin;
 
@@ -76,10 +69,11 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     private View view;
     private AuthenticationListener authenticationListener;
+    private CertPinningHelper certPinningHelper;
 
 
     public AuthenticationFragment() {
-        // Required empty public constructor
+        this.certPinningHelper = new CertPinningHelper();
     }
 
     @Override
@@ -138,7 +132,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
              */
             @Override
             public void showAuthError(final Exception error) {
-                if (authStateService.checkCertificateVerificationError(error)) {
+                if (certPinningHelper.checkCertificateVerificationError(error)) {
                     showMessage(R.string.cert_pin_verification_failed);
                 } else {
                     showMessage(R.string.authentication_failed);
@@ -179,18 +173,18 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         // disable allowing a user to login until the channel is secure
         keycloakLogin.setEnabled(false);
 
-        // TODO CHANGE
-        String hostURL = "https://keycloak.security.feedhenry.org";
+        ServiceConfiguration keycloakServiceConfiguration = mobileCore.getServiceConfiguration("keycloak");
+        String hostURL = keycloakServiceConfiguration.getUrl();
         boolean sendAccessToken = false;
 
-        authStateService.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
+        certPinningHelper.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
 
                 Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG)
                         .show();
 
-                if (authStateService.checkCertificateVerificationError(e)) {
+                if (certPinningHelper.checkCertificateVerificationError(e)) {
                     Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
 
                     // run the UI updates on the UI thread
