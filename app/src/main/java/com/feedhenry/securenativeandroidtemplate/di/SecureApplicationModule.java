@@ -121,7 +121,6 @@ public class SecureApplicationModule {
                 .withRedirectUri("com.feedhenry.securenativeandroidtemplate:/callback")
                 .build();
 
-        // Only invoke this once, every subsequent retrieval of the AuthService will retrieve the same, already initialized, instance.
         authService.init(context, authServiceConfig);
         return authService;
     }

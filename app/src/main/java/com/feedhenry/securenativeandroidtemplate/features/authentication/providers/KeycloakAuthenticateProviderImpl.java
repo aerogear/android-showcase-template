@@ -39,7 +39,6 @@ import okhttp3.Response;
 @Singleton
 public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationProvider {
 
-    private AuthStateService authStateService;
     public static int LOGIN_RESULT_CODE = 1;
     private CallbackHandler logoutCallback;
 
@@ -47,23 +46,22 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     Context context;
 
     @Inject
-    MobileCore mobileCore;
-
-    @Inject
     AuthService authService;
 
     @Inject
-    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AuthStateService authStateService, MobileCore mobileCore) {
+    public KeycloakAuthenticateProviderImpl(@NonNull final Context context) {
         this.context = context;
-        this.authStateService = authStateService;
     }
 
     // tag::performAuthRequest[]
     /**
      * Create the config for the initial Keycloak auth request to get a temporary token and create an intent to handle the response
+     *
+     * @param fromActivity the activity used to perform the login
+     * @param authCallback the authentication callback
      */
     @Override
-    public void login(Activity fromActivity, Callback authCallback) {
+    public void login(final Activity fromActivity, final Callback authCallback) {
 
         // Build the options object and start the authentication flow. Provide an activity to handle the auth response.
         OIDCAuthenticateOptions options = new OIDCAuthenticateOptions(fromActivity, LOGIN_RESULT_CODE);
@@ -74,8 +72,10 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     // tag::logout[]
     /**
      * Perform a logout request against the openid connect server
+     *
+     * @param logoutCallback the logout callback
      */
-    public void logout(CallbackHandler logoutCallback) {
+    public void logout(final CallbackHandler logoutCallback) {
         this.logoutCallback = logoutCallback;
         UserPrincipal currentUser = authService.currentUser();
         authService.logout(currentUser);
@@ -83,6 +83,9 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     }
     // end::logout[]
 
+    /**
+     * Handler for a successful logout
+     */
     private void logoutSuccess() {
         Log.w("", context.getString(R.string.logout_success));
         if (this.logoutCallback != null) {
@@ -90,7 +93,12 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         }
     }
 
-    private void logoutFailed(Exception error) {
+    /**
+     * Handler for a failed logout
+     *
+     * @param error the logout error exception
+     */
+    private void logoutFailed(final Exception error) {
         Log.w("", context.getString(R.string.logout_failed), error);
         if (this.logoutCallback != null) {
             logoutCallback.onError(error);

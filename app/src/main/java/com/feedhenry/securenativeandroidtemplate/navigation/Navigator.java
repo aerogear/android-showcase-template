@@ -51,7 +51,7 @@ public class Navigator {
         loadFragment(activity, homeView, HomeFragment.TAG);
     }
 
-    public void navigateToAuthenticationView(BaseActivity activity) {
+    public void navigateToAuthenticationView(final BaseActivity activity) {
         AuthenticationFragment authFragment = new AuthenticationFragment();
         UserPrincipal user = authService.currentUser();
         if (user != null) {
@@ -61,12 +61,12 @@ public class Navigator {
         }
     }
 
-    public void navigateToAuthenticateDetailsView(BaseActivity activity, UserPrincipal user) {
+    public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user) {
         AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(user);
         loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
     }
 
-    public void navigateToAccessControlView(BaseActivity activity) {
+    public void navigateToAccessControlView(final BaseActivity activity) {
         UserPrincipal currentUser = authService.currentUser();
         if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
             AccessControlFragment accessControView = new AccessControlFragment();

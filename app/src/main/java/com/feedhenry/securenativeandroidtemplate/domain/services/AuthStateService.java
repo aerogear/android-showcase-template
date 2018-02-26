@@ -30,8 +30,6 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by tjackman on 9/16/17.
  */
@@ -42,18 +40,20 @@ public class AuthStateService {
     @Inject
     AuthService authService;
 
-
     @Inject
     public AuthStateService() {
 
     }
 
     // tag::createRequest[]
-
     /**
      * Make a request to a resource that requires the access token to be sent with the request
+     *
+     * @param requestUrl the request URL
+     * @param sendAccessToken boolean on whether to send the access token as part of the request
+     * @param callback the OkHTTP callback for the request
      */
-    public Call createRequest(String requestUrl, boolean sendAccessToken, okhttp3.Callback callback) {
+    public Call createRequest(final String requestUrl, final boolean sendAccessToken, final okhttp3.Callback callback) {
 
         URL url = null;
         try {
@@ -105,14 +105,16 @@ public class AuthStateService {
     // tag::checkCertificateVerificationError[]
     /**
      * Check if an exception is caused by a certificate verification error
-     * @param e
-     * @return
+     *
+     * @param error the error exception from a failed request
+     *
+     * @return boolean based on whether or not certificate pinning has failed
      */
-    public boolean checkCertificateVerificationError(Exception e) {
+    public boolean checkCertificateVerificationError(final Exception error) {
         boolean certificateVerificationError = false;
-        if (e.getCause() != null &&
-                (e.getCause().toString().contains("Certificate validation failed") ||
-                e.getCause().toString().contains("Pin verification failed"))) {
+        if (error.getCause() != null &&
+                (error.getCause().toString().contains("Certificate validation failed") ||
+                        error.getCause().toString().contains("Pin verification failed"))) {
             certificateVerificationError = true;
         }
         return certificateVerificationError;

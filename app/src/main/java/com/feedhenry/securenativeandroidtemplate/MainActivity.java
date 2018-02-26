@@ -163,22 +163,22 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onAuthSuccess(UserPrincipal user) {
+    public void onAuthSuccess(final UserPrincipal user) {
         navigator.navigateToAuthenticateDetailsView(this, user);
     }
 
     @Override
-    public void onAuthError(Exception error) {
+    public void onAuthError(final Exception error) {
 
     }
 
     @Override
-    public void onLogoutSuccess(UserPrincipal user) {
+    public void onLogoutSuccess(final UserPrincipal user) {
         navigator.navigateToAuthenticationView(this);
     }
 
     @Override
-    public void onLogoutError(Exception error) {
+    public void onLogoutError(final Exception error) {
 
     }
 

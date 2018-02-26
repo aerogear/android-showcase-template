@@ -1,9 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.providers;
 import android.app.Activity;
-import android.content.Intent;
-
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
-
 import org.aerogear.mobile.auth.Callback;
 
 
@@ -12,17 +9,18 @@ import org.aerogear.mobile.auth.Callback;
  */
 public interface OpenIDAuthenticationProvider {
 
-        /**
-         * Perform inital auth request to the auth endpoint
-         * @param fromActivity - the activity to use
-         * @param authCallback - the authentication callback
-         */
-        public void login(Activity fromActivity, Callback authCallback);
+    /**
+     * Perform a login to the OIDC server
+     * @param fromActivity - the activity to use for authenticating
+     * @param authCallback - the authentication callback
+     */
+    void login(Activity fromActivity, Callback authCallback);
 
-        /**
-         * Perform the logout flow
-         *
-         */
-        public void logout(CallbackHandler logoutCallback);
+    /**
+     * Perform a logout against the OIDC server
+     *
+     * @param logoutCallback the logout callback
+     */
+    void logout(CallbackHandler logoutCallback);
 
 }

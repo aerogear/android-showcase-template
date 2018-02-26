@@ -40,9 +40,9 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
 
     public interface AuthenticationDetailsListener {
 
-        void onLogoutSuccess(UserPrincipal user);
+        void onLogoutSuccess(final UserPrincipal user);
 
-        void onLogoutError(Exception error);
+        void onLogoutError(final Exception error);
     }
 
     @Inject
@@ -72,7 +72,14 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         // Required empty public constructor
     }
 
-    public static AuthenticationDetailsFragment forIdentityData(UserPrincipal user) {
+    /**
+     * Passing of the user identity data into the fragment
+     *
+     * @param user the current user
+     *
+     * @return the authentication details fragment
+     */
+    public static AuthenticationDetailsFragment forIdentityData(final UserPrincipal user) {
         AuthenticationDetailsFragment detailsFragment = new AuthenticationDetailsFragment();
         if (user != null) {
             Bundle args = new Bundle();
@@ -83,8 +90,8 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                             final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_authentication_details, container, false);
         ButterKnife.bind(this, view);
@@ -96,7 +103,7 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(final Activity activity) {
         AndroidInjection.inject(this);
         super.onAttach(activity);
         if (activity instanceof AuthenticationDetailsListener) {
@@ -120,16 +127,26 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     @Override
     protected AuthenticationDetailsView initView() {
         return new AuthenticationDetailsViewImpl(this) {
+            /**
+             * The handler for the logout failure
+             *
+             * @param user the user that was logged out
+             */
             @Override
-            public void logoutSuccess(UserPrincipal user) {
+            public void logoutSuccess(final UserPrincipal user) {
                 showMessage(R.string.logout_success);
                 if (authenticationDetailsListener != null) {
                     authenticationDetailsListener.onLogoutSuccess(user);
                 }
             }
 
+            /**
+             * The handler for the logout failure
+             *
+             * @param error the error exception from the failed logout
+             */
             @Override
-            public void logoutFailure(Exception error) {
+            public void logoutFailure(final Exception error) {
                 showMessage(R.string.logout_failed + ": " + error.getCause());
                 if (authenticationDetailsListener != null) {
                     authenticationDetailsListener.onLogoutError(error);
@@ -138,6 +155,11 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
         };
     }
 
+    /**
+     * Render the Users Identity Information in the View
+     *
+     * @return the help message for the current view
+     */
     @Override
     public int getHelpMessageResourceId() {
         return R.string.popup_authentication_details_fragment;
@@ -146,9 +168,9 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     /**
      * Render the Users Identity Information in the View
      *
-     * @param args
+     * @param args the args containing the identity information
      */
-    private void renderIdentityInfo(Bundle args) {
+    private void renderIdentityInfo(final Bundle args) {
         UserPrincipal user = (UserPrincipal) args.get(Constants.TOKEN_FIELDS.IDENTITY_DATA);
         if (user != null) {
             // get the users name

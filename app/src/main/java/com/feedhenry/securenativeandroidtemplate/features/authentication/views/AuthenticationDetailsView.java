@@ -1,6 +1,5 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.views;
 
-import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
 import org.aerogear.mobile.auth.user.UserPrincipal;
 

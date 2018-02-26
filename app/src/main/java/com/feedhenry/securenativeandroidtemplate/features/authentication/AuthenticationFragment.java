@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
-import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationViewImpl;
@@ -119,34 +118,52 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     @Override
     protected AuthenticationView initView() {
         return new AuthenticationViewImpl(this) {
+            /**
+             * Render the Users Identity Information upon auth success
+             *
+             * @param user the current user
+             */
             @Override
-            public void renderIdentityInfo(UserPrincipal user) {
+            public void renderIdentityInfo(final UserPrincipal user) {
                 showMessage(R.string.authentication_success);
                 if (authenticationListener != null) {
                     authenticationListener.onAuthSuccess(user);
                 }
             }
 
+            /**
+             * Render the Users Identity Information upon auth success
+             *
+             * @param error the error exception from the failed auth
+             */
             @Override
-            public void showAuthError(Exception e) {
-                if (authStateService.checkCertificateVerificationError(e)) {
+            public void showAuthError(final Exception error) {
+                if (authStateService.checkCertificateVerificationError(error)) {
                     showMessage(R.string.cert_pin_verification_failed);
                 } else {
                     showMessage(R.string.authentication_failed);
                 }
 
                 if (authenticationListener != null) {
-                    authenticationListener.onAuthError(e);
+                    authenticationListener.onAuthError(error);
                 }
             }
         };
     }
 
+    /**
+     * Render the Users Identity Information in the View
+     *
+     * @return the help message for the current view
+     */
     @Override
     public int getHelpMessageResourceId() {
         return R.string.popup_authentication_fragment;
     }
 
+    /**
+     * Handler for the login button click
+     */
     @OnClick(R.id.keycloakLogin)
     public void doLogin() {
         if (authenticationViewPresenter != null) {
