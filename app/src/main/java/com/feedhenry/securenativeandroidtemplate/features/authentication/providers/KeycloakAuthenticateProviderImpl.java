@@ -14,19 +14,6 @@ import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandle
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
-
-import net.openid.appauth.AppAuthConfiguration;
-import net.openid.appauth.AuthState;
-import net.openid.appauth.AuthorizationException;
-import net.openid.appauth.AuthorizationRequest;
-import net.openid.appauth.AuthorizationResponse;
-import net.openid.appauth.AuthorizationService;
-import net.openid.appauth.AuthorizationServiceConfiguration;
-import net.openid.appauth.ResponseTypeValues;
-import net.openid.appauth.TokenResponse;
-import net.openid.appauth.browser.BrowserBlacklist;
-import net.openid.appauth.browser.VersionedBrowserMatcher;
-
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.Callback;
 import org.aerogear.mobile.auth.authenticator.OIDCAuthenticateOptions;
@@ -52,12 +39,6 @@ import okhttp3.Response;
 @Singleton
 public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationProvider {
 
-    private static final Uri REDIRECT_URI = Constants.OPEN_ID_CONNECT_CONFIG.REDIRECT_URI;
-    private static final String OPEN_ID_SCOPE = Constants.OPEN_ID_CONNECT_CONFIG.OPEN_ID_SCOPE;
-
-    private AuthState authState;
-    private AuthorizationRequest authRequest;
-    private AuthorizationServiceConfiguration serviceConfig;
     private AuthStateService authStateService;
     public static int LOGIN_RESULT_CODE = 1;
     private CallbackHandler logoutCallback;

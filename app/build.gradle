@@ -65,7 +65,6 @@ dependencies {
     compile "com.android.support.constraint:constraint-layout:1.0.2"
     implementation 'org.aerogear:core:5.0.0-SNAPSHOT'
     implementation 'org.aerogear:auth:5.0.0-SNAPSHOT'
-    compile 'net.openid:appauth:0.7.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.datatheorem.android.trustkit:trustkit:1.0.1@aar'
     compile 'com.scottyab:rootbeer-lib:0.0.6'

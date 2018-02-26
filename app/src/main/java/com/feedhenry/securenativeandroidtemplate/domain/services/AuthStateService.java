@@ -9,9 +9,6 @@ import android.util.Log;
 import com.datatheorem.android.trustkit.TrustKit;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.HttpHelper;
-
-import net.openid.appauth.AuthState;
-
 import org.aerogear.mobile.auth.AuthService;
 import org.json.JSONException;
 import org.json.JSONObject;
