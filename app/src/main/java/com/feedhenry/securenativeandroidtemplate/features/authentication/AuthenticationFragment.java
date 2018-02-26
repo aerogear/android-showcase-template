@@ -21,6 +21,7 @@ import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
 
 import org.aerogear.mobile.auth.user.UserPrincipal;
+import org.aerogear.mobile.core.MobileCore;
 
 import java.io.IOException;
 
@@ -42,7 +43,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     public interface AuthenticationListener {
 
-        void onAuthSuccess(UserPrincipal user);
+        void onAuthSuccess(UserPrincipal identityData);
 
         void onAuthError(Exception error);
     }
@@ -70,6 +71,9 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     @BindView(R.id.logo)
     ImageView logo;
+
+    @Inject
+    MobileCore mobileCore;
 
     private View view;
     private AuthenticationListener authenticationListener;
@@ -158,7 +162,8 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         // disable allowing a user to login until the channel is secure
         keycloakLogin.setEnabled(false);
 
-        String hostURL = appConfiguration.getAuthConfiguration().getHostUrl();
+        // TODO CHANGE
+        String hostURL = "https://keycloak.security.feedhenry.org";
         boolean sendAccessToken = false;
 
         authStateService.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {

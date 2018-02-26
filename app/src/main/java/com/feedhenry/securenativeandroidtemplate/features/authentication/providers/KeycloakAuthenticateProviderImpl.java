@@ -12,7 +12,6 @@ import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
-import com.feedhenry.securenativeandroidtemplate.domain.configurations.AuthenticationConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 
@@ -56,8 +55,6 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     private static final Uri REDIRECT_URI = Constants.OPEN_ID_CONNECT_CONFIG.REDIRECT_URI;
     private static final String OPEN_ID_SCOPE = Constants.OPEN_ID_CONNECT_CONFIG.OPEN_ID_SCOPE;
 
-    private AuthenticationConfiguration authenticationConfiguration;
-
     private AuthState authState;
     private AuthorizationRequest authRequest;
     private AuthorizationServiceConfiguration serviceConfig;
@@ -75,9 +72,8 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     AuthService authService;
 
     @Inject
-    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AppConfiguration appConfiguration, AuthStateService authStateService, MobileCore mobileCore) {
+    public KeycloakAuthenticateProviderImpl(@NonNull Context context, AuthStateService authStateService, MobileCore mobileCore) {
         this.context = context;
-        this.authenticationConfiguration = appConfiguration.getAuthConfiguration();
         this.authStateService = authStateService;
     }
 
