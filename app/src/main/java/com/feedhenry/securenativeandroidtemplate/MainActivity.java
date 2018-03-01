@@ -145,6 +145,7 @@ public class MainActivity extends BaseActivity
         return fragmentInjector;
     }
 
+    // tag::onActivityResult[]
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == KeycloakAuthenticateProviderImpl.LOGIN_RESULT_CODE) {
@@ -153,6 +154,7 @@ public class MainActivity extends BaseActivity
             authService.handleAuthResult(data);
         }
     }
+    // end::onActivityResult[]
 
     @Override
     public void onAuthSuccess(final UserPrincipal user) {

@@ -103,6 +103,7 @@ public class SecureApplicationModule {
         return mobileCore;
     }
 
+    // tag::authServiceInit[]
     @Provides @Singleton
     AuthService provideAuthService(Context context, MobileCore mobileCore) {
         AuthService authService = mobileCore.getInstance(AuthService.class);
@@ -113,4 +114,5 @@ public class SecureApplicationModule {
         authService.init(context, authServiceConfig);
         return authService;
     }
+    // end::authServiceInit[]
 }
