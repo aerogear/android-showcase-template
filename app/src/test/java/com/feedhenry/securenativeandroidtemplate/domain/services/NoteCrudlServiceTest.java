@@ -1,7 +1,7 @@
 package com.feedhenry.securenativeandroidtemplate.domain.services;
 
 import com.feedhenry.securenativeandroidtemplate.BuildConfig;
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
@@ -58,7 +58,7 @@ public class NoteCrudlServiceTest {
         when(noteRepository.listNotes()).thenReturn(notes);
         when(noteRepository.deleteNote(any(Note.class))).thenReturn(note);
 
-        serviceToTest.createNote(note, NoteDataStore.STORE_TYPE_INMEMORY, new Callback<Note>() {
+        serviceToTest.createNote(note, NoteDataStore.STORE_TYPE_INMEMORY, new CallbackHandler<Note>() {
             @Override
             public void onSuccess(Note models) {
                 assertNotNull(models);
@@ -71,7 +71,7 @@ public class NoteCrudlServiceTest {
         });
         verify(noteRepository, times(1)).createNote(any(Note.class), anyInt());
 
-        serviceToTest.updateNote(note, new Callback<Note>() {
+        serviceToTest.updateNote(note, new CallbackHandler<Note>() {
             @Override
             public void onSuccess(Note models) {
                 assertNotNull(models);
@@ -84,7 +84,7 @@ public class NoteCrudlServiceTest {
         });
         verify(noteRepository, times(1)).updateNote(any(Note.class));
 
-        serviceToTest.readNote(note.getId(), NoteDataStore.STORE_TYPE_INMEMORY, new Callback<Note>() {
+        serviceToTest.readNote(note.getId(), NoteDataStore.STORE_TYPE_INMEMORY, new CallbackHandler<Note>() {
             @Override
             public void onSuccess(Note models) {
                 assertNotNull(models);
@@ -97,7 +97,7 @@ public class NoteCrudlServiceTest {
         });
         verify(noteRepository, times(1)).readNote(anyString(), anyInt());
 
-        serviceToTest.listNotes(new Callback<List<Note>>() {
+        serviceToTest.listNotes(new CallbackHandler<List<Note>>() {
             @Override
             public void onSuccess(List<Note> models) {
                 assertEquals(models.size(), 1);
@@ -110,7 +110,7 @@ public class NoteCrudlServiceTest {
         });
         verify(noteRepository, times(1)).listNotes();
 
-        serviceToTest.deleteNote(note, new Callback<Note>() {
+        serviceToTest.deleteNote(note, new CallbackHandler<Note>() {
             @Override
             public void onSuccess(Note models) {
                 assertNotNull(models);
