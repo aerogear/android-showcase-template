@@ -58,6 +58,7 @@
     <!-- Strings related to Access Control -->
     <string name="fragment_title_accesscontrol">Access Control</string>
     <string name="not_authenticated">Insufficient Privileges. Your Access Token must possess the "mobile-user" realm role.</string>
+    <string name="not_authenticated_api_access">Insufficient Privileges. Your Access Token must possess the "api-access" realm role.</string>
     <string name="role_mobile_user_label">Mobile User Role</string>
     <string name="role_api_access_label">API Access Role</string>
     <string name="role_superuser_label">Superuser Role</string>

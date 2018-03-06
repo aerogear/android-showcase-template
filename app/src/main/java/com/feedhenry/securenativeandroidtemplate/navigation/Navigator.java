@@ -85,8 +85,15 @@ public class Navigator {
     }
 
     public void navigateToNetworkView(MainActivity activity) {
-        NetworkFragment networkFragment = new NetworkFragment();
-        loadFragment(activity, networkFragment, NetworkFragment.TAG);
+
+        UserPrincipal currentUser = authService.currentUser();
+        if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
+            NetworkFragment networkFragment = new NetworkFragment();
+            loadFragment(activity, networkFragment, NetworkFragment.TAG);
+        } else {
+            Snackbar.make(activity.findViewById(android.R.id.content), R.string.not_authenticated_api_access, Snackbar.LENGTH_LONG).show();
+            navigateToAuthenticationView(activity);
+        }
     }
 
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {
