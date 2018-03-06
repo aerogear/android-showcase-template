@@ -59,8 +59,17 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
     public void logout(final CallbackHandler logoutCallback) {
         this.logoutCallback = logoutCallback;
         UserPrincipal currentUser = authService.currentUser();
-        authService.logout(currentUser);
-        logoutSuccess();
+        authService.logout(currentUser, new Callback<UserPrincipal>() {
+            @Override
+            public void onSuccess() {
+                logoutSuccess();;
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                logoutFailed(error);
+            }
+        });
     }
     // end::logout[]
 
@@ -79,7 +88,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      *
      * @param error the logout error exception
      */
-    private void logoutFailed(final Exception error) {
+    private void logoutFailed(final Throwable error) {
         Log.w("", context.getString(R.string.logout_failed), error);
         if (this.logoutCallback != null) {
             logoutCallback.onError(error);

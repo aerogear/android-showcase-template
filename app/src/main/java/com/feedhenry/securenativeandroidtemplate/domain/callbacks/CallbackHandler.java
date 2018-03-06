@@ -5,7 +5,7 @@ package com.feedhenry.securenativeandroidtemplate.domain.callbacks;
  */
 
 public interface CallbackHandler<T extends Object> {
-    public void onSuccess(T models);
-
-    public void onError(Throwable error);
+    default void onSuccess() {}
+    default void onSuccess(T models) {onSuccess();}
+    void onError(Throwable error);
 }
