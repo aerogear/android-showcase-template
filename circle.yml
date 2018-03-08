@@ -21,6 +21,7 @@ dependencies:
 
   cache_directories:
     - /usr/local/android-sdk-linux
+    - ~/.gradle
 
 test:
   override:
