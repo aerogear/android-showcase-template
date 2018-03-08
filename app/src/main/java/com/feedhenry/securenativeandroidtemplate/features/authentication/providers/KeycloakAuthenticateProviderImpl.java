@@ -62,7 +62,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
         authService.logout(currentUser, new Callback<UserPrincipal>() {
             @Override
             public void onSuccess() {
-                logoutSuccess();;
+                logoutSuccess();
             }
 
             @Override
