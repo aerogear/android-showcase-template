@@ -21,6 +21,8 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.provide
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
 import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.security.SecurityService;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Named;
@@ -102,6 +104,13 @@ public class SecureApplicationModule {
         MobileCore mobileCore = MobileCore.init(context);
         return mobileCore;
     }
+
+    // tag::securityServiceInit[]
+    @Provides @Singleton
+    SecurityService provideSecurityService(Context context, MobileCore mobileCore) {
+        return mobileCore.getInstance(SecurityService.class);
+    }
+    // end::securityServiceInit[]
 
     // tag::authServiceInit[]
     @Provides @Singleton

@@ -19,6 +19,7 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.provide
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
 import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.security.SecurityService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +85,11 @@ public class SecureApplicationTestModule {
     MobileCore provideMobileCore(Context context) {
         MobileCore mobileCore = MobileCore.init(context);
         return mobileCore;
+    }
+
+    @Provides @Singleton
+    SecurityService securityService(Context context, MobileCore mobileCore) {
+        return mobileCore.getInstance(SecurityService.class);
     }
 
     @Provides @Singleton
