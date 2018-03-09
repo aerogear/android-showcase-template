@@ -46,6 +46,7 @@ public class NoteCrudlServiceTest {
     @InjectMocks NoteCrudlService serviceToTest;
 
     @Test
+    @Config(constants = BuildConfig.class, sdk=26)
     public void testService() throws Exception {
         String testTitle = "testTitle";
         String testContent = "testContent";

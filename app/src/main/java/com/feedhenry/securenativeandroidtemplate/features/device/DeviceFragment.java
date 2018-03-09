@@ -1,17 +1,10 @@
 package com.feedhenry.securenativeandroidtemplate.features.device;
 
 import android.app.Activity;
-import android.app.KeyguardManager;
-import android.app.admin.DevicePolicyManager;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
-import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +17,10 @@ import com.feedhenry.securenativeandroidtemplate.features.device.presenters.Devi
 import com.feedhenry.securenativeandroidtemplate.features.device.views.DeviceView;
 import com.feedhenry.securenativeandroidtemplate.features.device.views.DeviceViewImpl;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
-import com.scottyab.rootbeer.RootBeer;
+
+import org.aerogear.mobile.security.SecurityCheckResult;
+import org.aerogear.mobile.security.SecurityCheckType;
+import org.aerogear.mobile.security.SecurityService;
 
 import javax.inject.Inject;
 
@@ -48,6 +44,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
 
     @Inject
     Context context;
+
+    @Inject
+    SecurityService securityService;
 
     @BindView(R.id.rootAccess)
     RadioButton rootAccess;
@@ -161,8 +160,8 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      */
     public void detectRoot() {
         totalTests++;
-        RootBeer rootBeer = new RootBeer(context);
-        if (rootBeer.isRooted()) {
+        SecurityCheckResult result = securityService.check(SecurityCheckType.IS_ROOTED);
+        if (result.passed()) {
             setDetected(rootAccess, R.string.root_detected_positive);
         }
     }
@@ -173,14 +172,10 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      * Detect if the device has a lock screen setup (pin, password etc).
      */
     public void detectDeviceLock() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            totalTests++;
-            KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
-            if (!keyguardManager.isDeviceSecure()) {
-                setDetected(lockScreenSetup, R.string.device_lock_detected_negative);
-            }
-        } else {
-            lockScreenSetup.setVisibility(View.GONE);
+        totalTests++;
+        SecurityCheckResult result = securityService.check(SecurityCheckType.SCREEN_LOCK_ENABLED);
+        if (!result.passed()) {
+            setDetected(lockScreenSetup, R.string.device_lock_detected_negative);
         }
     }
     // end::detectDeviceLock[]
@@ -191,40 +186,25 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      */
     public void debuggerDetected() {
         totalTests++;
-        if (Debug.isDebuggerConnected()) {
+        SecurityCheckResult result = securityService.check(SecurityCheckType.IS_DEBUGGER);
+        if (result.passed()) {
             setDetected(debuggerAccess, R.string.debugger_detected_positive);
         }
     }
     // end::debuggerDetected[]
 
+    // tag::detectEmulator[]
     /**
      * Detect if the application is being run in an emulator.
      */
     public void detectEmulator() {
         totalTests++;
-        if (isEmulator()) {
+        SecurityCheckResult result = securityService.check(SecurityCheckType.IS_EMULATOR);
+        if (result.passed()) {
             setDetected(emulatorAccess, R.string.emulator_detected_positive);
         }
     }
-
-    // tag::isEmulator[]
-    /**
-     * Helper function to detect if the host is an emulator
-     *
-     * @return boolean
-     */
-    private boolean isEmulator() {
-        return Build.FINGERPRINT.startsWith("generic")
-                || Build.FINGERPRINT.startsWith("unknown")
-                || Build.MODEL.contains("google_sdk")
-                || Build.MODEL.contains("Emulator")
-                || Build.MODEL.contains("Android SDK built for x86")
-                || Build.SERIAL == null
-                || Build.MANUFACTURER.contains("Genymotion")
-                || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
-                || "google_sdk".equals(Build.PRODUCT);
-    }
-    // end::isEmulator[]
+    // end::detectEmulator[]
 
     // tag::detectHookingFramework[]
     /**
@@ -263,14 +243,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      */
     public void detectBackupEnabled() {
         totalTests++;
-        try {
-            PackageInfo packageInfo;
-            packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_ALLOW_BACKUP) != 0) {
-                setDetected(allowBackup, R.string.allow_backup_detected_positive);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        SecurityCheckResult result = securityService.check(SecurityCheckType.ALLOW_BACKUP_ENABLED);
+        if (result.passed()) {
+            setDetected(allowBackup, R.string.allow_backup_detected_positive);
         }
     }
     // end::detectBackupEnabled[]
@@ -280,15 +255,10 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      * Function to check if the devices filesystem is encrypted
      */
     public void detectDeviceEncryptionStatus() {
-        if (Build.VERSION.SDK_INT >= 11) {
-            totalTests++;
-            final DevicePolicyManager policyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-            if (policyManager != null) {
-                int isEncrypted = policyManager.getStorageEncryptionStatus();
-                if (isEncrypted != DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE) {
-                    setDetected(deviceEncrypted, R.string.device_encrypted_negative);
-                }
-            }
+        totalTests++;
+        SecurityCheckResult result = securityService.check(SecurityCheckType.HAS_ENCRYPTION_ENABLED);
+        if (!result.passed()) {
+            setDetected(deviceEncrypted, R.string.device_encrypted_negative);
         }
     }
     // end::detectDeviceEncryptionStatus[]
@@ -314,11 +284,8 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      */
     public void detectDeveloperOptions() {
         totalTests++;
-        int devOptionsEnabled = Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
-                0);
-
-        if (devOptionsEnabled > 0) {
+        SecurityCheckResult result = securityService.check(SecurityCheckType.IS_DEVELOPER_MODE);
+        if (result.passed()) {
             setDetected(developerOptions, R.string.developer_options_positive);
         }
     }
