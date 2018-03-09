@@ -3,7 +3,7 @@ package com.feedhenry.securenativeandroidtemplate.domain.services;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 
@@ -22,11 +22,11 @@ public class NoteCrudlService {
     private static final String TAG = "NoteCrudlService";
 
     private abstract class NoteTask<Param, Progress, Result> extends AsyncTask<Param, Progress, Result> {
-        Callback<Result> callback;
+        CallbackHandler<Result> callback;
         NoteRepository noteRepository;
         Exception error;
 
-        NoteTask(NoteRepository noteRepo, Callback<Result> callback) {
+        NoteTask(NoteRepository noteRepo, CallbackHandler<Result> callback) {
             this.noteRepository = noteRepo;
             this.callback = callback;
         }
@@ -57,7 +57,7 @@ public class NoteCrudlService {
 
     private class CreateNoteTask extends NoteTask<Object, Void, Note> {
 
-        CreateNoteTask(NoteRepository noteRepo, Callback<Note> callback) {
+        CreateNoteTask(NoteRepository noteRepo, CallbackHandler<Note> callback) {
             super(noteRepo, callback);
         }
 
@@ -71,7 +71,7 @@ public class NoteCrudlService {
 
     private class UpdateNoteTask extends NoteTask<Note, Void, Note> {
 
-        UpdateNoteTask(NoteRepository noteRepo, Callback<Note> callback) {
+        UpdateNoteTask(NoteRepository noteRepo, CallbackHandler<Note> callback) {
             super(noteRepo, callback);
         }
 
@@ -83,7 +83,7 @@ public class NoteCrudlService {
 
     private class ReadNoteTask extends NoteTask<Object, Void, Note> {
 
-        ReadNoteTask(NoteRepository noteRepo, Callback<Note> callback) {
+        ReadNoteTask(NoteRepository noteRepo, CallbackHandler<Note> callback) {
             super(noteRepo, callback);
         }
 
@@ -97,7 +97,7 @@ public class NoteCrudlService {
 
     private class DeleteNoteTask extends NoteTask<Note, Void, Note> {
 
-        DeleteNoteTask(NoteRepository noteRepo, Callback<Note> callback) {
+        DeleteNoteTask(NoteRepository noteRepo, CallbackHandler<Note> callback) {
             super(noteRepo, callback);
         }
 
@@ -110,7 +110,7 @@ public class NoteCrudlService {
 
     private class ListNoteTask extends NoteTask<Void, Void, List<Note>> {
 
-        ListNoteTask(NoteRepository noteRepo, Callback<List<Note>> callback) {
+        ListNoteTask(NoteRepository noteRepo, CallbackHandler<List<Note>> callback) {
             super(noteRepo, callback);
         }
 
@@ -132,7 +132,7 @@ public class NoteCrudlService {
      * List the notes.
      * @param callback the function to be executed when the operation is finished. The callback will be executed on the main UI thread.
      */
-    public void listNotes(Callback<List<Note>> callback) {
+    public void listNotes(CallbackHandler<List<Note>> callback) {
         new ListNoteTask(this.noteRepo, callback).execute();
     }
 
@@ -142,7 +142,7 @@ public class NoteCrudlService {
      * @param storeType the storage type of the note
      * @param callback the function to be executed when the operation is finished. The callback will be executed on the main UI thread.
      */
-    public void createNote(Note noteToCreate, int storeType, Callback<Note> callback) {
+    public void createNote(Note noteToCreate, int storeType, CallbackHandler<Note> callback) {
         new CreateNoteTask(this.noteRepo, callback).execute(noteToCreate, storeType);
     }
 
@@ -151,7 +151,7 @@ public class NoteCrudlService {
      * @param noteToUpdate the note to be updated.
      * @param callback the function to be executed when the operation is finished. The callback will be executed on the main UI thread.
      */
-    public void updateNote(Note noteToUpdate, Callback<Note> callback) {
+    public void updateNote(Note noteToUpdate, CallbackHandler<Note> callback) {
         new UpdateNoteTask(this.noteRepo, callback).execute(noteToUpdate);
     }
 
@@ -160,7 +160,7 @@ public class NoteCrudlService {
      * @param noteToDelete the note to be deleted.
      * @param callback the function to be executed when the operation is finished. The callback will be executed on the main UI thread.
      */
-    public void deleteNote(Note noteToDelete, Callback<Note> callback) {
+    public void deleteNote(Note noteToDelete, CallbackHandler<Note> callback) {
         new DeleteNoteTask(this.noteRepo, callback).execute(noteToDelete);
     }
 
@@ -170,7 +170,7 @@ public class NoteCrudlService {
      * @param storeType the storage type of the note
      * @param callback the function to be executed when the operation is finished. The callback will be executed on the main UI thread.
      */
-    public void readNote(String noteId, int storeType, Callback<Note> callback) {
+    public void readNote(String noteId, int storeType, CallbackHandler<Note> callback) {
         new ReadNoteTask(this.noteRepo, callback).execute(noteId, storeType);
     }
 }

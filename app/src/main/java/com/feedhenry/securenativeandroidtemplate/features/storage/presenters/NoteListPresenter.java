@@ -1,6 +1,6 @@
 package com.feedhenry.securenativeandroidtemplate.features.storage.presenters;
 
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
@@ -33,7 +33,7 @@ public class NoteListPresenter extends BasePresenter<NoteListAppView> {
 
     private void loadData() {
         this.view.showLoading();
-        this.noteCrudlService.listNotes(new Callback<List<Note>>() {
+        this.noteCrudlService.listNotes(new CallbackHandler<List<Note>>() {
             @Override
             public void onSuccess(List<Note> models) {
                 if (view != null) {

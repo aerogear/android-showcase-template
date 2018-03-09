@@ -4,11 +4,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
-
 import com.feedhenry.securenativeandroidtemplate.BaseActivity;
 import com.feedhenry.securenativeandroidtemplate.MainActivity;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
-import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.accesscontrol.AccessControlFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
@@ -19,9 +17,9 @@ import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.features.network.NetworkFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
-import org.json.JSONException;
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.user.UserPrincipal;
 import javax.inject.Inject;
 
 /**
@@ -33,7 +31,7 @@ public class Navigator {
     Context context;
 
     @Inject
-    AuthStateService authStateService;
+    AuthService authService;
 
     @Inject
     public Navigator() {
@@ -45,28 +43,24 @@ public class Navigator {
         loadFragment(activity, homeView, HomeFragment.TAG);
     }
 
-    public void navigateToAuthenticationView(BaseActivity activity) {
+    public void navigateToAuthenticationView(final BaseActivity activity) {
         AuthenticationFragment authFragment = new AuthenticationFragment();
-        if(this.authStateService.isAuthorized()) {
-            Identity identity = null;
-            try {
-                identity = Identity.fromJson(this.authStateService.getIdentityInformation());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            navigateToAuthenticateDetailsView(activity, identity);
+        UserPrincipal user = authService.currentUser();
+        if (user != null) {
+            navigateToAuthenticateDetailsView(activity, user);
         } else {
             loadFragment(activity, authFragment, AuthenticationFragment.TAG);
         }
     }
 
-    public void navigateToAuthenticateDetailsView(BaseActivity activity, Identity identityData) {
-        AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(identityData);
+    public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user) {
+        AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(user);
         loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
     }
 
-    public void navigateToAccessControlView(BaseActivity activity) {
-        if (this.authStateService.isAuthorized() && this.authStateService.hasRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
+    public void navigateToAccessControlView(final BaseActivity activity) {
+        UserPrincipal currentUser = authService.currentUser();
+        if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
             AccessControlFragment accessControView = new AccessControlFragment();
             loadFragment(activity, accessControView, AccessControlFragment.TAG);
         } else {
@@ -91,8 +85,15 @@ public class Navigator {
     }
 
     public void navigateToNetworkView(MainActivity activity) {
-        NetworkFragment networkFragment = new NetworkFragment();
-        loadFragment(activity, networkFragment, NetworkFragment.TAG);
+
+        UserPrincipal currentUser = authService.currentUser();
+        if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
+            NetworkFragment networkFragment = new NetworkFragment();
+            loadFragment(activity, networkFragment, NetworkFragment.TAG);
+        } else {
+            Snackbar.make(activity.findViewById(android.R.id.content), R.string.not_authenticated_api_access, Snackbar.LENGTH_LONG).show();
+            navigateToAuthenticationView(activity);
+        }
     }
 
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {

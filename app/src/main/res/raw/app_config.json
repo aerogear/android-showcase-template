@@ -1,9 +1,4 @@
 {
-  "auth-server": {
-    "auth-server-url": "https://keycloak.security.feedhenry.org",
-    "realm-id": "secure-app",
-    "client-id": "client-app"
-  },
   "api-server": {
     "server-url": "https://api.security.feedhenry.org"
   }

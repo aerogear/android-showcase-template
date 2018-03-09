@@ -2,19 +2,44 @@
 
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
+        google()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
+plugins {
+    id "io.spring.dependency-management" version "1.0.4.RELEASE"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.jboss.aerogear:aerogear-android-sdk-bom:1.1.10'
+    }
+}
+
 allprojects {
     repositories {
+        mavenLocal()
         jcenter()
+        google()
+    }
+}
+
+subprojects {
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom 'org.jboss.aerogear:aerogear-android-sdk-bom:1.1.10'
+        }
     }
 }
 

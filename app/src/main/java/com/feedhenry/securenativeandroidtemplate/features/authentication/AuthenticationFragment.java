@@ -9,21 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
-import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationViewImpl;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
+import com.feedhenry.securenativeandroidtemplate.mvp.components.CertPinningHelper;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
-
+import org.aerogear.mobile.auth.user.UserPrincipal;
+import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.core.configuration.ServiceConfiguration;
 import java.io.IOException;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,7 +38,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     public interface AuthenticationListener {
 
-        void onAuthSuccess(Identity identityData);
+        void onAuthSuccess(UserPrincipal identityData);
 
         void onAuthError(Exception error);
     }
@@ -54,9 +52,6 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     @Inject
     AuthenticationViewPresenter authenticationViewPresenter;
 
-    @Inject
-    AuthStateService authStateService;
-
     @BindView(R.id.keycloakLogin)
     TextView keycloakLogin;
 
@@ -69,12 +64,16 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     @BindView(R.id.logo)
     ImageView logo;
 
+    @Inject
+    MobileCore mobileCore;
+
     private View view;
     private AuthenticationListener authenticationListener;
+    private CertPinningHelper certPinningHelper;
 
 
     public AuthenticationFragment() {
-        // Required empty public constructor
+        this.certPinningHelper = new CertPinningHelper();
     }
 
     @Override
@@ -113,34 +112,52 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     @Override
     protected AuthenticationView initView() {
         return new AuthenticationViewImpl(this) {
+            /**
+             * Render the Users Identity Information upon auth success
+             *
+             * @param user the current user
+             */
             @Override
-            public void renderIdentityInfo(Identity identity) {
+            public void renderIdentityInfo(final UserPrincipal user) {
                 showMessage(R.string.authentication_success);
                 if (authenticationListener != null) {
-                    authenticationListener.onAuthSuccess(identity);
+                    authenticationListener.onAuthSuccess(user);
                 }
             }
 
+            /**
+             * Render the Users Identity Information upon auth success
+             *
+             * @param error the error exception from the failed auth
+             */
             @Override
-            public void showAuthError(Exception e) {
-                if (authStateService.checkCertificateVerificationError(e)) {
+            public void showAuthError(final Exception error) {
+                if (certPinningHelper.checkCertificateVerificationError(error)) {
                     showMessage(R.string.cert_pin_verification_failed);
                 } else {
                     showMessage(R.string.authentication_failed);
                 }
 
                 if (authenticationListener != null) {
-                    authenticationListener.onAuthError(e);
+                    authenticationListener.onAuthError(error);
                 }
             }
         };
     }
 
+    /**
+     * Render the Users Identity Information in the View
+     *
+     * @return the help message for the current view
+     */
     @Override
     public int getHelpMessageResourceId() {
         return R.string.popup_authentication_fragment;
     }
 
+    /**
+     * Handler for the login button click
+     */
     @OnClick(R.id.keycloakLogin)
     public void doLogin() {
         if (authenticationViewPresenter != null) {
@@ -156,17 +173,18 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         // disable allowing a user to login until the channel is secure
         keycloakLogin.setEnabled(false);
 
-        String hostURL = appConfiguration.getAuthConfiguration().getHostUrl();
+        ServiceConfiguration keycloakServiceConfiguration = mobileCore.getServiceConfiguration("keycloak");
+        String hostURL = keycloakServiceConfiguration.getUrl();
         boolean sendAccessToken = false;
 
-        authStateService.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
+        certPinningHelper.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
 
                 Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG)
                         .show();
 
-                if (authStateService.checkCertificateVerificationError(e)) {
+                if (certPinningHelper.checkCertificateVerificationError(e)) {
                     Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
 
                     // run the UI updates on the UI thread

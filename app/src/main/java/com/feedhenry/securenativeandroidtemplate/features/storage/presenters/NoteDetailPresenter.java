@@ -1,7 +1,7 @@
 package com.feedhenry.securenativeandroidtemplate.features.storage.presenters;
 
 import com.feedhenry.securenativeandroidtemplate.R;
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
+import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.features.storage.views.NoteDetailAppView;
@@ -26,7 +26,7 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
     public void createNote(String noteTitle, String noteContent, int storeType) {
         this.view.showLoading();
         Note note = new Note(noteTitle, noteContent);
-        this.noteCrudlService.createNote(note, storeType, new Callback<Note>() {
+        this.noteCrudlService.createNote(note, storeType, new CallbackHandler<Note>() {
             @Override
             public void onSuccess(Note note) {
                 view.hideLoading();
@@ -44,7 +44,7 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
 
     public void loadNoteWithId(String noteId, int storeType) {
         this.view.showLoading();
-        this.noteCrudlService.readNote(noteId, storeType, new Callback<Note>() {
+        this.noteCrudlService.readNote(noteId, storeType, new CallbackHandler<Note>() {
             @Override
             public void onSuccess(Note note) {
                 view.hideLoading();
@@ -61,7 +61,7 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
 
     public void updateNote(Note note) {
         this.view.showLoading();
-        this.noteCrudlService.updateNote(note, new Callback<Note>() {
+        this.noteCrudlService.updateNote(note, new CallbackHandler<Note>() {
             @Override
             public void onSuccess(Note updatedNote) {
                 view.hideLoading();
@@ -78,7 +78,7 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
 
     public void deleteNote(final Note note) {
         this.view.showLoading();
-        this.noteCrudlService.deleteNote(note, new Callback<Note>() {
+        this.noteCrudlService.deleteNote(note, new CallbackHandler<Note>() {
             @Override
             public void onSuccess(Note models) {
                 view.hideLoading();

@@ -1,7 +1,7 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.views;
-
-import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
+import org.aerogear.mobile.auth.user.UserPrincipal;
+
 
 /**
  * Created by weili on 12/09/2017.
@@ -9,7 +9,7 @@ import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
 
 public interface AuthenticationView extends AppView {
 
-    public void renderIdentityInfo(Identity identity);
+    public void renderIdentityInfo(UserPrincipal user);
 
     public void showAuthError(Exception error);
 }

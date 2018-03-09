@@ -8,7 +8,6 @@ import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
 import com.feedhenry.securenativeandroidtemplate.features.network.NetworkFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
-
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 

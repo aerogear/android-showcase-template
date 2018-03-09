@@ -1,6 +1,5 @@
 package com.feedhenry.securenativeandroidtemplate;
 
-
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -12,21 +11,19 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-
-import com.feedhenry.securenativeandroidtemplate.domain.Constants;
-import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationDetailsFragment;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment;
+import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.HttpHelper;
 import com.feedhenry.securenativeandroidtemplate.navigation.Navigator;
-
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.user.UserPrincipal;
+import org.aerogear.mobile.core.MobileCore;
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
@@ -43,6 +40,9 @@ public class MainActivity extends BaseActivity
 
     @Inject
     OpenIDAuthenticationProvider authProvider;
+
+    @Inject
+    MobileCore mobileCore;
 
     @Inject
     Navigator navigator;
@@ -145,30 +145,34 @@ public class MainActivity extends BaseActivity
         return fragmentInjector;
     }
 
+    // tag::onActivityResult[]
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODES.AUTH_CODE) {
-            authProvider.onAuthResult(data);
+        if (requestCode == KeycloakAuthenticateProviderImpl.LOGIN_RESULT_CODE) {
+            // The core will return the same instance of the auth service as before
+            AuthService authService = mobileCore.getInstance(AuthService.class);
+            authService.handleAuthResult(data);
         }
     }
+    // end::onActivityResult[]
 
     @Override
-    public void onAuthSuccess(Identity identityData) {
-        navigator.navigateToAuthenticateDetailsView(this, identityData);
+    public void onAuthSuccess(final UserPrincipal user) {
+        navigator.navigateToAuthenticateDetailsView(this, user);
     }
 
     @Override
-    public void onAuthError(Exception error) {
+    public void onAuthError(final Exception error) {
 
     }
 
     @Override
-    public void onLogoutSuccess(Identity state) {
+    public void onLogoutSuccess(final UserPrincipal user) {
         navigator.navigateToAuthenticationView(this);
     }
 
     @Override
-    public void onLogoutError(Exception error) {
+    public void onLogoutError(final Exception error) {
 
     }
 

@@ -4,26 +4,14 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
-
 import com.feedhenry.securenativeandroidtemplate.di.SecureTestApplication;
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
-import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
-import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStore;
-import com.feedhenry.securenativeandroidtemplate.domain.store.NoteDataStoreFactory;
 import com.feedhenry.securenativeandroidtemplate.domain.store.SecureFileNoteStoreTest;
 import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.NoteDbHelper;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -38,9 +26,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
 
 /**
  * Created by weili on 14/09/2017.

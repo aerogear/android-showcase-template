@@ -2,30 +2,24 @@ package com.feedhenry.securenativeandroidtemplate.features.network.presenters;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.datatheorem.android.trustkit.TrustKit;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.ApiServerConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
-import com.feedhenry.securenativeandroidtemplate.domain.services.AuthStateService;
-import com.feedhenry.securenativeandroidtemplate.domain.services.NoteCrudlService;
 import com.feedhenry.securenativeandroidtemplate.features.network.views.UploadNotesView;
 import com.feedhenry.securenativeandroidtemplate.mvp.components.HttpHelper;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
-
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.user.UserPrincipal;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -43,15 +37,16 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
             = MediaType.parse("application/json; charset=utf-8");
 
     private NoteRepository noteRepository;
-    private AuthStateService authStateService;
     private ApiServerConfiguration apiServerConfiguration;
 
     private UploadNotesTask uploadNotesTask;
 
     @Inject
-    public UploadNotesPresenter(NoteRepository noteRepos, AuthStateService authStateService, AppConfiguration appConfiguration){
+    AuthService authService;
+
+    @Inject
+    public UploadNotesPresenter(NoteRepository noteRepos, AppConfiguration appConfiguration){
         this.noteRepository = noteRepos;
-        this.authStateService = authStateService;
         this.apiServerConfiguration = appConfiguration.getAPIServerConfiguration();
     }
 
@@ -97,10 +92,13 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
         protected ClientStatus doInBackground(Void... voids) {
             ClientStatus status = null;
             try {
-                boolean hasPermission = authStateService.hasRole(requiredRole);
-                long numberOfNotes = noteRepository.count();
-                status = new ClientStatus(hasPermission, numberOfNotes);
-                return status;
+                UserPrincipal user = authService.currentUser();
+                if (user != null ) {
+                    boolean hasPermission = user.hasRealmRole(requiredRole);
+                    long numberOfNotes = noteRepository.count();
+                    status = new ClientStatus(hasPermission, numberOfNotes);
+                    return status;
+                }
             } catch (Exception e) {
                 Log.e(TAG, "Error - Exception", e);
                 this.error = e;
@@ -138,46 +136,50 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
         @Override
         protected Long doInBackground(Void... voids) {
             String apiUrl = apiServerConfiguration.getNoteAPIUrl();
-            String accessToken = authStateService.getAccessToken();
+
+            UserPrincipal user = authService.currentUser();
             long uploaded = 0;
-            try {
-                URL url = new URL(apiUrl);
-                String hostname = url.getHost();
+            if (user != null ) {
+                String accessToken = user.getAccessToken();
+                try {
+                    URL url = new URL(apiUrl);
+                    String hostname = url.getHost();
 
-                SSLSocketFactory sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(hostname);
-                X509TrustManager trustManager = TrustKit.getInstance().getTrustManager(hostname);
+                    SSLSocketFactory sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(hostname);
+                    X509TrustManager trustManager = TrustKit.getInstance().getTrustManager(hostname);
 
-                OkHttpClient httpClient = HttpHelper.getHttpClient()
-                        .sslSocketFactory(sslSocketFactory, trustManager)
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .build();
-
-                List<Note> notes = noteRepository.listNotes();
-                long totalNumber = notes.size();
-                long currentCount = 0;
-                for (Note note : notes) {
-                    if (isCancelled() || this.error != null) {
-                        break;
-                    }
-                    Note readNote = noteRepository.readNote(note.getId());
-                    RequestBody requestBody = RequestBody.create(JSON, readNote.toJson(true).toString());
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .post(requestBody)
-                            .addHeader("Authorization", String.format("Bearer %s", accessToken))
+                    OkHttpClient httpClient = HttpHelper.getHttpClient()
+                            .sslSocketFactory(sslSocketFactory, trustManager)
+                            .connectTimeout(10, TimeUnit.SECONDS)
                             .build();
-                    Response res = httpClient.newCall(request).execute();
-                    currentCount++;
-                    publishProgress(currentCount, totalNumber);
-                    if (res.isSuccessful()) {
-                        uploaded++;
-                    } else {
-                        this.error = new Exception(res.body().string());
+
+                    List<Note> notes = noteRepository.listNotes();
+                    long totalNumber = notes.size();
+                    long currentCount = 0;
+                    for (Note note : notes) {
+                        if (isCancelled() || this.error != null) {
+                            break;
+                        }
+                        Note readNote = noteRepository.readNote(note.getId());
+                        RequestBody requestBody = RequestBody.create(JSON, readNote.toJson(true).toString());
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .post(requestBody)
+                                .addHeader("Authorization", String.format("Bearer %s", accessToken))
+                                .build();
+                        Response res = httpClient.newCall(request).execute();
+                        currentCount++;
+                        publishProgress(currentCount, totalNumber);
+                        if (res.isSuccessful()) {
+                            uploaded++;
+                        } else {
+                            this.error = new Exception(res.body().string());
+                        }
                     }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error - Exception", e);
+                    this.error = e;
                 }
-            } catch ( Exception e) {
-                Log.e(TAG, "Error - Exception", e);
-                this.error = e;
             }
             return uploaded;
         }

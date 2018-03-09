@@ -18,14 +18,12 @@ import javax.inject.Singleton;
 @Singleton
 public class AppConfiguration {
 
-    private static final String AUTH_SERVER_KEY = "auth-server";
     private static final String API_SERVER_KEY = "api-server";
 
     private Context context;
     private Exception configurationError;
     private JSONObject appConfigJson;
 
-    private AuthenticationConfiguration authConfiguration;
     private ApiServerConfiguration apiServerConfiguration;
 
     @Inject
@@ -43,23 +41,10 @@ public class AppConfiguration {
         try {
             String content = StreamUtils.readStream(in);
             appConfigJson = new JSONObject(content);
-            authConfiguration = new AuthenticationConfiguration(appConfigJson.getJSONObject(AUTH_SERVER_KEY));
             apiServerConfiguration = new ApiServerConfiguration(appConfigJson.getJSONObject(API_SERVER_KEY));
         } finally {
             in.close();
         }
-    }
-
-    public boolean isValid() {
-        return this.configurationError == null;
-    }
-
-    public Exception getConfigurationError() {
-        return this.configurationError;
-    }
-
-    public AuthenticationConfiguration getAuthConfiguration() {
-        return this.authConfiguration;
     }
 
     public ApiServerConfiguration getAPIServerConfiguration() {

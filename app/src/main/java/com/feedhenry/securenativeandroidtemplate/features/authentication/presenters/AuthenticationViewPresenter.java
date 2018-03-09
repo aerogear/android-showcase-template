@@ -1,12 +1,11 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication.presenters;
 
 import com.feedhenry.securenativeandroidtemplate.MainActivity;
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.Callback;
-import com.feedhenry.securenativeandroidtemplate.domain.models.Identity;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
-
+import org.aerogear.mobile.auth.Callback;
+import org.aerogear.mobile.auth.user.UserPrincipal;
 import javax.inject.Inject;
 
 /**
@@ -25,10 +24,10 @@ public class AuthenticationViewPresenter extends BasePresenter<AuthenticationVie
     }
 
     public void doLogin() {
-        authProvider.performAuthRequest(mainActivity, new Callback<Identity>() {
+        authProvider.login(mainActivity, new Callback<UserPrincipal>() {
             @Override
-            public void onSuccess(Identity identity) {
-                view.renderIdentityInfo(identity);
+            public void onSuccess(UserPrincipal user) {
+                view.renderIdentityInfo(user);
             }
 
             @Override

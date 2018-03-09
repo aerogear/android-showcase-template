@@ -16,6 +16,10 @@ import com.feedhenry.securenativeandroidtemplate.domain.store.sqlite.SqliteNoteS
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.providers.OpenIDAuthenticationProvider;
 
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
+import org.aerogear.mobile.core.MobileCore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +49,7 @@ public class SecureApplicationTestModule {
     }
 
     @Provides @Singleton @Named("sqliteStore")
-    NoteDataStore providesSqliteNoteDataStore(Context context,  RsaCrypto rsaCrypto) {
+    NoteDataStore providesSqliteNoteDataStore(Context context, RsaCrypto rsaCrypto) {
         return new SqliteNoteStore(context, rsaCrypto);
     }
 
@@ -74,5 +78,21 @@ public class SecureApplicationTestModule {
     @Provides @Singleton
     AesCrypto provideAesGcmCrypto(SecureKeyStore keyStore) {
         return new AesCrypto(keyStore);
+    }
+
+    @Provides @Singleton
+    MobileCore provideMobileCore(Context context) {
+        MobileCore mobileCore = MobileCore.init(context);
+        return mobileCore;
+    }
+
+    @Provides @Singleton
+    AuthService provideAuthService(Context context, MobileCore mobileCore) {
+        AuthService authService = mobileCore.getInstance(AuthService.class);
+        AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
+                .withRedirectUri("com.feedhenry.securenativeandroidtemplate:/callback")
+                .build();
+        authService.init(context, authServiceConfig);
+        return authService;
     }
 }

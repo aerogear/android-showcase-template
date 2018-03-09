@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "clusterName": "https://192.168.37.1:8443",
+  "namespace": "myproject",
+  "clientId": "app-cordova",
+  "services": [
+    {
+      "id": "keycloak",
+      "name": "keycloak",
+      "type": "keycloak",
+      "url": "https://keycloak.security.feedhenry.org",
+      "config": {
+        "auth-server-url": "https://keycloak.security.feedhenry.org/auth",
+        "realm": "secure-app",
+        "resource": "client-app",
+        "ssl-required": "external",
+        "url": "https://keycloak.security.feedhenry.org/auth"
+      }
+    }
+  ]
+}
+

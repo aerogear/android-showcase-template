@@ -6,8 +6,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import butterknife.OnClick;
-
 /**
  * Created by weili on 12/09/2017.
  */
