@@ -115,6 +115,9 @@
     <string name="device_os_latest_negative">Device OS Outdated</string>
     <string name="developer_options_positive">Developer Options Enabled</string>
     <string name="developer_options_negative">Developer Options Disabled</string>
+    <string name="device_trust_warning">Your device is not secure, do you want to continue?</string>
+    <string name="device_continue">Continue</string>
+    <string name="device_exit">Exit</string>
 
     <!-- Strings related to Cryptography -->
     <string name="fragment_title_cryptography">Cryptography</string>

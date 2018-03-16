@@ -16,6 +16,7 @@ import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.features.device.presenters.DevicePresenter;
 import com.feedhenry.securenativeandroidtemplate.features.device.views.DeviceView;
 import com.feedhenry.securenativeandroidtemplate.features.device.views.DeviceViewImpl;
+import com.feedhenry.securenativeandroidtemplate.features.device.views.WarningDialog;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
 import org.aerogear.mobile.security.SecurityCheckResult;
@@ -38,6 +39,8 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
 
 
     public static final String TAG = "device";
+
+    private static final int SCORE_THRESHOLD = 70;
 
     @Inject
     DevicePresenter devicePresenter;
@@ -138,6 +141,8 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     }
 
     public void runTests() {
+        totalTests = 0;
+        totalTestFailures = 0;
 
         // perform detections
         detectRoot();
@@ -151,7 +156,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         detectDeveloperOptions();
 
         // get trust score
-        setTrustScore();
+        int score = getTrustScore();
+        setTrustScore(score);
+        checkTrustScore(score);
     }
 
     // tag::detectRoot[]
@@ -303,11 +310,15 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         uiElement.setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
+    public int getTrustScore() {
+        int score = 100 - Math.round(((totalTestFailures / totalTests) * 100));
+        return  score;
+    }
+
     /**
      * Set the trust score colouring as an indicator
      */
-    public void setTrustScore() {
-        int score = 100 - Math.round(((totalTestFailures / totalTests) * 100));
+    public void setTrustScore(int score) {
         trustScore.setProgress(score);
         trustScoreText.setText(score + "%");
         trustScoreHeader.setText(getText(R.string.trust_score_header_title) + "\n(" + Math.round(totalTests) + " Tests)");
@@ -317,5 +328,17 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             trustScoreHeader.setBackgroundColor(getResources().getColor(R.color.green));
             trustScoreText.setBackgroundColor(getResources().getColor(R.color.green));
         }
+    }
+
+    private void checkTrustScore(int score) {
+        if (score < SCORE_THRESHOLD) {
+            WarningDialog warning = new WarningDialog();
+            warning.show(getFragmentManager(), "device_warning");
+        }
+    }
+
+    @OnClick(R.id.refresh_score_btn)
+    public void refreshScore() {
+        runTests();
     }
 }

@@ -1,148 +1,167 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notes_main_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/refresh_score_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="bottom|right|end"
+        android:layout_margin="@dimen/note_add_btn_margin"
+        android:clickable="true"
+        android:src="@drawable/ic_refresh_black_24dp"
+        android:tint="@android:color/background_light"
+        app:fabSize="normal" />
 
-        <TextView
-            android:id="@+id/trustScoreText"
-            android:layout_width="match_parent"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="0%"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:textAlignment="center"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-            android:textSize="70sp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/trustScoreHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:textAlignment="center"
-            android:paddingBottom="10dp"
-            android:text="@string/trust_score_header_title" />
+            <TextView
+                android:id="@+id/trustScoreText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+                android:textSize="70sp" />
 
-        <ProgressBar
-            android:id="@+id/trustScore"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_marginBottom="-15dp"
-            android:layout_marginTop="-10dp"
-            android:progressTint="@color/green"
-            android:progressBackgroundTint="@color/colorPrimary"
-            android:textAlignment="center"
-            android:max="100"
-            android:progress="100" />
+            <TextView
+                android:id="@+id/trustScoreHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:paddingBottom="10dp"
+                android:text="@string/trust_score_header_title" />
 
-        <RadioButton
-            android:id="@+id/emulatorAccess"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:button="@drawable/ic_emulator"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:textColor="@color/green"
-            android:padding="15dp"
-            android:layout_margin="10dp"
-            android:text="@string/emulator_detected_negative" />
+            <ProgressBar
+                android:id="@+id/trustScore"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_marginBottom="-15dp"
+                android:layout_marginTop="-10dp"
+                android:progressTint="@color/green"
+                android:progressBackgroundTint="@color/colorPrimary"
+                android:textAlignment="center"
+                android:max="100"
+                android:progress="100" />
 
-        <RadioButton
-            android:id="@+id/debuggerAccess"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:button="@drawable/ic_debug"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:textColor="@color/green"
-            android:padding="15dp"
-            android:text="@string/debugger_detected_negative" />
+            <RadioButton
+                android:id="@+id/emulatorAccess"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_emulator"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:textColor="@color/green"
+                android:padding="15dp"
+                android:layout_margin="10dp"
+                android:text="@string/emulator_detected_negative" />
 
-        <RadioButton
-            android:id="@+id/rootAccess"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:button="@drawable/ic_root"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:padding="15dp"
-            android:text="@string/root_detected_negative"
-            android:textColor="@color/green" />
+            <RadioButton
+                android:id="@+id/debuggerAccess"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:button="@drawable/ic_debug"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:textColor="@color/green"
+                android:padding="15dp"
+                android:text="@string/debugger_detected_negative" />
 
-        <RadioButton
-            android:id="@+id/hookingDetected"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:button="@drawable/ic_hooking"
-            android:textColor="@color/green"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:padding="15dp"
-            android:layout_margin="10dp"
-            android:text="@string/hooking_detected_negative" />
+            <RadioButton
+                android:id="@+id/rootAccess"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:button="@drawable/ic_root"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:padding="15dp"
+                android:text="@string/root_detected_negative"
+                android:textColor="@color/green" />
 
-        <RadioButton
-            android:id="@+id/lockScreenSetup"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:button="@drawable/ic_lock_screen"
-            android:textColor="@color/green"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:padding="15dp"
-            android:layout_margin="10dp"
-            android:text="@string/device_lock_detected_positive" />
+            <RadioButton
+                android:id="@+id/hookingDetected"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_hooking"
+                android:textColor="@color/green"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:padding="15dp"
+                android:layout_margin="10dp"
+                android:text="@string/hooking_detected_negative" />
 
-        <RadioButton
-            android:id="@+id/allowBackup"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:button="@drawable/ic_backup"
-            android:textColor="@color/green"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:padding="15dp"
-            android:layout_margin="10dp"
-            android:text="@string/allow_backup_detected_negative" />
+            <RadioButton
+                android:id="@+id/lockScreenSetup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_lock_screen"
+                android:textColor="@color/green"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:padding="15dp"
+                android:layout_margin="10dp"
+                android:text="@string/device_lock_detected_positive" />
 
-        <RadioButton
-            android:id="@+id/deviceEncrypted"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:button="@drawable/ic_encrypt"
-            android:textColor="@color/green"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:padding="15dp"
-            android:layout_margin="10dp"
-            android:text="@string/device_encrypted_positive" />
+            <RadioButton
+                android:id="@+id/allowBackup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_backup"
+                android:textColor="@color/green"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:padding="15dp"
+                android:layout_margin="10dp"
+                android:text="@string/allow_backup_detected_negative" />
 
-        <RadioButton
-            android:id="@+id/deviceOS"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:button="@drawable/ic_device_os"
-            android:textColor="@color/green"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:padding="15dp"
-            android:layout_margin="10dp"
-            android:text="@string/device_os_latest_positive" />
+            <RadioButton
+                android:id="@+id/deviceEncrypted"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_encrypt"
+                android:textColor="@color/green"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:padding="15dp"
+                android:layout_margin="10dp"
+                android:text="@string/device_encrypted_positive" />
 
-        <RadioButton
-            android:id="@+id/developerOptions"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:button="@drawable/ic_developer_options"
-            android:textColor="@color/green"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:padding="15dp"
-            android:layout_margin="10dp"
-            android:text="@string/developer_options_negative" />
+            <RadioButton
+                android:id="@+id/deviceOS"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_device_os"
+                android:textColor="@color/green"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:padding="15dp"
+                android:layout_margin="10dp"
+                android:text="@string/device_os_latest_positive" />
 
-    </LinearLayout>
+            <RadioButton
+                android:id="@+id/developerOptions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_developer_options"
+                android:textColor="@color/green"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:padding="15dp"
+                android:layout_margin="10dp"
+                android:text="@string/developer_options_negative" />
 
-</ScrollView>
+        </LinearLayout>
+
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>
