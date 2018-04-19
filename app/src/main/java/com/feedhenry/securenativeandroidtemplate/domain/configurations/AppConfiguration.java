@@ -1,13 +1,7 @@
 package com.feedhenry.securenativeandroidtemplate.domain.configurations;
 
-import android.content.Context;
-
-import com.feedhenry.securenativeandroidtemplate.R;
-import com.feedhenry.securenativeandroidtemplate.domain.utils.StreamUtils;
-
-import org.json.JSONObject;
-
-import java.io.InputStream;
+import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.core.configuration.ServiceConfiguration;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,33 +12,23 @@ import javax.inject.Singleton;
 @Singleton
 public class AppConfiguration {
 
-    private static final String API_SERVER_KEY = "api-server";
-
-    private Context context;
-    private Exception configurationError;
-    private JSONObject appConfigJson;
+    private static final String NOTES_SERVER_KEY = "notes-service";
 
     private ApiServerConfiguration apiServerConfiguration;
 
+    private final MobileCore mobileCore;
+
     @Inject
-    public AppConfiguration(Context context) {
-        this.context = context;
-        try {
-            readConfigurations();
-        } catch (Exception e) {
-            configurationError = e;
-        }
+    public AppConfiguration(MobileCore mobileCore) {
+        this.mobileCore = mobileCore;
+
+        readConfigurations();
     }
 
-    private void readConfigurations() throws Exception {
-        InputStream in = context.getResources().openRawResource(R.raw.app_config);
-        try {
-            String content = StreamUtils.readStream(in);
-            appConfigJson = new JSONObject(content);
-            apiServerConfiguration = new ApiServerConfiguration(appConfigJson.getJSONObject(API_SERVER_KEY));
-        } finally {
-            in.close();
-        }
+    private void readConfigurations() {
+        final ServiceConfiguration serviceConfiguration = mobileCore.getServiceConfiguration(NOTES_SERVER_KEY);
+        final String serviceUrl = serviceConfiguration.getUrl();
+        this.apiServerConfiguration = new ApiServerConfiguration(serviceUrl);
     }
 
     public ApiServerConfiguration getAPIServerConfiguration() {
