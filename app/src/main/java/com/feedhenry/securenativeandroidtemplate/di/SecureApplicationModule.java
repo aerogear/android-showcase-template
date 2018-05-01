@@ -99,23 +99,17 @@ public class SecureApplicationModule {
         return new NoteCrudlService(noteRepository);
     }
 
-    @Provides @Singleton
-    MobileCore provideMobileCore(Context context) {
-        MobileCore mobileCore = MobileCore.init(context);
-        return mobileCore;
-    }
-
     // tag::securityServiceInit[]
     @Provides @Singleton
-    SecurityService provideSecurityService(Context context, MobileCore mobileCore) {
-        return mobileCore.getInstance(SecurityService.class);
+    SecurityService provideSecurityService() {
+        return MobileCore.getInstance().getService(SecurityService.class);
     }
     // end::securityServiceInit[]
 
     // tag::authServiceInit[]
     @Provides @Singleton
-    AuthService provideAuthService(Context context, MobileCore mobileCore) {
-        AuthService authService = mobileCore.getInstance(AuthService.class);
+    AuthService provideAuthService(Context context) {
+        AuthService authService = MobileCore.getInstance().getService(AuthService.class);
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
                 .withRedirectUri("com.feedhenry.securenativeandroidtemplate:/callback")
                 .build();

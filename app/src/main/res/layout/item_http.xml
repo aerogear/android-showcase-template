@@ -1,0 +1,20 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.feedhenry.securenativeandroidtemplate.domain.models.User" />
+    </data>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@{user.name}"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        tools:text="AeroGear" />
+
+</layout>

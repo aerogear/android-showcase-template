@@ -5,11 +5,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.feedhenry.securenativeandroidtemplate.R;
-import com.feedhenry.securenativeandroidtemplate.domain.callbacks.CallbackHandler;
 import org.aerogear.mobile.auth.AuthService;
-import org.aerogear.mobile.auth.Callback;
 import org.aerogear.mobile.auth.authenticator.DefaultAuthenticateOptions;
 import org.aerogear.mobile.auth.user.UserPrincipal;
+import org.aerogear.mobile.core.Callback;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -21,7 +21,7 @@ import javax.inject.Singleton;
 public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationProvider {
 
     public static int LOGIN_RESULT_CODE = 1;
-    private CallbackHandler logoutCallback;
+    private Callback logoutCallback;
 
     @Inject
     Context context;
@@ -56,7 +56,7 @@ public class KeycloakAuthenticateProviderImpl implements OpenIDAuthenticationPro
      *
      * @param logoutCallback the logout callback
      */
-    public void logout(final CallbackHandler logoutCallback) {
+    public void logout(final Callback logoutCallback) {
         this.logoutCallback = logoutCallback;
         UserPrincipal currentUser = authService.currentUser();
         authService.logout(currentUser, new Callback<UserPrincipal>() {

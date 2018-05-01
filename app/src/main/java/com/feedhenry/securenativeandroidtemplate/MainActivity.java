@@ -42,9 +42,6 @@ public class MainActivity extends BaseActivity
     OpenIDAuthenticationProvider authProvider;
 
     @Inject
-    MobileCore mobileCore;
-
-    @Inject
     Navigator navigator;
 
     @BindView(R.id.toolbar)
@@ -134,6 +131,10 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_network) {
             navigator.navigateToNetworkView(this);
         }
+        // Visit the HTTP Screen
+        if (id == R.id.nav_http) {
+            navigator.navigateToHttpView(this);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -150,7 +151,7 @@ public class MainActivity extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == KeycloakAuthenticateProviderImpl.LOGIN_RESULT_CODE) {
             // The core will return the same instance of the auth service as before
-            AuthService authService = mobileCore.getInstance(AuthService.class);
+            AuthService authService = MobileCore.getInstance().getService(AuthService.class);
             authService.handleAuthResult(data);
         }
     }

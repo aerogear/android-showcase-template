@@ -64,9 +64,6 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     @BindView(R.id.logo)
     ImageView logo;
 
-    @Inject
-    MobileCore mobileCore;
-
     private View view;
     private AuthenticationListener authenticationListener;
     private CertPinningHelper certPinningHelper;
@@ -173,7 +170,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         // disable allowing a user to login until the channel is secure
         keycloakLogin.setEnabled(false);
 
-        ServiceConfiguration keycloakServiceConfiguration = mobileCore.getServiceConfiguration("keycloak");
+        ServiceConfiguration keycloakServiceConfiguration = MobileCore.getInstance().getServiceConfiguration("keycloak");
         String hostURL = keycloakServiceConfiguration.getUrl();
         boolean sendAccessToken = false;
 

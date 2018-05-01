@@ -133,4 +133,9 @@
 
     <string name="help_title">Help</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="popup_http_fragment">A Simple Request to a JSON Endpoint using the HTTP Module.</string>
+    <string name="fragment_title_http">HTTP</string>
+
 </resources>

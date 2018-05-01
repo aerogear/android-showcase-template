@@ -6,6 +6,8 @@ import com.feedhenry.securenativeandroidtemplate.features.authentication.provide
 import com.feedhenry.securenativeandroidtemplate.features.authentication.views.AuthenticationDetailsView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
 import org.aerogear.mobile.auth.user.UserPrincipal;
+import org.aerogear.mobile.core.Callback;
+
 import javax.inject.Inject;
 
 /**
@@ -24,7 +26,7 @@ public class AuthenticationDetailsPresenter extends BasePresenter<Authentication
     }
 
     public void logout(){
-        authProvider.logout(new CallbackHandler<UserPrincipal>() {
+        authProvider.logout(new Callback<UserPrincipal>() {
             @Override
             public void onSuccess(UserPrincipal user) {
                 view.logoutSuccess(user);

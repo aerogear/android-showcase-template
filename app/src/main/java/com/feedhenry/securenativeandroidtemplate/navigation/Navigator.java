@@ -14,6 +14,7 @@ import com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
+import com.feedhenry.securenativeandroidtemplate.features.http.HttpFragment;
 import com.feedhenry.securenativeandroidtemplate.features.network.NetworkFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
@@ -82,6 +83,11 @@ public class Navigator {
     public void navigateToDeviceView(MainActivity activity) {
         DeviceFragment deviceFragment = new DeviceFragment();
         loadFragment(activity, deviceFragment, DeviceFragment.TAG);
+    }
+
+    public void navigateToHttpView(MainActivity activity) {
+        HttpFragment httpFragment = new HttpFragment();
+        loadFragment(activity, httpFragment, HttpFragment.TAG);
     }
 
     public void navigateToNetworkView(MainActivity activity) {

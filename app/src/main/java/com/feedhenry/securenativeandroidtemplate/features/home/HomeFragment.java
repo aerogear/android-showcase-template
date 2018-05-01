@@ -12,10 +12,6 @@ import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.features.home.presenters.HomeViewPresenter;
 import com.feedhenry.securenativeandroidtemplate.features.home.views.HomeView;
 import com.feedhenry.securenativeandroidtemplate.features.home.views.HomeViewImpl;
-import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
-import com.feedhenry.securenativeandroidtemplate.mvp.presenters.Presenter;
-import com.feedhenry.securenativeandroidtemplate.mvp.views.AppView;
-import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseAppView;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
 
 import javax.inject.Inject;
