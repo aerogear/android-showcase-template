@@ -16,6 +16,7 @@ import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.features.http.HttpFragment;
 import com.feedhenry.securenativeandroidtemplate.features.network.NetworkFragment;
+import com.feedhenry.securenativeandroidtemplate.features.push.PushFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 import com.feedhenry.securenativeandroidtemplate.mvp.views.BaseFragment;
@@ -88,6 +89,11 @@ public class Navigator {
     public void navigateToHttpView(MainActivity activity) {
         HttpFragment httpFragment = new HttpFragment();
         loadFragment(activity, httpFragment, HttpFragment.TAG);
+    }
+
+    public void navigateToPushView(MainActivity activity) {
+        PushFragment pushFragment = new PushFragment();
+        loadFragment(activity, pushFragment, PushFragment.TAG);
     }
 
     public void navigateToNetworkView(MainActivity activity) {

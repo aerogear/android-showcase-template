@@ -16,17 +16,13 @@ public class AppConfiguration {
 
     private ApiServerConfiguration apiServerConfiguration;
 
-    private final MobileCore mobileCore;
-
     @Inject
-    public AppConfiguration(MobileCore mobileCore) {
-        this.mobileCore = mobileCore;
-
+    public AppConfiguration() {
         readConfigurations();
     }
 
     private void readConfigurations() {
-        final ServiceConfiguration serviceConfiguration = mobileCore.getServiceConfiguration(NOTES_SERVER_KEY);
+        final ServiceConfiguration serviceConfiguration = MobileCore.getInstance().getServiceConfiguration(NOTES_SERVER_KEY);
         final String serviceUrl = serviceConfiguration.getUrl();
         this.apiServerConfiguration = new ApiServerConfiguration(serviceUrl);
     }

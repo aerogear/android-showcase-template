@@ -53,12 +53,14 @@ android {
 }
 
 ext {
+    firebase_version = "15.0.0"
     android_support_version = "27.1.0"
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$android_support_version"
+    implementation "com.android.support:support-v4:$android_support_version"
     implementation "com.android.support:animated-vector-drawable:$android_support_version"
     implementation "com.android.support:customtabs:$android_support_version"
     implementation "com.android.support:design:$android_support_version"
@@ -69,14 +71,14 @@ dependencies {
 //    implementation 'org.aerogear:auth:0.1.0-2018-09'
     implementation 'org.aerogear:android-core:0.1.0-SNAPSHOT'
     implementation 'org.aerogear:android-auth:0.1.0-SNAPSHOT'
+    implementation 'org.aerogear:aerogear-push:0.1.0-SNAPSHOT'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.datatheorem.android.trustkit:trustkit:1.0.1@aar'
     implementation 'com.scottyab:rootbeer-lib:0.0.6'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
     implementation "com.github.nitrico.lastadapter:lastadapter:2.3.0"
-
+    implementation "com.google.firebase:firebase-messaging:${project.ext.firebase_version}"
     implementation 'com.jakewharton:butterknife:8.8.1'
-    implementation 'com.android.support:support-v4:27.1.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation 'com.google.dagger:dagger:2.11'
@@ -86,16 +88,16 @@ dependencies {
 
     implementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.10.0'
-    testCompile 'org.json:json:20160810'
-    testCompile "org.robolectric:robolectric:3.4.2"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.10.0'
+    testImplementation 'org.json:json:20160810'
+    testImplementation "org.robolectric:robolectric:3.4.2"
 
-    androidTestCompile 'org.mockito:mockito-android:2.10.0'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.0', {
+    testImplementation 'org.mockito:mockito-android:2.10.0'
+    testImplementation('com.android.support.test.espresso:espresso-core:3.0.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile('com.android.support.test.espresso:espresso-contrib:3.0.0') {
+    testImplementation('com.android.support.test.espresso:espresso-contrib:3.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'support-v4'
@@ -105,3 +107,5 @@ dependencies {
     androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     androidTestAnnotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
 }
+
+apply plugin: 'com.google.gms.google-services'

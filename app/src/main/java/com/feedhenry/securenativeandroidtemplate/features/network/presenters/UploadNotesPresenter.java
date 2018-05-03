@@ -2,7 +2,6 @@ package com.feedhenry.securenativeandroidtemplate.features.network.presenters;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.Constants;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.ApiServerConfiguration;
@@ -11,19 +10,16 @@ import com.feedhenry.securenativeandroidtemplate.domain.models.Note;
 import com.feedhenry.securenativeandroidtemplate.domain.repositories.NoteRepository;
 import com.feedhenry.securenativeandroidtemplate.features.network.views.UploadNotesView;
 import com.feedhenry.securenativeandroidtemplate.mvp.presenters.BasePresenter;
-
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
 import org.aerogear.mobile.core.MobileCore;
 import org.aerogear.mobile.core.http.HttpRequest;
 import org.aerogear.mobile.core.http.HttpResponse;
-
+import org.aerogear.mobile.core.reactive.Responder;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
 import javax.inject.Inject;
-
 import okhttp3.MediaType;
 
 /**
@@ -43,9 +39,6 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
 
     @Inject
     AuthService authService;
-
-    @Inject
-    MobileCore mobileCore;
 
     @Inject
     public UploadNotesPresenter(NoteRepository noteRepos, AppConfiguration appConfiguration){
@@ -153,23 +146,25 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
                             break;
                         }
                         Note readNote = noteRepository.readNote(note.getId());
-                        HttpRequest httpRequest = mobileCore.getHttpLayer().newRequest();
+                        HttpRequest httpRequest = MobileCore.getInstance().getHttpLayer().newRequest();
                         httpRequest.addHeader("Authorization", String.format("Bearer %s", accessToken));
-                        httpRequest.post(apiUrl, readNote.toJson(true).toString().getBytes("UTF-8"));
-                        HttpResponse httpResponse = httpRequest.execute();
 
-                        httpResponse.onError(() -> {
-                            UploadNotesTask.this.error = new Exception(httpResponse.stringBody());
-                        });
-                        httpResponse.onSuccess(() -> {
-                            uploaded.incrementAndGet();
-                        });
-                        httpResponse.onComplete(() -> {
-                            long progress = currentCount.incrementAndGet();
-                            publishProgress(progress, totalNumber);
-                        });
+                        httpRequest.post(apiUrl, readNote.toJson(true).toString().getBytes("UTF-8"))
+                                .respondWith(new Responder<HttpResponse>() {
+                                    @Override
+                                    public void onResult(HttpResponse value) {
+                                        uploaded.incrementAndGet();
+                                    }
 
-                        httpResponse.waitForCompletionAndClose();
+                                    @Override
+                                    public void onException(Exception exception) {
+                                        Log.e(TAG, "Error - Exception", exception);
+                                        error = exception;
+                                    }
+                                });
+
+                        long progress = currentCount.incrementAndGet();
+                        publishProgress(progress, totalNumber);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error - Exception", e);

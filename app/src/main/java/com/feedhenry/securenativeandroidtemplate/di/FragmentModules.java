@@ -7,6 +7,7 @@ import com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment;
 import com.feedhenry.securenativeandroidtemplate.features.home.HomeFragment;
 import com.feedhenry.securenativeandroidtemplate.features.http.HttpFragment;
 import com.feedhenry.securenativeandroidtemplate.features.network.NetworkFragment;
+import com.feedhenry.securenativeandroidtemplate.features.push.PushFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesDetailFragment;
 import com.feedhenry.securenativeandroidtemplate.features.storage.NotesListFragment;
 import dagger.Module;
@@ -45,4 +46,7 @@ public abstract class FragmentModules {
 
     @ContributesAndroidInjector
     abstract HttpFragment contributeHttpFragmentInjector();
+
+    @ContributesAndroidInjector
+    abstract PushFragment contributePushFragmentInjector();
 }

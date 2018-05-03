@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import android.app.Activity;
+import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,6 +45,9 @@ public class HttpFragment extends BaseFragment <HttpViewPresenter, HttpView>{
 
     @BindView(R.id.userList)
     RecyclerView userList;
+
+    @Inject
+    Context context;
 
     View view;
 
@@ -93,7 +97,7 @@ public class HttpFragment extends BaseFragment <HttpViewPresenter, HttpView>{
     }
 
     public void sendRequest() {
-        userList.setLayoutManager(new LinearLayoutManager(getContext()));
+        userList.setLayoutManager(new LinearLayoutManager(context));
 
         new LastAdapter(users, BR.user).map(User.class, R.layout.item_http).into(userList);
 

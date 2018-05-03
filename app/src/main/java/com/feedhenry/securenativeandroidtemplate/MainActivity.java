@@ -136,6 +136,11 @@ public class MainActivity extends BaseActivity
             navigator.navigateToHttpView(this);
         }
 
+        // Visit the Push Screen
+        if (id == R.id.nav_push) {
+            navigator.navigateToPushView(this);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

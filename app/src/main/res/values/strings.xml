@@ -133,9 +133,16 @@
 
     <string name="help_title">Help</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- HTTP -->
     <string name="popup_http_fragment">A Simple Request to a JSON Endpoint using the HTTP Module.</string>
     <string name="fragment_title_http">HTTP</string>
+
+    <!-- Push -->
+    <string name="device_register_success">Device success registered on Unified Push Server</string>
+    <string name="device_register_error">An error occurred while trying to register the device on Unified Push Server</string>
+    <string name="nothing_here">Nothing here yet</string>
+    <string name="send_notification">Send notifications from the console</string>
+    <string name="popup_push_fragment">AeroGear for Android provides support for integrating Firebase Cloud Messaging (FCM) with the AeroGear Unified Push Server.  Push messaging is a mechanism for sending data to mobile clients from a remote server. For mobile applications, this reduces battery usage, removes polling code and provides for a better user experience as data changes are communicated in real time.  Messages that FCM receives from an application server are sent to the Android device over a connection managed by the operating system. These messages are then extracted and passed to an application using services definied provided by the AeroGear library.</string>
+    <string name="fragment_title_push">Push</string>
 
 </resources>
