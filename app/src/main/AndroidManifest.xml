@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.feedhenry.securenativeandroidtemplate"
+    package="com.aerogear.androidshowcase"
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".SecureApplication"
+        android:name="com.aerogear.androidshowcase.SecureApplication"
         android:allowBackup="false"
         android:icon="@drawable/ag_avatar"
         android:label="@string/app_name"
@@ -15,10 +15,10 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="DEFAULT_MESSAGE_HANDLER_KEY"
-            android:value="com.feedhenry.securenativeandroidtemplate.handler.NotificationBarMessageHandler" />
+            android:value="com.aerogear.androidshowcase.handler.NotificationBarMessageHandler" />
         <activity
 
-            android:name=".MainActivity"
+            android:name="com.aerogear.androidshowcase.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

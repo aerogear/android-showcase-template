@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.feedhenry.securenativeandroidtemplate.features.http.HttpFragment">
+    tools:context="com.aerogear.androidshowcase.features.http.HttpFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/userList"

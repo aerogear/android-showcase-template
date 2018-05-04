@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
-    tools:context="com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment">
+    tools:context="com.aerogear.androidshowcase.features.authentication.AuthenticationFragment">
 
 
     <TextView

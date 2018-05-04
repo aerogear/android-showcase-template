@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
-    tools:context="com.feedhenry.securenativeandroidtemplate.features.accesscontrol.AccessControlFragment">
+    tools:context="com.aerogear.androidshowcase.features.accesscontrol.AccessControlFragment">
 
 
     <LinearLayout

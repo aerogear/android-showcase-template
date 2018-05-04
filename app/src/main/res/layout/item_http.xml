@@ -5,7 +5,7 @@
 
         <variable
             name="user"
-            type="com.feedhenry.securenativeandroidtemplate.domain.models.User" />
+            type="com.aerogear.androidshowcase.domain.models.User" />
     </data>
 
     <TextView
