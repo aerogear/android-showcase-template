@@ -84,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_marginTop"
                 style="@style/Widget.AppCompat.Button.Colored"
+                android:background="@color/orange"
                 android:text="@string/action_save" />
 
             <Button

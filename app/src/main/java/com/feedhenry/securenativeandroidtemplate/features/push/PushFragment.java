@@ -167,7 +167,18 @@ public class PushFragment extends BaseFragment implements MessageHandler {
         register.setEnabled(!registered);
         refreshToken.setEnabled(registered);
         unregister.setEnabled(registered);
+
+        if (registered) {
+            register.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            unregister.setTextColor(getResources().getColor(R.color.white));
+            refreshToken.setTextColor(getResources().getColor(R.color.white));
+        } else {
+            register.setTextColor(getResources().getColor(R.color.white));
+            unregister.setTextColor(getResources().getColor(R.color.grey));
+            refreshToken.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
     }
+
 
     @Override
     public int getHelpMessageResourceId() {

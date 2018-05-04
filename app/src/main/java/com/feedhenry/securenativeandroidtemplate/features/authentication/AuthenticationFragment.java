@@ -1,6 +1,8 @@
 package com.feedhenry.securenativeandroidtemplate.features.authentication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.feedhenry.securenativeandroidtemplate.MainActivity;
 import com.feedhenry.securenativeandroidtemplate.R;
 import com.feedhenry.securenativeandroidtemplate.domain.configurations.AppConfiguration;
 import com.feedhenry.securenativeandroidtemplate.features.authentication.presenters.AuthenticationViewPresenter;
@@ -64,9 +68,13 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     @BindView(R.id.logo)
     ImageView logo;
 
+    @Inject
+    Context context;
+
     private View view;
     private AuthenticationListener authenticationListener;
     private CertPinningHelper certPinningHelper;
+    ProgressDialog pinningDialog;
 
 
     public AuthenticationFragment() {
@@ -76,6 +84,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     @Override
     public void onAttach(Activity activity) {
         AndroidInjection.inject(this);
+        pinningDialog = new ProgressDialog(activity);
         super.onAttach(activity);
         if (activity instanceof AuthenticationListener) {
             authenticationListener = (AuthenticationListener) activity;
@@ -170,6 +179,10 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         // disable allowing a user to login until the channel is secure
         keycloakLogin.setEnabled(false);
 
+        pinningDialog.setTitle("Please Wait");
+        pinningDialog.setMessage("Checking For Secure Channel...");
+        pinningDialog.show();
+
         ServiceConfiguration keycloakServiceConfiguration = MobileCore.getInstance().getServiceConfiguration("keycloak");
         String hostURL = keycloakServiceConfiguration.getUrl();
         boolean sendAccessToken = false;
@@ -189,6 +202,8 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
                     {
                         public void run()
                         {
+                            pinningDialog.hide();
+
                             // hide the authentication button
                             keycloakLogin.setVisibility(view.GONE);
 
@@ -213,6 +228,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
                 {
                     public void run()
                     {
+                        pinningDialog.hide();
                         keycloakLogin.setEnabled(true);
                     }
                 });

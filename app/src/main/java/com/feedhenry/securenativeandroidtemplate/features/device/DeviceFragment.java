@@ -166,7 +166,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void detectRoot() {
         totalTests++;
         SecurityCheckResult result = securityService.check(SecurityCheckType.NOT_ROOTED);
-        if (result.passed()) {
+        if (!result.passed()) {
             setDetected(rootAccess, R.string.root_detected_positive);
         }
     }
@@ -192,7 +192,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void debuggerDetected() {
         totalTests++;
         SecurityCheckResult result = securityService.check(SecurityCheckType.NO_DEBUGGER);
-        if (result.passed()) {
+        if (!result.passed()) {
             setDetected(debuggerAccess, R.string.debugger_detected_positive);
         }
     }
@@ -205,7 +205,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void detectEmulator() {
         totalTests++;
         SecurityCheckResult result = securityService.check(SecurityCheckType.NOT_IN_EMULATOR);
-        if (result.passed()) {
+        if (!result.passed()) {
             setDetected(emulatorAccess, R.string.emulator_detected_positive);
         }
     }
@@ -249,7 +249,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void detectBackupEnabled() {
         totalTests++;
         SecurityCheckResult result = securityService.check(SecurityCheckType.ALLOW_BACKUP_DISABLED);
-        if (result.passed()) {
+        if (!result.passed()) {
             setDetected(allowBackup, R.string.allow_backup_detected_positive);
         }
     }
@@ -290,7 +290,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void detectDeveloperOptions() {
         totalTests++;
         SecurityCheckResult result = securityService.check(SecurityCheckType.NO_DEVELOPER_MODE);
-        if (result.passed()) {
+        if (!result.passed()) {
             setDetected(developerOptions, R.string.developer_options_positive);
         }
     }
@@ -305,7 +305,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void setDetected(RadioButton uiElement, int textResource) {
         totalTestFailures++;
         uiElement.setText(textResource);
-        uiElement.setTextColor(getResources().getColor(R.color.colorPrimary));
+        uiElement.setTextColor(getResources().getColor(R.color.orange));
     }
 
     public int getTrustScore() {

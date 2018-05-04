@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:text="0%"
                 android:background="@color/colorPrimary"
-                android:textColor="@color/white"
+                android:textColor="@color/red"
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault"
                 android:textSize="70sp" />

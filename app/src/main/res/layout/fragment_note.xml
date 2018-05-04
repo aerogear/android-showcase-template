@@ -18,12 +18,13 @@
 
             <TextView
                 android:id="@+id/noteTitle"
+                android:textColor="@color/orange"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/note_title_height"
                 android:layout_alignParentTop="true"
                 android:padding="@dimen/note_view_padding"
                 android:textSize="24sp"
-                android:textStyle="bold|italic">
+                android:textStyle="bold">
             </TextView>
 
             <TextView
@@ -32,7 +33,7 @@
                 android:layout_height="@dimen/note_store_height"
                 android:layout_below="@+id/noteTitle"
                 android:paddingLeft="@dimen/note_view_padding"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
 
         </RelativeLayout>

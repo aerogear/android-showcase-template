@@ -69,7 +69,7 @@ public class RVNoteAdapter extends RecyclerView.Adapter<RVNoteAdapter.NoteViewHo
     public void onBindViewHolder(NoteViewHolder holder, int position) {
         final Note selectedNote = notes.get(position);
         holder.noteTitle.setText(selectedNote.getTitle());
-        holder.noteStore.setText("Storage: " + getStoreName(selectedNote.getStoreType()));
+        holder.noteStore.setText(getStoreName(selectedNote.getStoreType()));
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

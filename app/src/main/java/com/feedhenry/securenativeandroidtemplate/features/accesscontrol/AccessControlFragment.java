@@ -89,19 +89,23 @@ public class AccessControlFragment extends BaseFragment<AccessControlViewPresent
      */
     public void performAccessControl() {
         UserPrincipal user = authService.currentUser();
-        int color = Color.argb(50, 89, 151, 93);
+        int backgroundColor = getResources().getColor(R.color.orange);
+        int textColor = getResources().getColor(R.color.white);
         if (user != null) {
             if (user.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
                 setGranted(R.string.role_mobile_user_label, roleMobileUser);
-                roleMobileUser.setBackgroundColor(color);
+                roleMobileUser.setBackgroundColor(backgroundColor);
+                roleMobileUser.setTextColor(textColor);
             }
             if (user.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
                 setGranted(R.string.role_api_access_label, roleApiAccess);
-                roleApiAccess.setBackgroundColor(color);
+                roleApiAccess.setBackgroundColor(backgroundColor);
+                roleApiAccess.setTextColor(textColor);
             }
             if (user.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_SUPERUSER)) {
                 setGranted(R.string.role_superuser_label, roleSuperuser);
-                roleSuperuser.setBackgroundColor(color);
+                roleSuperuser.setBackgroundColor(backgroundColor);
+                roleSuperuser.setTextColor(textColor);
             }
        }
     }

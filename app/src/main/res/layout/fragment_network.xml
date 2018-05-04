@@ -9,15 +9,6 @@
     tools:context="com.feedhenry.securenativeandroidtemplate.features.authentication.AuthenticationFragment">
 
 
-    <ImageView
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="false"
-        android:cropToPadding="false"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/fh_background" />
-
     <TextView
         android:id="@+id/notes_info"
         android:layout_width="match_parent"
@@ -72,6 +63,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="@dimen/authentication_button_margin_bottom"
         android:enabled="false"
+        android:background="@color/orange"
+        android:textColor="@color/white"
         android:text="@string/upload_notes" />
 
     <Button
@@ -83,6 +76,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="@dimen/authentication_button_margin_bottom"
         android:text="@string/cancel_upload"
+        android:background="@color/orange"
+        android:textColor="@color/white"
         android:visibility="gone" />
 
 </RelativeLayout>

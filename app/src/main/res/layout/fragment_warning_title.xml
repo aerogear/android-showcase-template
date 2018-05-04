@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="Warning"
-        android:background="@color/colorPrimary"
+        android:background="@color/red"
         android:textColor="@color/white"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault"
