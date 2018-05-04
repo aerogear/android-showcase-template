@@ -1,6 +1,5 @@
-image:https://circleci.com/gh/feedhenry/mobile-security-android-template.svg?style=svg["CircleCI", link="https://circleci.com/gh/feedhenry/mobile-security-android-template"]
-image:https://img.shields.io/badge/API-19%2B-brightgreen.svg?style=flat["API", link="https://android-arsenal.com/api?level=19"]
-image:https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp/badge.svg?style=svg["Known Vulnerabilities", link="https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp"]
+image:https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat["API", link="https://android-arsenal.com/api?level=19"]
+image:https://snyk.io/test/github/aerogear/android-showcase-template/master%2Fapp/badge.svg?style=svg["Known Vulnerabilities", link="https://snyk.io/test/github/aerogear/android-showcase-template/master%2Fapp"]
 
 = Secure Native Android Template
 
