@@ -34,7 +34,7 @@ public class PreAndroidMSecureKeyStore extends SecureKeyStoreImpl implements Sec
     private static final int BASE64_FLAG = Base64.NO_WRAP;
     private static final int BIT_PER_BYTE = 8;
 
-    private static final String RSA_KEY_ALIAS = "com.feedhenry.secureapp.rsakeypair";
+    private static final String RSA_KEY_ALIAS = "com.aerogear.androidshowcase.rsakeypair";
     private Context context;
     private SharedPreferences sharedPreferences;
 

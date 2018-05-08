@@ -5,13 +5,13 @@ android {
     buildToolsVersion '27.0.3'
     dataBinding.enabled true
     defaultConfig {
-        applicationId "com.feedhenry.securenativeandroidtemplate"
+        applicationId "com.aerogear.androidshowcase"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.feedhenry.securenativeandroidtemplate.MockTestRunner"
-        manifestPlaceholders = ['appAuthRedirectScheme': 'com.feedhenry.securenativeandroidtemplate']
+        testInstrumentationRunner "com.aerogear.androidshowcase.MockTestRunner"
+        manifestPlaceholders = ['appAuthRedirectScheme': 'com.aerogear.androidshowcase']
         vectorDrawables {
             useSupportLibrary true
         }
@@ -54,7 +54,7 @@ android {
 
 ext {
     firebase_version = "15.0.0"
-    android_support_version = "27.1.0"
+    android_support_version = "27.1.1"
 }
 
 dependencies {
@@ -93,11 +93,11 @@ dependencies {
     testImplementation 'org.json:json:20160810'
     testImplementation "org.robolectric:robolectric:3.4.2"
 
-    testImplementation 'org.mockito:mockito-android:2.10.0'
-    testImplementation('com.android.support.test.espresso:espresso-core:3.0.0', {
+    androidTestImplementation 'org.mockito:mockito-android:2.10.0'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation('com.android.support.test.espresso:espresso-contrib:3.0.0') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:3.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'support-v4'
@@ -106,6 +106,7 @@ dependencies {
     }
     androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     androidTestAnnotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
+    androidTestCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'

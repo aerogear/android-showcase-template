@@ -111,7 +111,7 @@ public class SecureApplicationModule {
     AuthService provideAuthService(Context context) {
         AuthService authService = MobileCore.getInstance().getService(AuthService.class);
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
-                .withRedirectUri("com.feedhenry.securenativeandroidtemplate:/callback")
+                .withRedirectUri("com.aerogear.androidshowcase:/callback")
                 .build();
 
         authService.init(context, authServiceConfig);

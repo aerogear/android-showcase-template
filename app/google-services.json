@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:56938872708:android:1511d73e1e8c02f1",
         "android_client_info": {
-          "package_name": "com.feedhenry.securenativeandroidtemplate"
+          "package_name": "com.aerogear.androidshowcase"
         }
       },
       "oauth_client": [

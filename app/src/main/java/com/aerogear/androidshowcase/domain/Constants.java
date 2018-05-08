@@ -19,7 +19,7 @@ public class Constants {
 
 
     public static final class OPEN_ID_CONNECT_CONFIG {
-        public static final Uri REDIRECT_URI = Uri.parse("com.feedhenry.securenativeandroidtemplate:/callback");
+        public static final Uri REDIRECT_URI = Uri.parse("com.aerogear.androidshowcase:/callback");
         public static final String OPEN_ID_SCOPE = "openid";
     }
 

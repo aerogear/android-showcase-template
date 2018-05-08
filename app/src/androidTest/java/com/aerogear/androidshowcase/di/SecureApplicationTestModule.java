@@ -83,18 +83,18 @@ public class SecureApplicationTestModule {
 
     @Provides @Singleton
     MobileCore provideMobileCore(Context context) {
-        MobileCore mobileCore = MobileCore.init(context);
+        MobileCore mobileCore = MobileCore.getInstance();
         return mobileCore;
     }
 
     @Provides @Singleton
     SecurityService securityService(Context context, MobileCore mobileCore) {
-        return mobileCore.getInstance(SecurityService.class);
+        return mobileCore.getInstance().getService(SecurityService.class);
     }
 
     @Provides @Singleton
     AuthService provideAuthService(Context context, MobileCore mobileCore) {
-        AuthService authService = mobileCore.getInstance(AuthService.class);
+        AuthService authService = mobileCore.getInstance().getService(AuthService.class);
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
                 .withRedirectUri("com.aerogear.androidshowcase:/callback")
                 .build();

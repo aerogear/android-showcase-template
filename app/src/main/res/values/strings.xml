@@ -38,7 +38,7 @@
     <!-- Strings related to Authentication -->
     <string name="fragment_title_authenticate">Authenticate</string>
     <string name="action_settings">Settings</string>
-    <string name="app_redirect_scheme">com.feedhenry.securenativeandroidtemplate</string>
+    <string name="app_redirect_scheme">com.aerogear.androidshowcase</string>
     <string name="title_activity_authenticate">Authenticate</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_auth_token">No Authentication Token</string>
