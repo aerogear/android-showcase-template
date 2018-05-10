@@ -1,9 +1,9 @@
 <resources>
     <!-- Strings related to apps -->
-    <string name="org_name">FeedHenry</string>
-    <string name="org_url">www.feedhenry.org</string>
-    <string name="app_name">Secure Android Template</string>
-    <string name="app_description">A Native Android Application that demonstrates Secure Mobile Development Practises.</string>
+    <string name="org_name">AeroGear</string>
+    <string name="org_url">www.aerogear.org</string>
+    <string name="app_name">Android Showcase App</string>
+    <string name="app_description">A Native Android Application that demonstrates features of the Aerogear Android SDK.</string>
 
     <!-- Strings related to the information popups -->
     <string name="popup_title">Information</string>
@@ -38,7 +38,7 @@
     <!-- Strings related to Authentication -->
     <string name="fragment_title_authenticate">Authenticate</string>
     <string name="action_settings">Settings</string>
-    <string name="app_redirect_scheme">com.feedhenry.securenativeandroidtemplate</string>
+    <string name="app_redirect_scheme">com.aerogear.androidshowcase</string>
     <string name="title_activity_authenticate">Authenticate</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_auth_token">No Authentication Token</string>
@@ -132,5 +132,17 @@
     <string name="home_title">Secure Android Template</string>
 
     <string name="help_title">Help</string>
+
+    <!-- HTTP -->
+    <string name="popup_http_fragment">A Simple Request to a JSON Endpoint using the HTTP Module.</string>
+    <string name="fragment_title_http">HTTP</string>
+
+    <!-- Push -->
+    <string name="device_register_success">Device success registered on Unified Push Server</string>
+    <string name="device_register_error">An error occurred while trying to register the device on Unified Push Server</string>
+    <string name="nothing_here">Nothing here yet</string>
+    <string name="send_notification">Send notifications from the console</string>
+    <string name="popup_push_fragment">AeroGear for Android provides support for integrating Firebase Cloud Messaging (FCM) with the AeroGear Unified Push Server.  Push messaging is a mechanism for sending data to mobile clients from a remote server. For mobile applications, this reduces battery usage, removes polling code and provides for a better user experience as data changes are communicated in real time.  Messages that FCM receives from an application server are sent to the Android device over a connection managed by the operating system. These messages are then extracted and passed to an application using services definied provided by the AeroGear library.</string>
+    <string name="fragment_title_push">Push</string>
 
 </resources>

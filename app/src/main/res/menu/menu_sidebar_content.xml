@@ -28,5 +28,14 @@
             android:id="@+id/nav_device"
             android:icon="@drawable/ic_phone_lock"
             android:title="@string/fragment_title_device" />
+        <item
+            android:id="@+id/nav_http"
+            android:icon="@drawable/ic_http"
+            android:title="@string/fragment_title_http" />
+
+        <item
+            android:id="@+id/nav_push"
+            android:icon="@drawable/ic_message"
+            android:title="@string/fragment_title_push" />
     </group>
 </menu>

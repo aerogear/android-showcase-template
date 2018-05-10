@@ -24,6 +24,27 @@
         "ssl-required": "external",
         "url": "https://keycloak.security.feedhenry.org/auth"
       }
+    },
+    {
+      "id": "metrics",
+      "name": "metrics",
+      "url": "http://192.168.0.101:3000/metrics",
+      "type": "metrics",
+      "config": {
+      }
+    },
+    {
+      "id": "push",
+      "name": "push",
+      "url": "https://ups-dm-myproject-1.193b.starter-ca-central-1.openshiftapps.com/",
+      "type": "push",
+      "config": {
+        "android": {
+          "variantId": "9351f86d-9531-4ba3-beac-b73dc3c8764b",
+          "variantSecret": "22784d6d-9526-4826-bbed-b18e977fc38c",
+          "senderId": "56938872708"
+        }
+      }
     }
   ]
 }

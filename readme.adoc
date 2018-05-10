@@ -1,6 +1,5 @@
-image:https://circleci.com/gh/feedhenry/mobile-security-android-template.svg?style=svg["CircleCI", link="https://circleci.com/gh/feedhenry/mobile-security-android-template"]
-image:https://img.shields.io/badge/API-19%2B-brightgreen.svg?style=flat["API", link="https://android-arsenal.com/api?level=19"]
-image:https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp/badge.svg?style=svg["Known Vulnerabilities", link="https://snyk.io/test/github/feedhenry/mobile-security-android-template/master%2Fapp"]
+image:https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat["API", link="https://android-arsenal.com/api?level=19"]
+image:https://snyk.io/test/github/aerogear/android-showcase-template/master%2Fapp/badge.svg?style=svg["Known Vulnerabilities", link="https://snyk.io/test/github/aerogear/android-showcase-template/master%2Fapp"]
 
 = Secure Native Android Template
 
@@ -58,12 +57,12 @@ By default the app will use the backend services that are running on https://sec
 You can also configure the app to run against different backend services:
 
 === Keycloak Configuration
-The Keycloak configuration is saved in the https://github.com/feedhenry/mobile-security-android-template/tree/master/app/src/main/assets/mobile-services.json[mobile-services.json] file.
+The Keycloak configuration is saved in the https://github.com/aerogear/android-showcase-template/tree/master/app/src/main/assets/mobile-services.json[mobile-services.json] file.
 
 .Code
 [source,json,linenums,indent=0]
 ....
-include::https://raw.githubusercontent.com/feedhenry/mobile-security-android-template/master/app/src/main/assets/mobile-services.json[]
+include::https://raw.githubusercontent.com/aerogear/android-showcase-template/master/app/src/main/assets/mobile-services.json[]
 ....
 
 === Cert Pinning Configuration

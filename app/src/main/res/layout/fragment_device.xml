@@ -11,9 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right|end"
         android:layout_margin="@dimen/note_add_btn_margin"
+        android:background="@color/orange"
         android:clickable="true"
         android:src="@drawable/ic_refresh_black_24dp"
-        android:tint="@android:color/background_light"
+        android:tint="@color/white"
+        app:backgroundTint="@color/orange"
         app:fabSize="normal" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,7 +23,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.feedhenry.securenativeandroidtemplate.features.device.DeviceFragment">
+        tools:context="com.aerogear.androidshowcase.features.device.DeviceFragment">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -34,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="0%"
                 android:background="@color/colorPrimary"
-                android:textColor="@color/white"
+                android:textColor="@color/red"
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault"
                 android:textSize="70sp" />

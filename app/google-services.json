@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "56938872708",
+    "firebase_url": "https://aerogear-playground.firebaseio.com",
+    "project_id": "aerogear-playground",
+    "storage_bucket": "aerogear-playground.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56938872708:android:1511d73e1e8c02f1",
+        "android_client_info": {
+          "package_name": "com.aerogear.androidshowcase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "56938872708-guthigb9rlncora778hs22ufbkqpjtom.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "56938872708-7f2mrm3edeu8g6iiio78nc96kk7mohet.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAM11RlZfu76uhYcM7QDmxNNS9u9xl4z4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
