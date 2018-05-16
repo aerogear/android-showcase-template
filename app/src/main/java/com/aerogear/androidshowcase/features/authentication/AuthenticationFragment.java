@@ -182,7 +182,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         pinningDialog.setMessage("Checking For Secure Channel...");
         pinningDialog.show();
 
-        ServiceConfiguration keycloakServiceConfiguration = MobileCore.getInstance().getServiceConfiguration("keycloak");
+        ServiceConfiguration keycloakServiceConfiguration = MobileCore.getInstance().getServiceConfigurationByType("keycloak");
         String hostURL = keycloakServiceConfiguration.getUrl();
         boolean sendAccessToken = false;
 
