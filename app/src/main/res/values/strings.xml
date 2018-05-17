@@ -111,8 +111,6 @@
     <string name="allow_backup_detected_negative">App Data Backup Recovery Disabled</string>
     <string name="device_encrypted_positive">Device Encryption Active</string>
     <string name="device_encrypted_negative">Device Encryption Inactive</string>
-    <string name="device_os_latest_positive">Device Running Latest OS</string>
-    <string name="device_os_latest_negative">Device OS Outdated</string>
     <string name="developer_options_positive">Developer Options Enabled</string>
     <string name="developer_options_negative">Developer Options Disabled</string>
     <string name="device_trust_warning">Your device is not secure, do you want to continue?</string>
