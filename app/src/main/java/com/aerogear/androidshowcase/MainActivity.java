@@ -131,10 +131,6 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_network) {
             navigator.navigateToNetworkView(this);
         }
-        // Visit the HTTP Screen
-        if (id == R.id.nav_http) {
-            navigator.navigateToHttpView(this);
-        }
 
         // Visit the Push Screen
         if (id == R.id.nav_push) {

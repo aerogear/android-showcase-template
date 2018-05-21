@@ -14,7 +14,6 @@ import com.aerogear.androidshowcase.features.device.DeviceFragment;
 import com.aerogear.androidshowcase.features.home.HomeFragment;
 import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.domain.models.Note;
-import com.aerogear.androidshowcase.features.http.HttpFragment;
 import com.aerogear.androidshowcase.features.network.NetworkFragment;
 import com.aerogear.androidshowcase.features.push.PushFragment;
 import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
@@ -84,11 +83,6 @@ public class Navigator {
     public void navigateToDeviceView(MainActivity activity) {
         DeviceFragment deviceFragment = new DeviceFragment();
         loadFragment(activity, deviceFragment, DeviceFragment.TAG);
-    }
-
-    public void navigateToHttpView(MainActivity activity) {
-        HttpFragment httpFragment = new HttpFragment();
-        loadFragment(activity, httpFragment, HttpFragment.TAG);
     }
 
     public void navigateToPushView(MainActivity activity) {

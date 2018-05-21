@@ -5,7 +5,6 @@ import com.aerogear.androidshowcase.features.authentication.AuthenticationDetail
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.device.DeviceFragment;
 import com.aerogear.androidshowcase.features.home.HomeFragment;
-import com.aerogear.androidshowcase.features.http.HttpFragment;
 import com.aerogear.androidshowcase.features.network.NetworkFragment;
 import com.aerogear.androidshowcase.features.push.PushFragment;
 import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
@@ -43,9 +42,6 @@ public abstract class FragmentModules {
 
     @ContributesAndroidInjector
     abstract NetworkFragment contributeNetworkFragmentInjector();
-
-    @ContributesAndroidInjector
-    abstract HttpFragment contributeHttpFragmentInjector();
 
     @ContributesAndroidInjector
     abstract PushFragment contributePushFragmentInjector();
