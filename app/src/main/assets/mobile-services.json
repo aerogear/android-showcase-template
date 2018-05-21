@@ -16,13 +16,12 @@
       "id": "keycloak",
       "name": "keycloak",
       "type": "keycloak",
-      "url": "https://keycloak.security.feedhenry.org",
+      "url": "https://keycloak.security.feedhenry.org/auth",
       "config": {
         "auth-server-url": "https://keycloak.security.feedhenry.org/auth",
         "realm": "secure-app",
         "resource": "client-app",
-        "ssl-required": "external",
-        "url": "https://keycloak.security.feedhenry.org/auth"
+        "ssl-required": "external"
       }
     },
     {
