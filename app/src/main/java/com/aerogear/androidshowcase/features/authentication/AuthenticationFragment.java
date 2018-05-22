@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aerogear.androidshowcase.R;
-import com.aerogear.androidshowcase.domain.configurations.AppConfiguration;
 import com.aerogear.androidshowcase.features.authentication.presenters.AuthenticationViewPresenter;
 import com.aerogear.androidshowcase.features.authentication.views.AuthenticationView;
 import com.aerogear.androidshowcase.features.authentication.views.AuthenticationViewImpl;
@@ -48,9 +47,6 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     @Inject
     Navigator navigator;
-
-    @Inject
-    AppConfiguration appConfiguration;
 
     @Inject
     AuthenticationViewPresenter authenticationViewPresenter;
