@@ -22,7 +22,7 @@ public class AppConfiguration {
     }
 
     private void readConfigurations() {
-        final ServiceConfiguration serviceConfiguration = MobileCore.getInstance().getServiceConfigurationByType(NOTES_SERVER_KEY);
+        final ServiceConfiguration serviceConfiguration = MobileCore.getInstance().getServiceConfigurationById(NOTES_SERVER_KEY);
         final String serviceUrl = serviceConfiguration.getUrl();
         this.apiServerConfiguration = new ApiServerConfiguration(serviceUrl);
     }
