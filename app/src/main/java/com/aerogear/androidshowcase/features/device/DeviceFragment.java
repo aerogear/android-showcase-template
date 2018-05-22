@@ -19,9 +19,14 @@ import com.aerogear.androidshowcase.features.device.views.DeviceViewImpl;
 import com.aerogear.androidshowcase.features.device.views.WarningDialog;
 import com.aerogear.androidshowcase.mvp.views.BaseFragment;
 
+import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.core.metrics.MetricsService;
+import org.aerogear.mobile.security.SecurityCheckExecutor;
 import org.aerogear.mobile.security.SecurityCheckResult;
 import org.aerogear.mobile.security.SecurityCheckType;
 import org.aerogear.mobile.security.SecurityService;
+
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -61,9 +66,6 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     @BindView(R.id.debuggerAccess)
     RadioButton debuggerAccess;
 
-    @BindView(R.id.hookingDetected)
-    RadioButton hookingDetected;
-
     @BindView(R.id.allowBackup)
     RadioButton allowBackup;
 
@@ -99,6 +101,8 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_device, container, false);
         ButterKnife.bind(this, view);
+
+        securityService = MobileCore.getInstance().getService(SecurityService.class);
 
         // run the detection tests on load
         runTests();
@@ -139,15 +143,25 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         totalTests = 0;
         totalTestFailures = 0;
 
+        Map<String, SecurityCheckResult> results = SecurityCheckExecutor.Builder
+                .newSyncExecutor(context)
+                .withSecurityCheck(SecurityCheckType.NOT_ROOTED)
+                .withSecurityCheck(SecurityCheckType.SCREEN_LOCK_ENABLED)
+                .withSecurityCheck(SecurityCheckType.NOT_IN_EMULATOR)
+                .withSecurityCheck(SecurityCheckType.NO_DEBUGGER)
+                .withSecurityCheck(SecurityCheckType.NO_DEVELOPER_MODE)
+                .withMetricsService(
+                        MobileCore.getInstance().getService(MetricsService.class))
+                .build().execute();
+
         // perform detections
-        detectRoot();
-        detectDeviceLock();
-        detectEmulator();
-        debuggerDetected();
-        detectHookingFramework();
-        detectBackupEnabled();
-        detectDeviceEncryptionStatus();
-        detectDeveloperOptions();
+        detectRoot(results);
+        detectDeviceLock(results);
+        detectEmulator(results);
+        debuggerDetected(results);
+        detectBackupEnabled(results);
+        detectDeviceEncryptionStatus(results);
+        detectDeveloperOptions(results);
 
         // get trust score
         int score = getTrustScore();
@@ -159,11 +173,11 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     /**
      * Detect if the device is rooted.
      */
-    public void detectRoot() {
+    public void detectRoot(Map<String, SecurityCheckResult> results) {
         totalTests++;
-        SecurityCheckResult result = securityService.check(SecurityCheckType.NOT_ROOTED);
-        if (!result.passed()) {
-            setDetected(rootAccess, R.string.root_detected_positive);
+        SecurityCheckResult result = results.get(SecurityCheckType.NOT_ROOTED.getType());
+        if (result != null && !result.passed()) {
+            setCheckFailed(rootAccess, R.string.root_detected_positive);
         }
     }
     // end::detectRoot[]
@@ -172,11 +186,11 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     /**
      * Detect if the device has a lock screen setup (pin, password etc).
      */
-    public void detectDeviceLock() {
+    public void detectDeviceLock(Map<String, SecurityCheckResult> results) {
         totalTests++;
-        SecurityCheckResult result = securityService.check(SecurityCheckType.SCREEN_LOCK_ENABLED);
-        if (!result.passed()) {
-            setDetected(lockScreenSetup, R.string.device_lock_detected_negative);
+        SecurityCheckResult result = results.get(SecurityCheckType.SCREEN_LOCK_ENABLED.getType());
+        if (result != null && !result.passed()) {
+            setCheckFailed(lockScreenSetup, R.string.device_lock_detected_negative);
         }
     }
     // end::detectDeviceLock[]
@@ -185,11 +199,11 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     /**
      * Detect if a debugger is attached to the application.
      */
-    public void debuggerDetected() {
+    public void debuggerDetected(Map<String, SecurityCheckResult> results) {
         totalTests++;
-        SecurityCheckResult result = securityService.check(SecurityCheckType.NO_DEBUGGER);
-        if (!result.passed()) {
-            setDetected(debuggerAccess, R.string.debugger_detected_positive);
+        SecurityCheckResult result = results.get(SecurityCheckType.NO_DEBUGGER.getType());
+        if (result != null && !result.passed()) {
+            setCheckFailed(debuggerAccess, R.string.debugger_detected_positive);
         }
     }
     // end::debuggerDetected[]
@@ -198,68 +212,39 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     /**
      * Detect if the application is being run in an emulator.
      */
-    public void detectEmulator() {
+    public void detectEmulator(Map<String, SecurityCheckResult> results) {
         totalTests++;
-        SecurityCheckResult result = securityService.check(SecurityCheckType.NOT_IN_EMULATOR);
-        if (!result.passed()) {
-            setDetected(emulatorAccess, R.string.emulator_detected_positive);
+        SecurityCheckResult result = results.get(SecurityCheckType.NOT_IN_EMULATOR.getType());
+        if (result != null && !result.passed()) {
+            setCheckFailed(emulatorAccess, R.string.emulator_detected_positive);
         }
     }
     // end::detectEmulator[]
-
-    // tag::detectHookingFramework[]
-    /**
-     * Detect if a hooking framework application is installed on the device
-     */
-    public void detectHookingFramework() {
-        totalTests++;
-        String xposedPackageName = "de.robv.android.xposed.installer";
-        String substratePackageName = "com.saurik.substrate";
-
-        if (checkAppInstalled(xposedPackageName) || checkAppInstalled(substratePackageName)) {
-            setDetected(hookingDetected, R.string.hooking_detected_positive);
-        }
-    }
-    // end::detectHookingFramework[]
-
-    /**
-     * Function to check if an app is installed on the device based on a package name.
-     *
-     * @param packageName - the package name to check
-     * @return boolean
-     */
-    public boolean checkAppInstalled(String packageName) {
-        try {
-            PackageManager packageManager = context.getPackageManager();
-            packageManager.getPackageInfo(packageName, 0);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
-    }
 
     // tag::detectBackupEnabled[]
     /**
      * Function to check if the backup flag is enabled in the application manifest file
      */
-    public void detectBackupEnabled() {
+    public void detectBackupEnabled(Map<String, SecurityCheckResult> results) {
         totalTests++;
         SecurityCheckResult result = securityService.check(SecurityCheckType.ALLOW_BACKUP_DISABLED);
-        if (!result.passed()) {
-            setDetected(allowBackup, R.string.allow_backup_detected_positive);
+        if (result != null && !result.passed()) {
+            setCheckFailed(allowBackup, R.string.allow_backup_detected_positive);
         }
     }
     // end::detectBackupEnabled[]
 
     // tag::detectDeviceEncryptionStatus[]
+
     /**
      * Function to check if the devices filesystem is encrypted
      */
-    public void detectDeviceEncryptionStatus() {
+    public void detectDeviceEncryptionStatus(Map<String, SecurityCheckResult> results) {
         totalTests++;
-        SecurityCheckResult result = securityService.check(SecurityCheckType.HAS_ENCRYPTION_ENABLED);
-        if (!result.passed()) {
-            setDetected(deviceEncrypted, R.string.device_encrypted_negative);
+        SecurityCheckResult result =
+                securityService.check(SecurityCheckType.HAS_ENCRYPTION_ENABLED);
+        if (result != null && !result.passed()) {
+            setCheckFailed(deviceEncrypted, R.string.device_encrypted_negative);
         }
     }
     // end::detectDeviceEncryptionStatus[]
@@ -268,26 +253,29 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     /**
      * Detect if the developer options mode is enabled on the device
      */
-    public void detectDeveloperOptions() {
+    public void detectDeveloperOptions(Map<String, SecurityCheckResult> results) {
         totalTests++;
-        SecurityCheckResult result = securityService.check(SecurityCheckType.NO_DEVELOPER_MODE);
-        if (!result.passed()) {
-            setDetected(developerOptions, R.string.developer_options_positive);
+        SecurityCheckResult result = results.get(SecurityCheckType.NO_DEVELOPER_MODE.getType());
+        if (result != null && !result.passed()) {
+            setCheckFailed(developerOptions, R.string.developer_options_positive);
         }
     }
     // end::detectDeveloperOptions[]
 
+
     /**
-     * Function to allow updates to the radio buttons UI
+     * Function to allow updates to the radio buttons UI when a security check has failed Passed
+     * tests do not need updating due to being the default UI state
      *
-     * @param uiElement    - the UI element to update
+     * @param uiElement - the UI element to update
      * @param textResource - the text resource to set the updates text for
      */
-    public void setDetected(RadioButton uiElement, int textResource) {
+    public void setCheckFailed(RadioButton uiElement, int textResource) {
         totalTestFailures++;
         uiElement.setText(textResource);
         uiElement.setTextColor(getResources().getColor(R.color.orange));
     }
+
 
     public int getTrustScore() {
         int score = 100 - Math.round(((totalTestFailures / totalTests) * 100));
