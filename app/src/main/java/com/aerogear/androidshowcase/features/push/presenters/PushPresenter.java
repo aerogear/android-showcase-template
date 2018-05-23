@@ -23,17 +23,7 @@ public class PushPresenter extends BasePresenter<PushView> {
 
     public void unregister() {
         PushService pushService = MobileCore.getInstance().getService(PushService.class);
-        pushService.unregisterDevice(new Callback() {
-            @Override
-            public void onSuccess() {
-                view.unregisterSuccess();
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                view.unregisterError(error);
-            }
-        });
+        pushService.unregisterDevice();
     }
 
     public void register() {
@@ -42,17 +32,7 @@ public class PushPresenter extends BasePresenter<PushView> {
         unifiedPushConfig.setCategories(Arrays.asList("Android", "Example"));
 
         PushService pushService = MobileCore.getInstance().getService(PushService.class);
-        pushService.registerDevice(unifiedPushConfig, new Callback() {
-            @Override
-            public void onSuccess() {
-                view.registerSuccess();
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                view.registerError(error);
-            }
-        });
+        pushService.registerDevice();
     }
 
     public void refreshToken() {
