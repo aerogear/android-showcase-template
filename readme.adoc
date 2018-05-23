@@ -18,7 +18,7 @@ Everytime when a PR is merged to master, the build script will automatically pus
 - Certificate Pinning
 - Code Obfuscation (with Proguard)
 - Secure Data Storage
-- Device Trust Checks (Root Access, Emulator Access, latest OS etc)
+- Device Trust Checks (Root Access, Emulator Access etc)
 - 2FA with OTP (via Keycloak)
 - Authentication Brute Force Detection (via Keycloak)
 - Account Lockout Policies (via Keycloak)

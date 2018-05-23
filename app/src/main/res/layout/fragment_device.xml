@@ -142,17 +142,6 @@
                 android:text="@string/device_encrypted_positive" />
 
             <RadioButton
-                android:id="@+id/deviceOS"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:button="@drawable/ic_device_os"
-                android:textColor="@color/green"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:padding="15dp"
-                android:layout_margin="10dp"
-                android:text="@string/device_os_latest_positive" />
-
-            <RadioButton
                 android:id="@+id/developerOptions"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

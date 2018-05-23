@@ -70,9 +70,6 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     @BindView(R.id.deviceEncrypted)
     RadioButton deviceEncrypted;
 
-    @BindView(R.id.deviceOS)
-    RadioButton deviceOS;
-
     @BindView(R.id.developerOptions)
     RadioButton developerOptions;
 
@@ -150,7 +147,6 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         detectHookingFramework();
         detectBackupEnabled();
         detectDeviceEncryptionStatus();
-        detectLatestOS();
         detectDeveloperOptions();
 
         // get trust score
@@ -267,21 +263,6 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         }
     }
     // end::detectDeviceEncryptionStatus[]
-
-    // tag::detectLatestOS[]
-    /**
-     * Function to check if the device is running the latest Android OS
-     */
-    public void detectLatestOS() {
-        // todo: find if there is a better way to define what the latest android version is
-        int latestOsApiLevel = Build.VERSION_CODES.M;
-        totalTests++;
-
-        if (Build.VERSION.SDK_INT < latestOsApiLevel) {
-            setDetected(deviceOS, R.string.device_os_latest_negative);
-        }
-    }
-    // end::detectLatestOS[]
 
     // tag::detectDeveloperOptions[]
     /**
