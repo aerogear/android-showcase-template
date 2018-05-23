@@ -4,6 +4,8 @@ import com.aerogear.androidshowcase.features.push.views.PushView;
 import com.aerogear.androidshowcase.mvp.presenters.BasePresenter;
 import org.aerogear.mobile.core.Callback;
 import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.core.executor.AppExecutors;
+import org.aerogear.mobile.core.reactive.Responder;
 import org.aerogear.mobile.push.PushService;
 import org.aerogear.mobile.push.UnifiedPushConfig;
 import java.util.Arrays;
@@ -23,17 +25,18 @@ public class PushPresenter extends BasePresenter<PushView> {
 
     public void unregister() {
         PushService pushService = MobileCore.getInstance().getService(PushService.class);
-        pushService.unregisterDevice(new Callback() {
-            @Override
-            public void onSuccess() {
-                view.unregisterSuccess();
-            }
+        pushService.unregisterDevice().respondOn(new AppExecutors().mainThread())
+            .respondWith(new Responder<Boolean>() {
+                @Override
+                public void onResult(Boolean value) {
+                    view.unregisterSuccess();
+                }
 
-            @Override
-            public void onError(Throwable error) {
-                view.unregisterError(error);
-            }
-        });
+                @Override
+                public void onException(Exception exception) {
+                    view.unregisterError(exception);
+                }
+            });
     }
 
     public void register() {
@@ -42,17 +45,18 @@ public class PushPresenter extends BasePresenter<PushView> {
         unifiedPushConfig.setCategories(Arrays.asList("Android", "Example"));
 
         PushService pushService = MobileCore.getInstance().getService(PushService.class);
-        pushService.registerDevice(unifiedPushConfig, new Callback() {
-            @Override
-            public void onSuccess() {
-                view.registerSuccess();
-            }
+        pushService.registerDevice().respondOn(new AppExecutors().mainThread())
+            .respondWith(new Responder<Boolean>() {
+                @Override
+                public void onResult(Boolean value) {
+                    view.registerSuccess();
+                }
 
-            @Override
-            public void onError(Throwable error) {
-                view.registerError(error);
-            }
-        });
+                @Override
+                public void onException(Exception exception) {
+                    view.registerError(exception);
+                }
+            });
     }
 
     public void refreshToken() {
