@@ -101,7 +101,7 @@ It's possible to verify the install went well by checking the local maven reposi
 ----
 ls ~/.m2/repository/org/aerogear
 
-# Should output aerogear-push android-core core android-auth auth unifiedpush
+# Should output android-push android-core core android-auth auth unifiedpush
 ----
 
 === MavenLocal()
