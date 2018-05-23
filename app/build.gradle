@@ -71,7 +71,7 @@ dependencies {
 //    implementation 'org.aerogear:auth:0.1.0-2018-09'
     implementation 'org.aerogear:android-core:0.1.0-SNAPSHOT'
     implementation 'org.aerogear:android-auth:0.1.0-SNAPSHOT'
-    implementation 'org.aerogear:aerogear-push:0.1.0-SNAPSHOT'
+    implementation 'org.aerogear:android-push:0.1.0-SNAPSHOT'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.datatheorem.android.trustkit:trustkit:1.0.1@aar'
     implementation 'com.scottyab:rootbeer-lib:0.0.6'

@@ -42,6 +42,9 @@ public class MainActivity extends BaseActivity
     OpenIDAuthenticationProvider authProvider;
 
     @Inject
+    AuthService authService;
+
+    @Inject
     Navigator navigator;
 
     @BindView(R.id.toolbar)
@@ -151,8 +154,6 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == KeycloakAuthenticateProviderImpl.LOGIN_RESULT_CODE) {
-            // The core will return the same instance of the auth service as before
-            AuthService authService = MobileCore.getInstance().getService(AuthService.class);
             authService.handleAuthResult(data);
         }
     }

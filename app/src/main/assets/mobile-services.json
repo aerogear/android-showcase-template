@@ -5,7 +5,7 @@
   "clientId": "app-android",
   "services": [
     {
-      "id": "custom-runtime-connector",
+      "id": "notes-service",
       "name": "notes-service",
       "type": "Custom Runtime Connector",
       "url": "https://api.security.feedhenry.org",
