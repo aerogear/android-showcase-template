@@ -69,7 +69,7 @@ export KRYPTOWIRE_API_KEY=<PUT YOUR API KEY HERE>
 
 ### jcenter()
 
-To use a published version of the SDK, add jcenter to the [build.gradle](../build.grade) file in the root directory of this project.
+To use a published version of the SDK, add jcenter to the [build.gradle](https://github.com/aerogear/android-showcase-template/blob/master/build.gradle) file in the root directory of this project.
 
 ```groovy
 allprojects {
@@ -115,7 +115,7 @@ ls ~/.m2/repository/org/aerogear
 
 ### MavenLocal()
 
-If the build of the SDK is from source, add mavenLocal() to the [build.gradle](../build.grade) file in the root directory of this project.
+If the build of the SDK is from source, add mavenLocal() to the [build.gradle](https://github.com/aerogear/android-showcase-template/blob/master/build.gradle) file in the root directory of this project.
 
 ```groovy
 allprojects {
