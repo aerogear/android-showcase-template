@@ -98,17 +98,6 @@
                 android:textColor="@color/green" />
 
             <RadioButton
-                android:id="@+id/hookingDetected"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:button="@drawable/ic_hooking"
-                android:textColor="@color/green"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:padding="15dp"
-                android:layout_margin="10dp"
-                android:text="@string/hooking_detected_negative" />
-
-            <RadioButton
                 android:id="@+id/lockScreenSetup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
