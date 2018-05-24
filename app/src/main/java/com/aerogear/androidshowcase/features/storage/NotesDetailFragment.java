@@ -67,6 +67,9 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
     @BindView(R.id.store_type_sqlite)
     RadioButton storeTypeSqlRadio;
 
+    @BindView(R.id.store_type_graphql)
+    RadioButton storeTypeGraphqlRadio;
+
     private View noteCreateView;
     private Unbinder unbinder;
 
@@ -165,7 +168,9 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
                 deleteButton.setVisibility(View.VISIBLE);
                 if (note.getStoreType() == NoteDataStore.STORE_TYPE_FILE) {
                     storeTypeFileSystemRadio.setChecked(true);
-                } else {
+                } else if (note.getStoreType() == NoteDataStore.STORE_TYPE_GRAPHQL) {
+                    storeTypeGraphqlRadio.setChecked(true);
+                } else{
                     storeTypeSqlRadio.setChecked(true);
                 }
                 disableRadioButtons(storeTypeChoice);
@@ -227,6 +232,8 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
         int selectedStoreTypeId = storeTypeChoice.getCheckedRadioButtonId();
         if (selectedStoreTypeId == storeTypeFileSystemRadio.getId()) {
             return NoteDataStore.STORE_TYPE_FILE;
+        } else if (selectedStoreTypeId == storeTypeGraphqlRadio.getId()) {
+            return NoteDataStore.STORE_TYPE_GRAPHQL;
         } else {
             return NoteDataStore.STORE_TYPE_SQL;
         }

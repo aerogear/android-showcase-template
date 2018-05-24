@@ -7,6 +7,9 @@ import com.aerogear.androidshowcase.domain.services.NoteCrudlService;
 import com.aerogear.androidshowcase.features.storage.views.NoteDetailAppView;
 import com.aerogear.androidshowcase.mvp.presenters.BasePresenter;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import javax.inject.Inject;
 
 /**
@@ -28,7 +31,7 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
         Note note = new Note(noteTitle, noteContent);
         this.noteCrudlService.createNote(note, storeType, new CallbackHandler<Note>() {
             @Override
-            public void onSuccess(Note note) {
+            public void onSuccess(Note note) throws ExecutionException, InterruptedException {
                 view.hideLoading();
                 view.showMessage(R.string.info_note_saved);
                 view.onNoteSaved(note);
@@ -46,7 +49,7 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
         this.view.showLoading();
         this.noteCrudlService.readNote(noteId, storeType, new CallbackHandler<Note>() {
             @Override
-            public void onSuccess(Note note) {
+            public void onSuccess(Note note) throws ExecutionException, InterruptedException {
                 view.hideLoading();
                 view.loadNote(note);
             }
@@ -63,7 +66,7 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
         this.view.showLoading();
         this.noteCrudlService.updateNote(note, new CallbackHandler<Note>() {
             @Override
-            public void onSuccess(Note updatedNote) {
+            public void onSuccess(Note updatedNote) throws ExecutionException, InterruptedException {
                 view.hideLoading();
                 view.showMessage(R.string.info_note_saved);
                 view.onNoteSaved(updatedNote);
@@ -80,7 +83,7 @@ public class NoteDetailPresenter extends BasePresenter<NoteDetailAppView> {
         this.view.showLoading();
         this.noteCrudlService.deleteNote(note, new CallbackHandler<Note>() {
             @Override
-            public void onSuccess(Note models) {
+            public void onSuccess(Note note) throws ExecutionException, InterruptedException {
                 view.hideLoading();
                 view.showMessage(R.string.info_note_deleted);
                 view.onNoteSaved(note);

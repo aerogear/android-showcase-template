@@ -20,6 +20,8 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -44,16 +46,16 @@ public class SecureFileNoteStore implements NoteDataStore {
     }
 
     @Override
-    public Note createNote(Note note) throws Exception {
+    public Future<Note> createNote(Note note) throws Exception {
         return saveNote(note);
     }
 
     @Override
-    public Note updateNote(Note note) throws Exception {
+    public Future<Note> updateNote(Note note) throws Exception {
         return saveNote(note);
     }
 
-    private Note saveNote(Note note) throws Exception {
+    private Future<Note> saveNote(Note note) throws Exception {
         loadMetadata();
         JSONObject noteJsonNoContent = note.toJson(false);
         notesMetadata.put(note.getId(), noteJsonNoContent);
@@ -61,22 +63,26 @@ public class SecureFileNoteStore implements NoteDataStore {
 
         JSONObject noteJsonWithContent = note.toJson(true);
         writeFileWithEncryption(note.getId(), noteJsonWithContent.toString());
-        return note;
+        CompletableFuture<Note> future = new CompletableFuture<>();
+        future.complete(note);
+        return future;
     }
 
     @Override
-    public Note deleteNote(Note note) throws Exception {
+    public Future<Note> deleteNote(Note note) throws Exception {
         loadMetadata();
         notesMetadata.remove(note.getId());
         writeFileWithEncryption(NOTES_METADATA_FILENAME, notesMetadata.toString());
 
         removeFile(note.getId());
         aesCrypto.deleteSecretKey(note.getId());
-        return note;
+        CompletableFuture<Note> future = new CompletableFuture<>();
+        future.complete(note);
+        return future;
     }
 
     @Override
-    public Note readNote(String noteId) throws Exception {
+    public Future<Note> readNote(String noteId) throws Exception {
         loadMetadata();
         if (!notesMetadata.has(noteId)) {
             return null;
@@ -84,14 +90,18 @@ public class SecureFileNoteStore implements NoteDataStore {
         String noteJson = readFileWithDecryption(noteId);
         Note note = Note.fromJSON(new JSONObject(noteJson));
         note.setStoreType(getType());
-        return note;
+        CompletableFuture<Note> future = new CompletableFuture<>();
+        future.complete(note);
+        return future;
     }
 
     @Override
-    public List<Note> listNotes() throws Exception {
+    public Future<List<Note>> listNotes() throws Exception {
         loadMetadata();
         List<Note> notes = convertToList(notesMetadata);
-        return notes;
+        CompletableFuture<List<Note>> future = new CompletableFuture<>();
+        future.complete(notes);
+        return future;
     }
 
     @Override

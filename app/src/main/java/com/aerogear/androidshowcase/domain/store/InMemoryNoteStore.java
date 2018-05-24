@@ -1,11 +1,18 @@
 package com.aerogear.androidshowcase.domain.store;
 
+import android.support.annotation.NonNull;
+
 import com.aerogear.androidshowcase.domain.models.Note;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * An in-memory storage for the notes.
@@ -15,36 +22,46 @@ public class InMemoryNoteStore implements NoteDataStore {
     private Map<String, Note> inMemoryStore = new HashMap<String, Note>();
 
     @Override
-    public Note createNote(Note note) {
+    public Future<Note> createNote(Note note) {
+        CompletableFuture<Note> future = new CompletableFuture<>();
         if (!inMemoryStore.containsKey(note.getId())) {
             inMemoryStore.put(note.getId(), note);
         }
-        return note;
+        future.complete(note);
+        return future;
     }
 
     @Override
-    public Note updateNote(Note note) {
+    public Future<Note> updateNote(Note note) {
+        CompletableFuture<Note> future = new CompletableFuture<>();
         inMemoryStore.put(note.getId(), note);
-        return note;
+        future.complete(note);
+        return future;
     }
 
     @Override
-    public Note deleteNote(Note note) {
+    public Future<Note> deleteNote(Note note) {
+        CompletableFuture<Note> future = new CompletableFuture<>();
         inMemoryStore.remove(note.getId());
-        return note;
+        future.complete(note);
+        return future;
     }
 
     @Override
-    public Note readNote(String noteId) {
+    public Future<Note> readNote(String noteId) {
+        CompletableFuture<Note> future = new CompletableFuture<>();
         Note note = inMemoryStore.get(noteId);
-        return note;
+        future.complete(note);
+        return future;
     }
 
     @Override
-    public List<Note> listNotes() {
-        List<Note> notes =  new ArrayList<Note>();
+    public Future<List<Note>> listNotes() {
+        CompletableFuture<List<Note>> future = new CompletableFuture<>();
+        List<Note> notes = new ArrayList<Note>();
         notes.addAll(inMemoryStore.values());
-        return notes;
+        future.complete(notes);
+        return future;
     }
 
     @Override

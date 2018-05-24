@@ -19,6 +19,8 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -93,7 +95,7 @@ public class SqliteNoteStore implements NoteDataStore {
     }
 
     @Override
-    public Note createNote(Note note) throws Exception {
+    public Future<Note> createNote(Note note) throws Exception {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -104,14 +106,16 @@ public class SqliteNoteStore implements NoteDataStore {
 
         long id = db.insert(NoteContract.NoteEntry.TABLE_NAME, null, values);
         if (id >= 0) {
-            return note;
+            CompletableFuture<Note> future = new CompletableFuture<>();
+            future.complete(note);
+            return future;
         } else {
             throw new NoteStoreException("Failed to create note using sqlite");
         }
     }
 
     @Override
-    public Note updateNote(Note note) throws Exception {
+    public Future<Note> updateNote(Note note) throws Exception {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(NoteContract.NoteEntry.COLUMN_NAME_TITLE, note.getTitle());
@@ -126,23 +130,27 @@ public class SqliteNoteStore implements NoteDataStore {
                 selectionArgs
         );
         if (count == 1) {
-            return note;
+            CompletableFuture<Note> future = new CompletableFuture<>();
+            future.complete(note);
+            return future;
         } else {
             throw new NoteStoreException("Failed to update note using sqlite");
         }
     }
 
     @Override
-    public Note deleteNote(Note note) throws Exception {
+    public Future<Note> deleteNote(Note note) throws Exception {
         SQLiteDatabase db = getWritableDatabase();
         String selection = NoteContract.NoteEntry.COLUMN_UUID + " is ?";
         String[] selectionArgs = { note.getId() };
         db.delete(NoteContract.NoteEntry.TABLE_NAME, selection, selectionArgs);
-        return note;
+        CompletableFuture<Note> future = new CompletableFuture<>();
+        future.complete(note);
+        return future;
     }
 
     @Override
-    public Note readNote(String noteId) throws Exception {
+    public Future<Note> readNote(String noteId) throws Exception {
         SQLiteDatabase db = getReadableDb();
 
         String[] projections = {
@@ -165,11 +173,12 @@ public class SqliteNoteStore implements NoteDataStore {
             readNote.setStoreType(getType());
         }
         cursor.close();
-        return readNote;
-    }
+        CompletableFuture<Note> future = new CompletableFuture<>();
+        future.complete(readNote);
+        return future;    }
 
     @Override
-    public List<Note> listNotes() throws Exception {
+    public Future<List<Note>> listNotes() throws Exception {
         SQLiteDatabase db = getReadableDb();
         String[] projections = {
                 NoteContract.NoteEntry.COLUMN_UUID,
@@ -189,7 +198,10 @@ public class SqliteNoteStore implements NoteDataStore {
             notes.add(note);
         }
         cursor.close();
-        return notes;
+
+        CompletableFuture<List<Note>> future = new CompletableFuture<>();
+        future.complete(notes);
+        return future;
     }
 
     @Override

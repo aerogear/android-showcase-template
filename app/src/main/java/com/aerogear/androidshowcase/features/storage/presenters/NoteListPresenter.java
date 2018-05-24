@@ -7,6 +7,8 @@ import com.aerogear.androidshowcase.mvp.presenters.BasePresenter;
 import com.aerogear.androidshowcase.features.storage.views.NoteListAppView;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -34,7 +36,7 @@ public class NoteListPresenter extends BasePresenter<NoteListAppView> {
         this.view.showLoading();
         this.noteCrudlService.listNotes(new CallbackHandler<List<Note>>() {
             @Override
-            public void onSuccess(List<Note> models) {
+            public void onSuccess(List<Note> models) throws ExecutionException, InterruptedException {
                 if (view != null) {
                     view.hideLoading();
                     view.renderNotes(models);

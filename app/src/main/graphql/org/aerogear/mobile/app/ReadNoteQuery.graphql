@@ -1,0 +1,8 @@
+query readNote($id: String!) {
+  readNote(id: $id) {
+      id
+      title
+      content
+      createdAt
+  }
+}

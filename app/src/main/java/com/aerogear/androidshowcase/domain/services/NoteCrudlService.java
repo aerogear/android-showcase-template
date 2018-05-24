@@ -8,6 +8,7 @@ import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.domain.repositories.NoteRepository;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
@@ -48,7 +49,11 @@ public class NoteCrudlService {
                 Log.e(TAG, error.getMessage(), error);
                 callback.onError(error);
             } else {
-                callback.onSuccess(result);
+                try {
+                    callback.onSuccess(result);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 

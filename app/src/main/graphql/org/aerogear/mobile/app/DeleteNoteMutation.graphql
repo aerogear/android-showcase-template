@@ -1,0 +1,8 @@
+mutation deleteNote($note: NoteInput!) {
+  deleteNote(note: $note) {
+      id
+      title
+      content
+      createdAt
+  }
+}

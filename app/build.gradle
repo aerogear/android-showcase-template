@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.apollographql.android'
 
 android {
     compileSdkVersion 27
@@ -6,7 +7,7 @@ android {
     dataBinding.enabled true
     defaultConfig {
         applicationId "com.aerogear.androidshowcase"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -59,6 +60,8 @@ ext {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.apollographql.apollo:apollo-runtime:0.5.0'
+    implementation 'com.apollographql.apollo:apollo-android-support:0.5.0'
     implementation "com.android.support:appcompat-v7:$android_support_version"
     implementation "com.android.support:support-v4:$android_support_version"
     implementation "com.android.support:animated-vector-drawable:$android_support_version"
@@ -69,9 +72,9 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:1.0.2"
 //    implementation 'org.aerogear:core:0.1.0-2018-09'
 //    implementation 'org.aerogear:auth:0.1.0-2018-09'
-    implementation 'org.aerogear:android-core:0.1.0-SNAPSHOT'
-    implementation 'org.aerogear:android-auth:0.1.0-SNAPSHOT'
-    implementation 'org.aerogear:android-push:0.1.0-SNAPSHOT'
+    implementation 'org.aerogear:android-core:0.1.0-2018-21'
+    implementation 'org.aerogear:android-auth:0.1.0-2018-21'
+    implementation 'org.aerogear:android-push:0.1.0-2018-21'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.datatheorem.android.trustkit:trustkit:1.0.1@aar'
     implementation 'com.scottyab:rootbeer-lib:0.0.6'

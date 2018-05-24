@@ -7,6 +7,7 @@ import com.aerogear.androidshowcase.domain.store.NoteStoreException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,7 +32,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         List<Note> notes = new ArrayList<Note>();
         List<NoteDataStore> stores = this.noteStoreFactory.getAllStores();
         for (NoteDataStore store: stores) {
-            notes.addAll(store.listNotes());
+            notes.addAll(store.listNotes().get());
         }
         return notes;
     }
@@ -41,7 +42,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         Note readNote = null;
         List<NoteDataStore> stores = this.noteStoreFactory.getAllStores();
         for (NoteDataStore store:stores) {
-            readNote = store.readNote(noteId);
+            readNote = store.readNote(noteId).get();
             if (readNote != null) {
                 break;
             }
@@ -53,7 +54,7 @@ public class NoteRepositoryImpl implements NoteRepository {
     public Note readNote(String noteId, int storeType) throws Exception {
         NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
         if (dataStore != null) {
-            return dataStore.readNote(noteId);
+            return dataStore.readNote(noteId).get();
         } else {
             throw new NoteStoreException("invalid store type " + storeType);
         }
@@ -64,7 +65,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         noteModel.setStoreType(storeType);
         NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
         if (dataStore != null) {
-            return dataStore.createNote(noteModel);
+            return dataStore.createNote(noteModel).get();
         } else {
             throw new NoteStoreException("invalid store type " + storeType);
         }
@@ -75,7 +76,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         int storeType = noteModel.getStoreType();
         NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
         if (dataStore != null) {
-            return dataStore.updateNote(noteModel);
+            return dataStore.updateNote(noteModel).get();
         } else {
             throw new NoteStoreException("invalid store type " + storeType);
         }
@@ -86,7 +87,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         int storeType = noteModel.getStoreType();
         NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
         if (dataStore != null) {
-            return dataStore.deleteNote(noteModel);
+            return dataStore.deleteNote(noteModel).get();
         } else {
             throw new NoteStoreException("invalid store type " + storeType);
         }

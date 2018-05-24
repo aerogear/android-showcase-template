@@ -79,6 +79,7 @@
     <string name="error_failed_delete_note">Failed to delete note</string>
     <string name="fragment_store_type">Store Type</string>
     <string name="store_type_file_system">File System</string>
+    <string name="store_type_graphql">GraphQL</string>
     <string name="store_type_sqlite">SQLite Database</string>
 
     <!-- Strings related to Network -->

@@ -76,6 +76,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/store_type_sqlite" />
+
+                <RadioButton
+                    android:id="@+id/store_type_graphql"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/store_type_graphql" />
             </RadioGroup>
 
             <Button

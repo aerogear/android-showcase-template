@@ -83,6 +83,8 @@ public class RVNoteAdapter extends RecyclerView.Adapter<RVNoteAdapter.NoteViewHo
     private String getStoreName(int storeType) {
         if (storeType == NoteDataStore.STORE_TYPE_FILE) {
             return "File System";
+        } else if (storeType == NoteDataStore.STORE_TYPE_GRAPHQL) {
+            return "GraphQL";
         } else {
             return "SQLite Database";
         }

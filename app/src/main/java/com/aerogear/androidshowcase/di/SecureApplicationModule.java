@@ -12,6 +12,7 @@ import com.aerogear.androidshowcase.domain.crypto.SecureKeyStore;
 import com.aerogear.androidshowcase.domain.repositories.NoteRepository;
 import com.aerogear.androidshowcase.domain.repositories.NoteRepositoryImpl;
 import com.aerogear.androidshowcase.domain.services.NoteCrudlService;
+import com.aerogear.androidshowcase.domain.store.GraphqlNoteStore;
 import com.aerogear.androidshowcase.domain.store.NoteDataStore;
 import com.aerogear.androidshowcase.domain.store.NoteDataStoreFactory;
 import com.aerogear.androidshowcase.domain.store.SecureFileNoteStore;
@@ -77,11 +78,17 @@ public class SecureApplicationModule {
         return new SqliteNoteStore(context, rsaCrypto);
     }
 
+    @Provides @Singleton @Named("graphqlStore")
+    NoteDataStore providesGraphqlNoteDataStore(Context context) {
+        return new GraphqlNoteStore();
+    }
+
     @Provides @Singleton
-    NoteDataStoreFactory provideNoteDataStoreFactory(Context context, @Named("fileStore") NoteDataStore fileStore, @Named("sqliteStore") NoteDataStore sqlStore) {
+    NoteDataStoreFactory provideNoteDataStoreFactory(Context context, @Named("fileStore") NoteDataStore fileStore, @Named("sqliteStore") NoteDataStore sqlStore, @Named("graphqlStore") NoteDataStore graphqlStore) {
         List<NoteDataStore> stores = new ArrayList<NoteDataStore>();
         stores.add(fileStore);
         stores.add(sqlStore);
+        stores.add(graphqlStore);
         return new NoteDataStoreFactory(context, stores);
     }
 

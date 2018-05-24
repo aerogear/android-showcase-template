@@ -1,0 +1,8 @@
+query listNotes {
+  listNotes {
+      id
+      title
+      content
+      createdAt
+  }
+}
