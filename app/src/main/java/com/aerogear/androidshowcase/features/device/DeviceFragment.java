@@ -150,6 +150,8 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
                 .withSecurityCheck(SecurityCheckType.NOT_IN_EMULATOR)
                 .withSecurityCheck(SecurityCheckType.NO_DEBUGGER)
                 .withSecurityCheck(SecurityCheckType.NO_DEVELOPER_MODE)
+                .withSecurityCheck(SecurityCheckType.HAS_ENCRYPTION_ENABLED)
+                .withSecurityCheck(SecurityCheckType.ALLOW_BACKUP_DISABLED)
                 .withMetricsService(
                         MobileCore.getInstance().getService(MetricsService.class))
                 .build().execute();
