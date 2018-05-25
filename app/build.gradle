@@ -67,12 +67,6 @@ dependencies {
     implementation "com.android.support:cardview-v7:$android_support_version"
     implementation "com.android.support:support-v4:$android_support_version"
     implementation "com.android.support.constraint:constraint-layout:1.0.2"
-    implementation 'org.aerogear:android-core:0.1.0-2018-21'
-    implementation 'org.aerogear:android-auth:0.1.0-2018-21'
-    implementation 'org.aerogear:android-push:0.1.0-2018-21'
-//    implementation 'org.aerogear:android-core:0.1.0-SNAPSHOT'
-//    implementation 'org.aerogear:android-auth:0.1.0-SNAPSHOT'
-//    implementation 'org.aerogear:android-push:0.1.0-SNAPSHOT'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.datatheorem.android.trustkit:trustkit:1.0.1@aar'
     implementation 'com.scottyab:rootbeer-lib:0.0.6'
@@ -88,6 +82,19 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
 
     implementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+
+    releaseImplementation 'org.aerogear:android-core:0.1.0-2018-21'
+    releaseImplementation 'org.aerogear:android-auth:0.1.0-2018-21'
+    releaseImplementation 'org.aerogear:android-push:0.1.0-2018-21'
+
+    debugImplementation 'org.aerogear:android-core:0.1.0-2018-21'
+    debugImplementation 'org.aerogear:android-auth:0.1.0-2018-21'
+    debugImplementation 'org.aerogear:android-push:0.1.0-2018-21'
+
+    localImplementation 'org.aerogear:android-core:0.1.0-SNAPSHOT'
+    localImplementation 'org.aerogear:android-auth:0.1.0-SNAPSHOT'
+    localImplementation 'org.aerogear:android-push:0.1.0-SNAPSHOT'
+    localImplementation 'org.aerogear:android-security:0.1.0-SNAPSHOT'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.10.0'
