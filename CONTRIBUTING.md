@@ -37,16 +37,6 @@ cd aerogear-showcase-template/
 
 ## Installing dependencies and building the ShowCase Template
 
-Run the following command to install the dependencies for the Android Showcase Template:
-
-```bash
-./gradlew install
-```
-
-In Android Studio, go to `Tools > Android > Sync Project With Gradle Files`.
-
-See the [Gradle Documentation](https://docs.gradle.org/current/userguide/pt02.html) for more information on Gradle and the Gradle Wrapper
-
 To run all the tests:
 ```bash
 ./gradlew test connectedAndroidTest
@@ -59,11 +49,7 @@ To do release build (you will need to setup the signing credential):
 ```bash
 ./gradlew aR
 ```
-To push the built binary to Kryptowire
-```bash
-export KRYPTOWIRE_API_KEY=<PUT YOUR API KEY HERE>
-./pushToKryptowire.sh
-```
+See the [Gradle Documentation](https://docs.gradle.org/current/userguide/pt02.html) for more information on Gradle and the Gradle Wrapper
 
 ## Using a Published SDK
 
