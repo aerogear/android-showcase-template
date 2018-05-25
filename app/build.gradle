@@ -114,7 +114,6 @@ dependencies {
     }
     androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     androidTestAnnotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
-    androidTestCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
