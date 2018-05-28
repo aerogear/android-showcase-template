@@ -1,5 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     repositories {
         mavenLocal()
@@ -10,19 +8,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'com.google.gms:google-services:3.2.1'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
-plugins {
-    id "io.spring.dependency-management" version "1.0.4.RELEASE"
-}
-
-dependencyManagement {
-    imports {
-        mavenBom 'org.jboss.aerogear:aerogear-android-sdk-bom:1.1.10'
     }
 }
 
@@ -31,16 +16,6 @@ allprojects {
         mavenLocal()
         jcenter()
         google()
-    }
-}
-
-subprojects {
-    apply plugin: 'io.spring.dependency-management'
-
-    dependencyManagement {
-        imports {
-            mavenBom 'org.jboss.aerogear:aerogear-android-sdk-bom:1.1.10'
-        }
     }
 }
 
