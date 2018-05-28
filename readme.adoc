@@ -25,6 +25,18 @@ Everytime when a PR is merged to master, the build script will automatically pus
 - Authentication/Access Control Auditing & Logging (via Keycloak)
 - Authenticated Calls to Protected Endpoints (via Keycloak)
 
+== Run Showcase
+The `master` branch will always track to the latest release of the SDK.
+
+To run the showcase app
+
+[source, bash]
+----
+git clone git@github.com:aerogear/android-showcase-template.git
+----
+
+Open showcase app in Android Studio and select the build variant `release` to run the showcase with the latest release, or select build variant `local` to run the show case with a locally installed version of the https://github.com/aerogear/aerogear-android-sdk/blob/master/docs/modules/ROOT/pages/index.adoc[SDK]
+
 == Build Instructions
 
 For full build instructions please take some time to read our link:./CONTRIBUTING.md[Contributing Guide]

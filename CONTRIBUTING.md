@@ -73,8 +73,10 @@ In the [build.gradle](./app/build.gradle) file in the app directory, add the dep
 ```groovy
 dependencies {
     ...
-    implementation 'org.aerogear:core:0.1.0-2018-09'
-    implementation 'org.aerogear:auth:0.1.0-2018-09' // <- adjust to suit release version
+    implementation 'org.aerogear:android-push:[version]
+    implementation 'org.aerogear:android-auth:[version]
+    implementation 'org.aerogear:android-security:[version]
+    
 }
 ```
 
@@ -120,7 +122,8 @@ In the [build.gradle](./app/build.gradle) file in the app directory, add the dep
 ```groovy
 dependencies {
     ...
-    implementation 'org.aerogear:android-core:5.0.0-SNAPSHOT'
-    implementation 'org.aerogear:android-auth:5.0.0-SNAPSHOT' //If you are using IDM services provided by KeyCloak
+    implementation 'org.aerogear:android-push:[version]-SNAPSHOT
+    implementation 'org.aerogear:android-auth:[version]-SNAPSHOT
+    implementation 'org.aerogear:android-security:[version]-SNAPSHOT
 }
 ```
