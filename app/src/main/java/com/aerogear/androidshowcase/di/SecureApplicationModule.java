@@ -18,8 +18,11 @@ import com.aerogear.androidshowcase.domain.store.SecureFileNoteStore;
 import com.aerogear.androidshowcase.domain.store.sqlite.SqliteNoteStore;
 import com.aerogear.androidshowcase.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.aerogear.androidshowcase.features.authentication.providers.OpenIDAuthenticationProvider;
+
 import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.configuration.AuthBrowsers;
 import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
+import org.aerogear.mobile.auth.configuration.BrowserConfiguration;
 import org.aerogear.mobile.core.MobileCore;
 import org.aerogear.mobile.security.SecurityService;
 
@@ -114,7 +117,12 @@ public class SecureApplicationModule {
                 .withRedirectUri("com.aerogear.androidshowcase:/callback")
                 .build();
 
-        authService.init(context, authServiceConfig);
+        BrowserConfiguration browserConfiguration = new BrowserConfiguration.BrowserConfigurationBuilder()
+                .blackList()
+                .browser(AuthBrowsers.CHROME_CUSTOM_TAB)
+                .build();
+
+        authService.init(context, authServiceConfig, browserConfiguration);
         return authService;
     }
     // end::authServiceInit[]
