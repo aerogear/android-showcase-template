@@ -18,13 +18,15 @@ import javax.inject.Inject;
 
 public class PushPresenter extends BasePresenter<PushView> {
 
+    private final PushService pushService;
+
     @Inject
     public PushPresenter() {
-
+        this.pushService = new PushService.Builder().openshift().build();
     }
 
     public void unregister() {
-        PushService pushService = MobileCore.getInstance().getService(PushService.class);
+        
         pushService.unregisterDevice().respondOn(new AppExecutors().mainThread())
             .respondWith(new Responder<Boolean>() {
                 @Override
@@ -44,7 +46,7 @@ public class PushPresenter extends BasePresenter<PushView> {
         unifiedPushConfig.setAlias("AeroGear");
         unifiedPushConfig.setCategories(Arrays.asList("Android", "Example"));
 
-        PushService pushService = MobileCore.getInstance().getService(PushService.class);
+        
         pushService.registerDevice().respondOn(new AppExecutors().mainThread())
             .respondWith(new Responder<Boolean>() {
                 @Override
@@ -60,7 +62,7 @@ public class PushPresenter extends BasePresenter<PushView> {
     }
 
     public void refreshToken() {
-        PushService pushService = MobileCore.getInstance().getService(PushService.class);
-        pushService.refreshToken();
+        
+        PushService.refreshToken(MobileCore.getInstance().getContext());
     }
 }
