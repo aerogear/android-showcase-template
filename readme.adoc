@@ -25,111 +25,21 @@ Everytime when a PR is merged to master, the build script will automatically pus
 - Authentication/Access Control Auditing & Logging (via Keycloak)
 - Authenticated Calls to Protected Endpoints (via Keycloak)
 
+== Run Showcase
+The `master` branch will always track to the latest release of the SDK.
+
+To run the showcase app
+
+[source, bash]
+----
+git clone git@github.com:aerogear/android-showcase-template.git
+----
+
+Open showcase app in Android Studio and select the build variant `release` or `debug` to run the showcase with the latest release, or select build variant `local` to run the show case with a locally installed version of the https://github.com/aerogear/aerogear-android-sdk/blob/master/docs/modules/ROOT/pages/index.adoc[SDK]
+
 == Build Instructions
 
-=== Prerequisites
-* Android SDK or Android Studio from https://developer.android.com/studio/index.html[Google].  Check link:./app/build.gradle[build.gradle] file for the require SDK version and build tools version.
-* It's recommended to install the latest version of http://openjdk.java.net/install/index.html[OpenJDK].
-
-* To run all the tests:
-[source, bash]
-----
-./gradlew test connectedAndroidTest
-----
-* To build
-[source, bash]
-----
-/gradlew assembleDebug
-----
-* To do release build (you will need to setup the signing credential):
-[source, bash]
-----
-./gradlew aR
-----
-* To push the built binary to Kryptowire
-[source, bash]
-----
-export KRYPTOWIRE_API_KEY=<PUT YOUR API KEY HERE>
-./pushToKryptowire.sh
-----
-
-== Using a Published SDK
-
-=== jcenter()
-
-To use a published version of the SDK, add jcenter to the link:build.grade[build.gradle] file in the root directory of this project.
-
-[source, groovy]
-----
-allprojects {
-    repositories {
-        jcenter() // <-- Add This line
-        google()
-    }
-}
-----
-
-=== Reference the Dependencies
-
-In the link:./app/build.gradle[build.gradle] file in the app directory, add the dependencies provided by the SDK.
-
-----
-dependencies {
-    ...
-    implementation 'org.aerogear:core:0.1.0-2018-09'
-    implementation 'org.aerogear:auth:0.1.0-2018-09' // <- adjust to suit release version
-}
-----
-
-A full list of releases can be viewed https://github.com/aerogear/aerogear-android-sdk/releases[here].
-
-== Installing Local Build of SDK
-
-Alternatively the SDK can be installed manually instead of using a published version.
-
-=== Clone and build the library
-
-[source, sh]
-----
-git clone https://github.com/aerogear/aerogear-android-sdk
-cd aerogear-android-sdk
-./gradlew install
-----
-
-It's possible to verify the install went well by checking the local maven repository:
-
-----
-ls ~/.m2/repository/org/aerogear
-
-# Should output android-push android-core core android-auth auth unifiedpush
-----
-
-=== MavenLocal()
-
-If the build of the SDK is from source, add mavenLocal() to the link:build.grade[build.gradle] file in the root directory of this project.
-
-[source, groovy]
-----
-allprojects {
-    repositories {
-        mavenLocal() // <-- Add This line
-        google()
-        jcenter()
-    }
-}
-----
-
-=== Reference the Dependencies
-
-In the link:./app/build.gradle[build.gradle] file in the app directory, add the dependencies provided by the SDK.
-
-----
-dependencies {
-    ...
-    implementation 'org.aerogear:core:5.0.0-SNAPSHOT'
-    implementation 'org.aerogear:auth:5.0.0-SNAPSHOT' //If you are using IDM services provided by KeyCloak
-}
-----
+For full build instructions please take some time to read our link:./CONTRIBUTING.md[Contributing Guide]
 
 == Work with Different Backend Services
 
