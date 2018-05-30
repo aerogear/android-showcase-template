@@ -37,19 +37,9 @@ cd aerogear-showcase-template/
 
 ## Installing dependencies and building the ShowCase Template
 
-To run all the tests:
-```bash
-./gradlew test connectedAndroidTest
-```
-To build:
-```bash
-/gradlew assembleDebug
-```
-To do release build (you will need to setup the signing credential):
-```bash
-./gradlew aR
-```
-See the [Gradle Documentation](https://docs.gradle.org/current/userguide/pt02.html) for more information on Gradle and the Gradle Wrapper
+Open showcase app in Android Studio and select the build variant `release` or `debug` to run the showcase with the latest release, or select build variant `local` to run the show case with a locally installed version of the [SDK](https://github.com/aerogear/aerogear-android-sdk/blob/master/docs/modules/ROOT/pages/index.adoc)
+
+With the variant selected navigate to `build` on the toolbar in Android Studio and select `Build Project`
 
 ## Using a Published SDK
 
@@ -73,9 +63,13 @@ In the [build.gradle](./app/build.gradle) file in the app directory, add the dep
 ```groovy
 dependencies {
     ...
-    implementation 'org.aerogear:android-push:[version]
-    implementation 'org.aerogear:android-auth:[version]
-    implementation 'org.aerogear:android-security:[version]
+    releaseimplementation 'org.aerogear:android-push:[version]
+    releaseimplementation 'org.aerogear:android-auth:[version]
+    releaseimplementation 'org.aerogear:android-security:[version]
+    
+    debugimplementation 'org.aerogear:android-push:[version]
+    debugimplementation 'org.aerogear:android-auth:[version]
+    debugimplementation 'org.aerogear:android-security:[version]
     
 }
 ```
@@ -98,7 +92,7 @@ It's possible to verify the install went well by checking the local maven reposi
 
 ```bash
 ls ~/.m2/repository/org/aerogear
-# Should output android-push android-core android-auth 
+# Should output android-push android-core android-auth android-security 
 ```
 
 ### MavenLocal()
@@ -122,8 +116,8 @@ In the [build.gradle](./app/build.gradle) file in the app directory, add the dep
 ```groovy
 dependencies {
     ...
-    implementation 'org.aerogear:android-push:[version]-SNAPSHOT
-    implementation 'org.aerogear:android-auth:[version]-SNAPSHOT
-    implementation 'org.aerogear:android-security:[version]-SNAPSHOT
+    localimplementation 'org.aerogear:android-push:[version]-SNAPSHOT
+    localimplementation 'org.aerogear:android-auth:[version]-SNAPSHOT
+    localimplementation 'org.aerogear:android-security:[version]-SNAPSHOT
 }
 ```

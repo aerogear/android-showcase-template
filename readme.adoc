@@ -35,7 +35,7 @@ To run the showcase app
 git clone git@github.com:aerogear/android-showcase-template.git
 ----
 
-Open showcase app in Android Studio and select the build variant `release` to run the showcase with the latest release, or select build variant `local` to run the show case with a locally installed version of the https://github.com/aerogear/aerogear-android-sdk/blob/master/docs/modules/ROOT/pages/index.adoc[SDK]
+Open showcase app in Android Studio and select the build variant `release` or `debug` to run the showcase with the latest release, or select build variant `local` to run the show case with a locally installed version of the https://github.com/aerogear/aerogear-android-sdk/blob/master/docs/modules/ROOT/pages/index.adoc[SDK]
 
 == Build Instructions
 
