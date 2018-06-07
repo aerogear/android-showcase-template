@@ -22,4 +22,4 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}
       - run:
           name: Run Tests
-          command: ./gradlew lint testDebug --tests *.UnitTestSuite spotlessCheck
+          command: ./gradlew compileReleaseSources
