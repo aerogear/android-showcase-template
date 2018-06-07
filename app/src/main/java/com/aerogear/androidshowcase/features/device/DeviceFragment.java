@@ -153,7 +153,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
                 .withSecurityCheck(SecurityCheckType.HAS_ENCRYPTION_ENABLED)
                 .withSecurityCheck(SecurityCheckType.ALLOW_BACKUP_DISABLED)
                 .withMetricsService(
-                        MobileCore.getInstance().getService(MetricsService.class))
+                        MobileCore.getInstance().getMetricsService())
                 .build().execute();
 
         // perform detections
