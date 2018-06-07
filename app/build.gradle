@@ -81,18 +81,20 @@ dependencies {
 
     implementation "net.zetetic:android-database-sqlcipher:3.5.7@aar"
 
-    releaseImplementation 'org.aerogear:android-core:0.1.0-2018-21'
-    releaseImplementation 'org.aerogear:android-auth:0.1.0-2018-21'
-    releaseImplementation 'org.aerogear:android-push:0.1.0-2018-21'
+    releaseImplementation 'org.aerogear:android-core:0.1.0-2018-23'
+    releaseImplementation 'org.aerogear:android-auth:0.1.0-2018-23'
+    releaseImplementation 'org.aerogear:android-security:0.1.0-2018-23'
+    releaseImplementation 'org.aerogear:android-push:0.1.0-2018-23'
 
-    debugImplementation 'org.aerogear:android-core:0.1.0-2018-21'
-    debugImplementation 'org.aerogear:android-auth:0.1.0-2018-21'
-    debugImplementation 'org.aerogear:android-push:0.1.0-2018-21'
+    debugImplementation 'org.aerogear:android-core:0.1.0-2018-23'
+    debugImplementation 'org.aerogear:android-auth:0.1.0-2018-23'
+    debugImplementation 'org.aerogear:android-security:0.1.0-2018-23'
+    debugImplementation 'org.aerogear:android-push:0.1.0-2018-23'
 
     localImplementation 'org.aerogear:android-core:0.1.0-SNAPSHOT'
     localImplementation 'org.aerogear:android-auth:0.1.0-SNAPSHOT'
-    localImplementation 'org.aerogear:android-push:0.1.0-SNAPSHOT'
     localImplementation 'org.aerogear:android-security:0.1.0-SNAPSHOT'
+    localImplementation 'org.aerogear:android-push:0.1.0-SNAPSHOT'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.10.0'
