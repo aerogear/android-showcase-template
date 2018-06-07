@@ -2,7 +2,7 @@
     <!-- Strings related to apps -->
     <string name="org_name">AeroGear</string>
     <string name="org_url">www.aerogear.org</string>
-    <string name="app_name">Android Showcase App</string>
+    <string name="app_name">AeroGear Android Showcase</string>
     <string name="app_description">A Native Android Application that demonstrates features of the Aerogear Android SDK.</string>
 
     <!-- Strings related to the information popups -->
