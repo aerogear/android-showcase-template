@@ -24,6 +24,7 @@
     <TextView
         android:id="@+id/home_title"
         android:layout_width="0dp"
+        android:autoLink="web"
         android:layout_marginStart="@dimen/home_description_margin_start"
         android:layout_marginEnd="@dimen/home_description_margin_start"
         android:textSize="@dimen/home_description_text_size"
