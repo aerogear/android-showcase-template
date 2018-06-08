@@ -173,11 +173,6 @@ public class NotesDetailFragment extends BaseFragment<NoteDetailPresenter, NoteD
         };
     }
 
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_storage_fragment;
-    }
-
     @OnClick(R.id.save_note_btn)
     public void saveNote() {
         String noteTitle = titleField.getText().toString();

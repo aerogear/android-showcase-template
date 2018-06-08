@@ -5,29 +5,6 @@
     <string name="app_name">AeroGear Android Showcase</string>
     <string name="app_description">This app demonstrates how to use the AeroGear Mobile services, backed by OpenShift to perform a wide range of common mobile tasks such as Identity Management, Device Security, Metrics Capture, Push Notifications and more. \n\nFor further information, visit <a href="http://www.aerogear.org">www.aerogear.org</a></string>
 
-    <!-- Strings related to the information popups -->
-    <string name="popup_title">Information</string>
-    <string name="popup_home_fragment">Welcome. Clicking this button on each view inside the App will give you more information about the different security measures implemented.</string>
-    <string name="popup_authentication_fragment">The Authentication and Access Control is provided by the OpenID Connect standard. The Open Source Identity and Access Management Server, Keycloak, is being used as the Identity Provider.  \n\nThis App uses the Authorization Code flow and saves the tokens to Shared Preferences in WORLD_PRIVATE mode.  \n\nCertificate pinning is being used for the Authentication Server. A Base64 encoded Subject Public Key Information (SPKI) fingerprint is being pinned in the mobile app which is verified against the presented certificate.</string>
-    <string name="popup_storage_fragment">The notes are encrypted automatically when saved locally. It supports 2 storage options, using file system or sqlite. \n\nWhen saved in the file system, each note is saved in its own file, and encrypted with its own secret key. The secret keys are persisted in the Android Keystore.
-        \nTo encrypt the files, AES is used. The key size is 128 bit, with GCM mode to ensure the integrity of the data.
-        \n\nWhen saved in sqlite database, SqlCipher library is used to encrypt the whole database.
-        \n\nFor Android versions below 23, the secret keys can not be generated using the keystore. Instead, a KeyPair is generated in the keystore, and the secret key is generated separately. Then the public key is used to encrypt the secret key and the encrypted secret key is persisted using the private SharedPrefereneces of the app.
-           To load the encrypted files, the encrypted secret key will be decrypted first using the private key.
-    </string>
-    <string name="popup_authentication_details_fragment">The Users Identity and Access Data is being retrieved from the OpenID Connect Access Token. \n\nThe remote	endpoint terminates the	existing session when the user logs out.</string>
-    <string name="popup_accesscontrol_fragment">There are a number of role checks performed here to indicate if the users Access Token grants them access to a number of predefined roles in the mobile app. \n\nTo enter this view, the user must at least possess the mobile-user role.</string>
-    <string name="popup_device_fragment">The Application assesses the environment around it to learn how the Application is being run.
-    \n\nThe application can detect if it is being run in an emulator by looking for evidence in the system properties.
-    \n\nThe application also detects if an Android debugger is attached to the application.
-    \n\nRoot Access is detected using a number of techniques including checking for root management apps, root cloaking apps, busybox binaries etc.
-    \n\nThe app will also detect if a user has setup a device lock screen using a pin, password, pattern etc.
-    \n\nHooking framework binaries like Cydia Substrate and the Xposed Framework will also be scanned for.
-    \n\nA number of other checks are performed to see if it is possible to recover application data using the android backup function, check if device encryption is being used, check that the device is using the latest Android version and detecting if the developer mode is enabled.</string>
-    <string name="popup_network_fragment"> Before being allowed to upload notes to the API server, the user\'s permission is checked on the client. The API server endpoints are also protected by the same role check.
-    \n\nTo ensure the security of the data during transmission, certificate pinning is used to check the identity of the server.
-    </string>
-
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -132,7 +109,6 @@
     <string name="help_title">Help</string>
 
     <!-- HTTP -->
-    <string name="popup_http_fragment">A Simple Request to a JSON Endpoint using the HTTP Module.</string>
     <string name="fragment_title_http">HTTP</string>
 
     <!-- Push -->
@@ -140,7 +116,6 @@
     <string name="device_register_error">An error occurred while trying to register the device on Unified Push Server</string>
     <string name="nothing_here">Nothing here yet</string>
     <string name="send_notification">Send notifications from the console</string>
-    <string name="popup_push_fragment">AeroGear for Android provides support for integrating Firebase Cloud Messaging (FCM) with the AeroGear Unified Push Server.  Push messaging is a mechanism for sending data to mobile clients from a remote server. For mobile applications, this reduces battery usage, removes polling code and provides for a better user experience as data changes are communicated in real time.  Messages that FCM receives from an application server are sent to the Android device over a connection managed by the operating system. These messages are then extracted and passed to an application using services definied provided by the AeroGear library.</string>
     <string name="fragment_title_push">Push</string>
 
 </resources>

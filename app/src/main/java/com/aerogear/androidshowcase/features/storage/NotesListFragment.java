@@ -147,11 +147,6 @@ public class NotesListFragment extends BaseFragment<NoteListPresenter, NoteListA
         };
     }
 
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_storage_fragment;
-    }
-
     private void setupRecyclerView() {
         this.notesAdapter.setOnItemClickListener(onItemClickListener);
         this.rvNotes.setLayoutManager(new LinearLayoutManager(getActivity()));

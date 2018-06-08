@@ -103,7 +103,6 @@ public class Navigator {
     }
 
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {
-        activity.setInformationTextResourceId(fragment.getHelpMessageResourceId());
         FragmentManager fm = activity.getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         // create a FragmentTransaction to begin the transaction and replace the Fragment

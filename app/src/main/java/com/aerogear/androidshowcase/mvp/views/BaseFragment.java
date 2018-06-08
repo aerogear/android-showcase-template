@@ -51,5 +51,4 @@ public abstract class BaseFragment<PRESENTER extends Presenter<VIEW>, VIEW exten
 
     protected abstract VIEW initView();
 
-    public abstract int getHelpMessageResourceId();
 }

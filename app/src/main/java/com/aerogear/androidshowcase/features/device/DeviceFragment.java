@@ -134,11 +134,6 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         };
     }
 
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_device_fragment;
-    }
-
     public void runTests() {
         totalTests = 0;
         totalTestFailures = 0;

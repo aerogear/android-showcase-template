@@ -63,8 +63,4 @@ public class HomeFragment extends BaseFragment<HomeViewPresenter, HomeView> {
         return new HomeViewImpl(this) {};
     }
 
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_home_fragment;
-    }
 }

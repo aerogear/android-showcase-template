@@ -124,9 +124,4 @@ public class AccessControlFragment extends BaseFragment<AccessControlViewPresent
         };
     }
 
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_accesscontrol_fragment;
-    }
-
 }

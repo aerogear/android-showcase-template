@@ -157,12 +157,6 @@ public class NetworkFragment extends BaseFragment<UploadNotesPresenter, UploadNo
         };
     }
 
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_network_fragment;
-    }
-
-
     @OnClick(R.id.uploadNotesBtn)
     public void uploadNotes() {
         this.presenter.uploadNotes();
