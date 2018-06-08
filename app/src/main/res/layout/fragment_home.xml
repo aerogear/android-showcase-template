@@ -24,6 +24,9 @@
     <TextView
         android:id="@+id/home_title"
         android:layout_width="0dp"
+        android:layout_marginStart="@dimen/home_description_margin_start"
+        android:layout_marginEnd="@dimen/home_description_margin_start"
+        android:textSize="@dimen/home_description_text_size"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/home_description_margin_top"
         android:text="@string/app_description"
