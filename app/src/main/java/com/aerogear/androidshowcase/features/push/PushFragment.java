@@ -179,9 +179,4 @@ public class PushFragment extends BaseFragment implements MessageHandler {
         }
     }
 
-
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_push_fragment;
-    }
 }

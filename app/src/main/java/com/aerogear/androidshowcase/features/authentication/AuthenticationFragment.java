@@ -147,16 +147,6 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
     }
 
     /**
-     * Render the Users Identity Information in the View
-     *
-     * @return the help message for the current view
-     */
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_authentication_fragment;
-    }
-
-    /**
      * Handler for the login button click
      */
     @OnClick(R.id.keycloakLogin)

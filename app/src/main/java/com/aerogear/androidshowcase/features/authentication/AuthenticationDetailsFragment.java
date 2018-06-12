@@ -150,16 +150,6 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     /**
      * Render the Users Identity Information in the View
      *
-     * @return the help message for the current view
-     */
-    @Override
-    public int getHelpMessageResourceId() {
-        return R.string.popup_authentication_details_fragment;
-    }
-
-    /**
-     * Render the Users Identity Information in the View
-     *
      * @param args the args containing the identity information
      */
     private void renderIdentityInfo(final Bundle args) {
