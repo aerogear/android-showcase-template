@@ -3,7 +3,9 @@ package com.aerogear.androidshowcase.navigation;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.widget.Toast;
 import com.aerogear.androidshowcase.BaseActivity;
 import com.aerogear.androidshowcase.MainActivity;
 import com.aerogear.androidshowcase.domain.Constants;
@@ -22,6 +24,8 @@ import com.aerogear.androidshowcase.mvp.views.BaseFragment;
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
 import javax.inject.Inject;
+import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.core.configuration.ServiceConfiguration;
 
 /**
  * A class to control the navigation of the app.
@@ -31,7 +35,7 @@ public class Navigator {
     @Inject
     Context context;
 
-    @Inject
+    @Inject @Nullable
     AuthService authService;
 
     @Inject
@@ -47,11 +51,27 @@ public class Navigator {
     public void navigateToAuthenticationView(final BaseActivity activity) {
         AuthenticationFragment authFragment = new AuthenticationFragment();
         UserPrincipal user = authService.currentUser();
+        if (!isConfigured("keycloak")) {
+            showNotConfiguredDialog("keycloak");
+            return;
+        }
         if (user != null) {
             navigateToAuthenticateDetailsView(activity, user);
         } else {
             loadFragment(activity, authFragment, AuthenticationFragment.TAG);
         }
+    }
+
+    private void showNotConfiguredDialog(String keycloak) {
+        Toast.makeText(context, keycloak + " is not in mobile-core.json", Toast.LENGTH_LONG).show();
+    }
+
+    private boolean isConfigured(String serviceId) {
+        MobileCore core = MobileCore.getInstance();
+        ServiceConfiguration configuration = core
+            .getServiceConfigurationById(serviceId);
+
+        return configuration != null;
     }
 
     public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user) {
