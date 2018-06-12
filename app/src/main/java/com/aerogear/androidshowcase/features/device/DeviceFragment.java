@@ -2,8 +2,6 @@ package com.aerogear.androidshowcase.features.device;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,29 +9,24 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.features.device.presenters.DevicePresenter;
 import com.aerogear.androidshowcase.features.device.views.DeviceView;
 import com.aerogear.androidshowcase.features.device.views.DeviceViewImpl;
 import com.aerogear.androidshowcase.features.device.views.WarningDialog;
 import com.aerogear.androidshowcase.mvp.views.BaseFragment;
-
+import dagger.android.AndroidInjection;
+import java.util.Map;
+import javax.inject.Inject;
 import org.aerogear.mobile.core.MobileCore;
-import org.aerogear.mobile.core.metrics.MetricsService;
 import org.aerogear.mobile.security.SecurityCheckExecutor;
 import org.aerogear.mobile.security.SecurityCheckResult;
 import org.aerogear.mobile.security.SecurityCheckType;
 import org.aerogear.mobile.security.SecurityService;
-
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import dagger.android.AndroidInjection;
+import org.aerogear.mobile.security.SyncSecurityCheckExecutor.Builder;
 
 /**
  * The fragment for the Device related functionality.
@@ -96,7 +89,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_device, container, false);
@@ -138,18 +131,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         totalTests = 0;
         totalTestFailures = 0;
 
-        Map<String, SecurityCheckResult> results = SecurityCheckExecutor.Builder
-                .newSyncExecutor(context)
-                .withSecurityCheck(SecurityCheckType.NOT_ROOTED)
-                .withSecurityCheck(SecurityCheckType.SCREEN_LOCK_ENABLED)
-                .withSecurityCheck(SecurityCheckType.NOT_IN_EMULATOR)
-                .withSecurityCheck(SecurityCheckType.NO_DEBUGGER)
-                .withSecurityCheck(SecurityCheckType.NO_DEVELOPER_MODE)
-                .withSecurityCheck(SecurityCheckType.HAS_ENCRYPTION_ENABLED)
-                .withSecurityCheck(SecurityCheckType.ALLOW_BACKUP_DISABLED)
-                .withMetricsService(
-                        MobileCore.getInstance().getMetricsService())
-                .build().execute();
+        Map<String, SecurityCheckResult> results = buildResults();
 
         // perform detections
         detectRoot(results);
@@ -166,6 +148,25 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         checkTrustScore(score);
     }
 
+    private Map<String, SecurityCheckResult> buildResults() {
+        MobileCore core = MobileCore.getInstance();
+        Builder builder = SecurityCheckExecutor.Builder
+            .newSyncExecutor(context)
+            .withSecurityCheck(SecurityCheckType.NOT_ROOTED)
+            .withSecurityCheck(SecurityCheckType.SCREEN_LOCK_ENABLED)
+            .withSecurityCheck(SecurityCheckType.NOT_IN_EMULATOR)
+            .withSecurityCheck(SecurityCheckType.NO_DEBUGGER)
+            .withSecurityCheck(SecurityCheckType.NO_DEVELOPER_MODE)
+            .withSecurityCheck(SecurityCheckType.HAS_ENCRYPTION_ENABLED)
+            .withSecurityCheck(SecurityCheckType.ALLOW_BACKUP_DISABLED);
+
+        if (core.getServiceConfigurationById("metrics") != null) {
+            builder.withMetricsService(core.getMetricsService());
+        }
+
+        return builder.build().execute();
+    }
+
     // tag::detectRoot[]
     /**
      * Detect if the device is rooted.
@@ -180,6 +181,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     // end::detectRoot[]
 
     // tag::detectDeviceLock[]
+
     /**
      * Detect if the device has a lock screen setup (pin, password etc).
      */
@@ -193,6 +195,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     // end::detectDeviceLock[]
 
     // tag::debuggerDetected[]
+
     /**
      * Detect if a debugger is attached to the application.
      */
@@ -206,6 +209,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     // end::debuggerDetected[]
 
     // tag::detectEmulator[]
+
     /**
      * Detect if the application is being run in an emulator.
      */
@@ -219,6 +223,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     // end::detectEmulator[]
 
     // tag::detectBackupEnabled[]
+
     /**
      * Function to check if the backup flag is enabled in the application manifest file
      */
@@ -239,7 +244,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void detectDeviceEncryptionStatus(Map<String, SecurityCheckResult> results) {
         totalTests++;
         SecurityCheckResult result =
-                securityService.check(SecurityCheckType.HAS_ENCRYPTION_ENABLED);
+            securityService.check(SecurityCheckType.HAS_ENCRYPTION_ENABLED);
         if (result != null && !result.passed()) {
             setCheckFailed(deviceEncrypted, R.string.device_encrypted_negative);
         }
@@ -247,6 +252,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     // end::detectDeviceEncryptionStatus[]
 
     // tag::detectDeveloperOptions[]
+
     /**
      * Detect if the developer options mode is enabled on the device
      */
@@ -276,7 +282,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
 
     public int getTrustScore() {
         int score = 100 - Math.round(((totalTestFailures / totalTests) * 100));
-        return  score;
+        return score;
     }
 
     /**
@@ -285,7 +291,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void setTrustScore(int score) {
         trustScore.setProgress(score);
         trustScoreText.setText(score + "%");
-        trustScoreHeader.setText(getText(R.string.trust_score_header_title) + "\n(" + Math.round(totalTests) + " Tests)");
+        trustScoreHeader.setText(
+            getText(R.string.trust_score_header_title) + "\n(" + Math.round(totalTests)
+                + " Tests)");
 
         // change the score percentage colour depending on the trust score
         if (trustScore.getProgress() == 100) {
