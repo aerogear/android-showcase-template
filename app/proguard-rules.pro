@@ -26,3 +26,7 @@
 -dontwarn com.google.errorprone.annotations.*
 -dontwarn okio.**
 -dontwarn org.slf4j.**
+
+-keep class net.sqlcipher.** {
+    *;
+}
