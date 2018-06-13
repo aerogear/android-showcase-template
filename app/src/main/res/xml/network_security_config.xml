@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+    <base-config>
+        <trust-anchors>
+            <certificates src="user"/>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">security.feedhenry.org</domain>
         <pin-set>
@@ -11,12 +17,6 @@
         // Set this to true for production, at least 2 unique pins must be provided above!
         <trustkit-config enforcePinning="true"></trustkit-config>
     </domain-config>
-    <debug-overrides>
-        <trust-anchors>
-            <!-- Additionally trust user added CAs -->
-            <certificates src="user" />
-        </trust-anchors>
-    </debug-overrides>
 </network-security-config>
 
 
