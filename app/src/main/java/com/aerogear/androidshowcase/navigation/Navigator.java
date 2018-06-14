@@ -3,7 +3,9 @@ package com.aerogear.androidshowcase.navigation;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.widget.Toast;
 import com.aerogear.androidshowcase.BaseActivity;
 import com.aerogear.androidshowcase.MainActivity;
 import com.aerogear.androidshowcase.domain.Constants;
@@ -22,6 +24,8 @@ import com.aerogear.androidshowcase.mvp.views.BaseFragment;
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
 import javax.inject.Inject;
+import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.core.configuration.ServiceConfiguration;
 
 /**
  * A class to control the navigation of the app.
@@ -31,7 +35,7 @@ public class Navigator {
     @Inject
     Context context;
 
-    @Inject
+    @Inject @Nullable
     AuthService authService;
 
     @Inject
@@ -45,8 +49,14 @@ public class Navigator {
     }
 
     public void navigateToAuthenticationView(final BaseActivity activity) {
+        if (!isConfigured("keycloak")) {
+            showNotConfiguredDialog("keycloak");
+            return;
+        }
+
         AuthenticationFragment authFragment = new AuthenticationFragment();
         UserPrincipal user = authService.currentUser();
+
         if (user != null) {
             navigateToAuthenticateDetailsView(activity, user);
         } else {
@@ -55,11 +65,21 @@ public class Navigator {
     }
 
     public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user) {
+        if (!isConfigured("keycloak")) {
+            showNotConfiguredDialog("keycloak");
+            return;
+        }
+
         AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(user);
         loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
     }
 
     public void navigateToAccessControlView(final BaseActivity activity) {
+        if (!isConfigured("keycloak")) {
+            showNotConfiguredDialog("keycloak");
+            return;
+        }
+
         UserPrincipal currentUser = authService.currentUser();
         if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
             AccessControlFragment accessControView = new AccessControlFragment();
@@ -71,11 +91,32 @@ public class Navigator {
     }
 
     public void navigateToStorageView(BaseActivity activity) {
+        if (!isConfigured("notes-service")) {
+            showNotConfiguredDialog("notes-service");
+            return;
+        }
+
+        if (!isConfigured("keycloak")) {
+            showNotConfiguredDialog("keycloak");
+            return;
+        }
+
+
         NotesListFragment notesListView = new NotesListFragment();
         loadFragment(activity, notesListView, NotesListFragment.TAG);
     }
 
     public void navigateToSingleNoteView(BaseActivity activity, Note note) {
+        if (!isConfigured("notes-service")) {
+            showNotConfiguredDialog("notes-service");
+            return;
+        }
+
+        if (!isConfigured("keycloak")) {
+            showNotConfiguredDialog("keycloak");
+            return;
+        }
+
         NotesDetailFragment noteDetails = NotesDetailFragment.forNote(note);
         loadFragment(activity, noteDetails, NotesDetailFragment.TAG);
     }
@@ -86,11 +127,20 @@ public class Navigator {
     }
 
     public void navigateToPushView(MainActivity activity) {
+        if (!isConfigured("push")) {
+            showNotConfiguredDialog("push");
+            return;
+        }
+
         PushFragment pushFragment = new PushFragment();
         loadFragment(activity, pushFragment, PushFragment.TAG);
     }
 
     public void navigateToNetworkView(MainActivity activity) {
+        if (!isConfigured("keycloak")) {
+            showNotConfiguredDialog("keycloak");
+            return;
+        }
 
         UserPrincipal currentUser = authService.currentUser();
         if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
@@ -122,6 +172,18 @@ public class Navigator {
         fm.popBackStack();
     }
 
+
+    private void showNotConfiguredDialog(String serviceId) {
+        Toast.makeText(context, serviceId + " is not in mobile-core.json", Toast.LENGTH_LONG).show();
+    }
+
+    private boolean isConfigured(String serviceId) {
+        MobileCore core = MobileCore.getInstance();
+        ServiceConfiguration configuration = core
+            .getServiceConfigurationByType(serviceId);
+
+        return configuration != null;
+    }
 
 
 }

@@ -1,5 +1,6 @@
 package com.aerogear.androidshowcase.mvp.components;
 
+import android.support.annotation.Nullable;
 import com.datatheorem.android.trustkit.TrustKit;
 import org.aerogear.mobile.auth.AuthService;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import okhttp3.Request;
 
 public class CertPinningHelper {
 
-    @Inject
+    @Inject @Nullable
     AuthService authService;
 
     public CertPinningHelper() {

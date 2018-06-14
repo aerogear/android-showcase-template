@@ -3,6 +3,7 @@ package com.aerogear.androidshowcase.di;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import com.aerogear.androidshowcase.domain.crypto.AesCrypto;
 import com.aerogear.androidshowcase.domain.crypto.AndroidMSecureKeyStore;
 import com.aerogear.androidshowcase.domain.crypto.NullAndroidSecureKeyStore;
@@ -107,9 +108,15 @@ public class SecureApplicationModule {
     // end::securityServiceInit[]
 
     // tag::authServiceInit[]
-    @Provides @Singleton
+    @Provides @Singleton @Nullable
     AuthService provideAuthService(Context context) {
-        AuthService authService = MobileCore.getInstance().getService(AuthService.class);
+        MobileCore core = MobileCore.getInstance();
+        if (core.getServiceConfigurationByType("keycloak") == null ) {
+            return null;//We are allowing this to be nullable because keycloak is not guaranteed to
+                        //be configured.  We are not returning an Optional because we can't guarantee
+                        //Optional is available on Android M and L and we don't want to add Guava.
+        }
+        AuthService authService = core.getService(AuthService.class);
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
                 .withRedirectUri("com.aerogear.androidshowcase:/callback")
                 .build();

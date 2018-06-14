@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,6 +12,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
@@ -20,16 +23,13 @@ import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
 import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.mvp.components.HttpHelper;
 import com.aerogear.androidshowcase.navigation.Navigator;
-import org.aerogear.mobile.auth.AuthService;
-import org.aerogear.mobile.auth.user.UserPrincipal;
-import org.aerogear.mobile.core.MobileCore;
-import javax.inject.Inject;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
+import javax.inject.Inject;
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.user.UserPrincipal;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, NotesDetailFragment.SaveNoteListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity
     @Inject
     OpenIDAuthenticationProvider authProvider;
 
-    @Inject
+    @Inject @Nullable
     AuthService authService;
 
     @Inject
@@ -154,7 +154,9 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == KeycloakAuthenticateProviderImpl.LOGIN_RESULT_CODE) {
-            authService.handleAuthResult(data);
+            //Put a note here that the null check is not how we expect people to use the SDK and link the good usage to the auth screen
+            if (authService != null)
+                authService.handleAuthResult(data);
         }
     }
     // end::onActivityResult[]

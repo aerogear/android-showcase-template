@@ -45,7 +45,9 @@ public class SecureApplication extends Application implements HasActivityInjecto
             //only thrown during tests, ignore it
         }
 
-        registerDeviceOnUnifiedPushServer();
+        if (MobileCore.getInstance().getServiceConfigurationByType("push") != null ) {
+            registerDeviceOnUnifiedPushServer();
+        }
     }
 
     protected void initInjector() {

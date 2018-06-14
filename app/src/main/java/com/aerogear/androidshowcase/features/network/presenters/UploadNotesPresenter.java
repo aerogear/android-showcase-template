@@ -1,6 +1,7 @@
 package com.aerogear.androidshowcase.features.network.presenters;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.domain.Constants;
@@ -37,7 +38,7 @@ public class UploadNotesPresenter extends BasePresenter<UploadNotesView> {
 
     private UploadNotesTask uploadNotesTask;
 
-    @Inject
+    @Inject @Nullable
     AuthService authService;
 
     @Inject
