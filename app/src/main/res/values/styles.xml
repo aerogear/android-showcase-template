@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
