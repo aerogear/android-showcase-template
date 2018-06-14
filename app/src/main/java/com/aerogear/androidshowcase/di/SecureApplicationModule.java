@@ -112,7 +112,9 @@ public class SecureApplicationModule {
     AuthService provideAuthService(Context context) {
         MobileCore core = MobileCore.getInstance();
         if (core.getServiceConfigurationByType("keycloak") == null ) {
-            return null;//I don't like null here, but we don't have the ability to have an
+            return null;//We are allowing this to be nullable because keycloak is not guaranteed to
+                        //be configured.  We are not returning an Optional because we can't guarantee
+                        //Optional is available on Android M and L and we don't want to add Guava.
         }
         AuthService authService = core.getService(AuthService.class);
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
