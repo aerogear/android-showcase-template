@@ -1,6 +1,8 @@
 package com.aerogear.androidshowcase.domain.store;
 
 import com.aerogear.androidshowcase.domain.models.Note;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 
 import java.util.List;
 import java.util.concurrent.Future;
@@ -51,6 +53,9 @@ public interface NoteDataStore {
      * Return the type of the store
      * @return
      */
+
+    void noteCreated(NotesDetailFragment.SaveNoteListener listener) throws Exception;
+
     public int getType();
 
     /**

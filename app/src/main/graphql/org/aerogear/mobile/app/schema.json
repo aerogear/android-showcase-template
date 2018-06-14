@@ -7,7 +7,9 @@
       "mutationType": {
         "name": "Mutation"
       },
-      "subscriptionType": null,
+      "subscriptionType": {
+        "name": "Subscription"
+      },
       "types": [
         {
           "kind": "OBJECT",
@@ -111,7 +113,7 @@
               "deprecationReason": null
             },
             {
-              "name": "createdAt",
+              "name": "timestamp",
               "description": "",
               "args": [],
               "type": {
@@ -259,7 +261,7 @@
               "defaultValue": null
             },
             {
-              "name": "createdAt",
+              "name": "timestamp",
               "description": "",
               "type": {
                 "kind": "SCALAR",
@@ -270,6 +272,29 @@
             }
           ],
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Subscription",
+          "description": "",
+          "fields": [
+            {
+              "name": "noteCreated",
+              "description": "",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Note",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },

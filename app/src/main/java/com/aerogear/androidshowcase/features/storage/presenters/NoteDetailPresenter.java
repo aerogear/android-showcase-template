@@ -4,6 +4,7 @@ import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.domain.callbacks.CallbackHandler;
 import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.domain.services.NoteCrudlService;
+import com.aerogear.androidshowcase.domain.store.NoteDataStore;
 import com.aerogear.androidshowcase.features.storage.views.NoteDetailAppView;
 import com.aerogear.androidshowcase.mvp.presenters.BasePresenter;
 

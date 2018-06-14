@@ -3,6 +3,8 @@ package com.aerogear.androidshowcase.domain.store;
 import android.support.annotation.NonNull;
 
 import com.aerogear.androidshowcase.domain.models.Note;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +64,11 @@ public class InMemoryNoteStore implements NoteDataStore {
         notes.addAll(inMemoryStore.values());
         future.complete(notes);
         return future;
+    }
+
+    @Override
+    public void noteCreated(NotesDetailFragment.SaveNoteListener listener) throws Exception {
+        // noop
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.domain.models.Note;
+import com.aerogear.androidshowcase.domain.store.NoteDataStore;
 import com.aerogear.androidshowcase.mvp.views.BaseFragment;
 import com.aerogear.androidshowcase.features.storage.adapters.RVNoteAdapter;
 import com.aerogear.androidshowcase.features.storage.presenters.NoteListPresenter;
@@ -96,6 +97,7 @@ public class NotesListFragment extends BaseFragment<NoteListPresenter, NoteListA
         notesListView = inflater.inflate(R.layout.fragment_notes_list, container, false);
         unbinder = ButterKnife.bind(this, notesListView);
         setupRecyclerView();
+        notesListPresenter.noteCreated(NoteDataStore.STORE_TYPE_GRAPHQL, (NotesDetailFragment.SaveNoteListener) this.getActivity());
         return notesListView;
     }
 

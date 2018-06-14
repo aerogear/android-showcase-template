@@ -6,6 +6,8 @@ import android.util.Log;
 import com.aerogear.androidshowcase.domain.callbacks.CallbackHandler;
 import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.domain.repositories.NoteRepository;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -177,5 +179,9 @@ public class NoteCrudlService {
      */
     public void readNote(String noteId, int storeType, CallbackHandler<Note> callback) {
         new ReadNoteTask(this.noteRepo, callback).execute(noteId, storeType);
+    }
+
+    public void noteCreated(int storeType, NotesDetailFragment.SaveNoteListener listener) throws Exception {
+        this.noteRepo.noteCreated(storeType, listener);
     }
 }

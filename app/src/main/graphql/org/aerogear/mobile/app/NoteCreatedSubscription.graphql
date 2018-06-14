@@ -1,5 +1,5 @@
-query listNotes {
-  listNotes {
+subscription noteCreated {
+  noteCreated {
       id
       title
       content

@@ -9,6 +9,8 @@ import com.aerogear.androidshowcase.domain.crypto.RsaCrypto;
 import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.domain.store.NoteDataStore;
 import com.aerogear.androidshowcase.domain.store.NoteStoreException;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 
 import net.sqlcipher.Cursor;
 import net.sqlcipher.DatabaseUtils;
@@ -202,6 +204,11 @@ public class SqliteNoteStore implements NoteDataStore {
         CompletableFuture<List<Note>> future = new CompletableFuture<>();
         future.complete(notes);
         return future;
+    }
+
+    @Override
+    public void noteCreated(NotesDetailFragment.SaveNoteListener listener) throws Exception {
+        // noop
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.aerogear.androidshowcase.domain.repositories;
 
 import com.aerogear.androidshowcase.domain.models.Note;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 
 import java.util.List;
 
@@ -49,11 +51,13 @@ public interface NoteRepository {
      */
     Note deleteNote(Note noteModel) throws Exception;
 
-    /**
-     * Return the total counts of notes
-     * @return the total number of notes
-     * @throws Exception
-     */
+    void noteCreated(int storeType, NotesDetailFragment.SaveNoteListener listener) throws Exception;
+
+        /**
+         * Return the total counts of notes
+         * @return the total number of notes
+         * @throws Exception
+         */
     long count() throws Exception;
 
 }

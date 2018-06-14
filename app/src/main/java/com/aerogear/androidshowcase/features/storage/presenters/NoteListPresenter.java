@@ -3,6 +3,9 @@ package com.aerogear.androidshowcase.features.storage.presenters;
 import com.aerogear.androidshowcase.domain.callbacks.CallbackHandler;
 import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.domain.services.NoteCrudlService;
+import com.aerogear.androidshowcase.domain.store.NoteDataStore;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.mvp.presenters.BasePresenter;
 import com.aerogear.androidshowcase.features.storage.views.NoteListAppView;
 
@@ -60,6 +63,14 @@ public class NoteListPresenter extends BasePresenter<NoteListAppView> {
 
     public void onCreateNote() {
         this.view.createNote();
+    }
+
+    public void noteCreated(int storeType, NotesDetailFragment.SaveNoteListener listener) {
+        try {
+            this.noteCrudlService.noteCreated(storeType, listener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

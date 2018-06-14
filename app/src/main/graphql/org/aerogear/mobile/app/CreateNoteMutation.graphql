@@ -3,6 +3,6 @@ mutation createNote($note: NoteInput!) {
       id
       title
       content
-      createdAt
+      timestamp
   }
 }

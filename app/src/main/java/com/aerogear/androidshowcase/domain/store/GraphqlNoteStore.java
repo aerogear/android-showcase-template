@@ -4,8 +4,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.aerogear.androidshowcase.domain.models.Note;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.ApolloSubscriptionCall;
 import com.apollographql.apollo.api.Input;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
@@ -15,6 +18,7 @@ import com.apollographql.apollo.subscription.WebSocketSubscriptionTransport;
 import org.aerogear.mobile.app.CreateNoteMutation;
 import org.aerogear.mobile.app.DeleteNoteMutation;
 import org.aerogear.mobile.app.ListNotesQuery;
+import org.aerogear.mobile.app.NoteCreatedSubscription;
 import org.aerogear.mobile.app.ReadNoteQuery;
 import org.aerogear.mobile.app.UpdateNoteMutation;
 import org.aerogear.mobile.app.type.NoteInput;
@@ -32,6 +36,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nonnull;
 
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 
 /**
@@ -41,8 +46,8 @@ import okhttp3.OkHttpClient;
 public class GraphqlNoteStore implements NoteDataStore {
 
     private ApolloClient apolloClient;
-    private static final String BASE_URL = "http://192.168.1.14:8080/graphql/";
-    private static final String SUBSCRIPTION_BASE_URL = "ws://192.168.1.14:8080/subscriptions";
+    private static final String BASE_URL = "http://192.168.1.7:8080/graphql/";
+    private static final String SUBSCRIPTION_BASE_URL = "ws://192.168.1.7:8080/websocket";
     private static final String TAG = "GraphqlNoteStore";
 
     public GraphqlNoteStore() {
@@ -59,7 +64,7 @@ public class GraphqlNoteStore implements NoteDataStore {
 
     @Override
     public Future<Note> createNote(Note note) throws Exception {
-        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).createdAt((double)note.getCreatedAt().getTime()).build();
+        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).timestamp((double)note.getCreatedAt().getTime()).build();
         ApolloCall<CreateNoteMutation.Data> createNoteQuery = apolloClient
                 .mutate(new CreateNoteMutation(noteInput));
 
@@ -69,7 +74,7 @@ public class GraphqlNoteStore implements NoteDataStore {
             public void onResponse(@Nonnull Response<CreateNoteMutation.Data> response) {
                 Log.d(TAG, "onResponse" + response.data().toString());
                 CreateNoteMutation.CreateNote createNote = response.data().createNote();
-                Note createdNote = new Note(createNote.id(), createNote.title(), createNote.content(), createNote.createdAt().longValue());
+                Note createdNote = new Note(createNote.id(), createNote.title(), createNote.content(), createNote.timestamp().longValue());
                 createdNote.setStoreType(getType());
                 future.complete(createdNote);
             }
@@ -85,7 +90,7 @@ public class GraphqlNoteStore implements NoteDataStore {
 
     @Override
     public Future<Note> updateNote(Note note) throws Exception {
-        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).createdAt((double)note.getCreatedAt().getTime()).build();
+        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).timestamp((double)note.getCreatedAt().getTime()).build();
         ApolloCall<UpdateNoteMutation.Data> updateNoteQuery = apolloClient
                 .mutate(new UpdateNoteMutation(noteInput));
 
@@ -95,7 +100,7 @@ public class GraphqlNoteStore implements NoteDataStore {
             public void onResponse(@Nonnull Response<UpdateNoteMutation.Data> response) {
                 Log.d(TAG, "onResponse" + response.data().toString());
                 UpdateNoteMutation.UpdateNote updateNote = response.data().updateNote();
-                Note updatedNote = new Note(updateNote.id(), updateNote.title(), updateNote.content(), updateNote.createdAt().longValue());
+                Note updatedNote = new Note(updateNote.id(), updateNote.title(), updateNote.content(), updateNote.timestamp().longValue());
                 updatedNote.setStoreType(getType());
                 future.complete(updatedNote);
             }
@@ -111,7 +116,7 @@ public class GraphqlNoteStore implements NoteDataStore {
 
     @Override
     public Future<Note> deleteNote(Note note) throws Exception {
-        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).createdAt((double)note.getCreatedAt().getTime()).build();
+        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).timestamp((double)note.getCreatedAt().getTime()).build();
         ApolloCall<DeleteNoteMutation.Data> deleteNoteQuery = apolloClient
                 .mutate(new DeleteNoteMutation(noteInput));
 
@@ -121,7 +126,7 @@ public class GraphqlNoteStore implements NoteDataStore {
             public void onResponse(@Nonnull Response<DeleteNoteMutation.Data> response) {
                 Log.d(TAG, "onResponse" + response.data().toString());
                 DeleteNoteMutation.DeleteNote deleteNote = response.data().deleteNote();
-                Note deletedNote = new Note(deleteNote.id(), deleteNote.title(), deleteNote.content(), deleteNote.createdAt().longValue());
+                Note deletedNote = new Note(deleteNote.id(), deleteNote.title(), deleteNote.content(), deleteNote.timestamp().longValue());
                 deletedNote.setStoreType(getType());
                 future.complete(deletedNote);
             }
@@ -147,7 +152,7 @@ public class GraphqlNoteStore implements NoteDataStore {
             public void onResponse(@Nonnull Response<ReadNoteQuery.Data> response) {
                 Log.d(TAG, "onResponse" + response.data().toString());
                 ReadNoteQuery.ReadNote readNote = response.data().readNote();
-                Note newNote = new Note(readNote.id(), readNote.title(), readNote.content(), readNote.createdAt().longValue());
+                Note newNote = new Note(readNote.id(), readNote.title(), readNote.content(), readNote.timestamp().longValue());
                 newNote.setStoreType(getType());
                 future.complete(newNote);
             }
@@ -175,7 +180,7 @@ public class GraphqlNoteStore implements NoteDataStore {
                 List<ListNotesQuery.ListNote> listNotes = response.data().listNotes();
                 List<Note> notes = new ArrayList<>();
                 for(ListNotesQuery.ListNote note: listNotes) {
-                    Note newNote = new Note(note.id(), note.title(), note.content(), note.createdAt().longValue());
+                    Note newNote = new Note(note.id(), note.title(), note.content(), note.timestamp().longValue());
                     newNote.setStoreType(getType());
                     notes.add(newNote);
                 }
@@ -189,6 +194,33 @@ public class GraphqlNoteStore implements NoteDataStore {
             }
         });
         return future;
+    }
+
+    @Override
+    public void noteCreated(NotesDetailFragment.SaveNoteListener listener) throws Exception {
+        ApolloSubscriptionCall<NoteCreatedSubscription.Data> subscriptionCall = apolloClient
+                .subscribe(new NoteCreatedSubscription());
+        // This is a simplified subscription example that doesn't handle view lifecycle
+        subscriptionCall.execute(new ApolloSubscriptionCall.Callback<NoteCreatedSubscription.Data>() {
+            @Override
+            public void onResponse(@Nonnull Response<NoteCreatedSubscription.Data> response) {
+                Log.d(TAG, "NoteCreatedSubscription onResponse" + response.data().toString());
+                NoteCreatedSubscription.NoteCreated createdNote = response.data().noteCreated();
+                Note newNote = new Note(createdNote.id(), createdNote.title(), createdNote.content(), createdNote.timestamp().longValue());
+                listener.onNoteSaved(newNote);
+            }
+
+            @Override
+            public void onFailure(@Nonnull ApolloException e) {
+                Log.e(TAG, "NoteCreatedSubscription onFailure", e);
+
+            }
+
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "NoteCreatedSubscription onCompleted ");
+            }
+        });
     }
 
     @Override

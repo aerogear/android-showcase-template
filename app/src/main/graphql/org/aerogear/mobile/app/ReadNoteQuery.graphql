@@ -3,6 +3,6 @@ query readNote($id: String!) {
       id
       title
       content
-      createdAt
+      timestamp
   }
 }

@@ -4,6 +4,8 @@ import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.domain.store.NoteDataStore;
 import com.aerogear.androidshowcase.domain.store.NoteDataStoreFactory;
 import com.aerogear.androidshowcase.domain.store.NoteStoreException;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,17 @@ public class NoteRepositoryImpl implements NoteRepository {
         } else {
             throw new NoteStoreException("invalid store type " + storeType);
         }
+    }
+
+    @Override
+    public void noteCreated(int storeType, NotesDetailFragment.SaveNoteListener listener) throws Exception {
+        NoteDataStore dataStore = this.noteStoreFactory.getDataStoreByType(storeType);
+        if (dataStore != null) {
+            dataStore.noteCreated(listener);
+        } else {
+            throw new NoteStoreException("invalid store type " + storeType);
+        }
+
     }
 
     @Override

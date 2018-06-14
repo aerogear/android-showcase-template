@@ -5,6 +5,8 @@ import android.content.Context;
 import com.aerogear.androidshowcase.domain.crypto.AesCrypto;
 import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.domain.utils.StreamUtils;
+import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
+import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,6 +104,11 @@ public class SecureFileNoteStore implements NoteDataStore {
         CompletableFuture<List<Note>> future = new CompletableFuture<>();
         future.complete(notes);
         return future;
+    }
+
+    @Override
+    public void noteCreated(NotesDetailFragment.SaveNoteListener listener) throws Exception {
+        // noop
     }
 
     @Override
