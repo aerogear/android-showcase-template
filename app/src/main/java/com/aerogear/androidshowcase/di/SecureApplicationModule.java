@@ -111,7 +111,7 @@ public class SecureApplicationModule {
     @Provides @Singleton @Nullable
     AuthService provideAuthService(Context context) {
         MobileCore core = MobileCore.getInstance();
-        if (core.getServiceConfigurationById("keycloak") == null ) {
+        if (core.getServiceConfigurationByType("keycloak") == null ) {
             return null;//I don't like null here, but we don't have the ability to have an
         }
         AuthService authService = core.getService(AuthService.class);

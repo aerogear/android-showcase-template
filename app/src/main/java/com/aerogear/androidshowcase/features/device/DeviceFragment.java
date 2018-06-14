@@ -160,7 +160,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
             .withSecurityCheck(SecurityCheckType.HAS_ENCRYPTION_ENABLED)
             .withSecurityCheck(SecurityCheckType.ALLOW_BACKUP_DISABLED);
 
-        if (core.getServiceConfigurationById("metrics") != null) {
+        if (core.getServiceConfigurationByType("metrics") != null) {
             builder.withMetricsService(core.getMetricsService());
         }
 

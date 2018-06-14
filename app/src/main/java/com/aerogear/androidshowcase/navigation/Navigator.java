@@ -180,7 +180,7 @@ public class Navigator {
     private boolean isConfigured(String serviceId) {
         MobileCore core = MobileCore.getInstance();
         ServiceConfiguration configuration = core
-            .getServiceConfigurationById(serviceId);
+            .getServiceConfigurationByType(serviceId);
 
         return configuration != null;
     }
