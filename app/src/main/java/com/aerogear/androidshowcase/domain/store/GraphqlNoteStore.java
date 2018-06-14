@@ -46,8 +46,8 @@ import okhttp3.OkHttpClient;
 public class GraphqlNoteStore implements NoteDataStore {
 
     private ApolloClient apolloClient;
-    private static final String BASE_URL = "http://192.168.1.7:8080/graphql/";
-    private static final String SUBSCRIPTION_BASE_URL = "ws://192.168.1.7:8080/websocket";
+    private static final String BASE_URL = "http://10.201.82.209:8080/graphql/";
+    private static final String SUBSCRIPTION_BASE_URL = "ws://10.201.82.209:8080/websocket";
     private static final String TAG = "GraphqlNoteStore";
 
     public GraphqlNoteStore() {
@@ -206,7 +206,11 @@ public class GraphqlNoteStore implements NoteDataStore {
             public void onResponse(@Nonnull Response<NoteCreatedSubscription.Data> response) {
                 Log.d(TAG, "NoteCreatedSubscription onResponse" + response.data().toString());
                 NoteCreatedSubscription.NoteCreated createdNote = response.data().noteCreated();
-                Note newNote = new Note(createdNote.id(), createdNote.title(), createdNote.content(), createdNote.timestamp().longValue());
+                long createdAt = 0l;
+                if (createdNote.timestamp() != null) {
+                    createdAt = createdNote.timestamp().longValue();
+                }
+                Note newNote = new Note(createdNote.id(), createdNote.title(), createdNote.content(), createdAt);
                 listener.onNoteSaved(newNote);
             }
 
