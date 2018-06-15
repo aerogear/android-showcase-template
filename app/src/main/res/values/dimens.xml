@@ -12,6 +12,17 @@
     <dimen name="home_description_margin_start">15dp</dimen>
     <dimen name="home_description_text_size">18sp</dimen>
 
+    <!-- Push -->
+    <dimen name="push_recycleview_padding">10dp</dimen>
+    <dimen name="push_cardview_height">80dp</dimen>
+    <dimen name="push_cardview_margin">5dp</dimen>
+    <dimen name="push_cardview_elevation">5dp</dimen>
+    <dimen name="push_cardview_corner_radius">0dp</dimen>
+    <dimen name="push_cardview_content_padding">10dp</dimen>
+    <dimen name="push_message_text_size">18sp</dimen>
+    <dimen name="push_received_text_size">12sp</dimen>
+    <dimen name="push_remove_icon_size">50dp</dimen>
+
     <dimen name="help_icon_height">48dp</dimen>
     <dimen name="help_icon_width">48dp</dimen>
 
