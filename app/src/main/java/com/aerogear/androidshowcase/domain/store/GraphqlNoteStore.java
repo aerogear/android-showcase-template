@@ -1,15 +1,12 @@
 package com.aerogear.androidshowcase.domain.store;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
-import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
 import com.apollographql.apollo.ApolloSubscriptionCall;
-import com.apollographql.apollo.api.Input;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers;
@@ -21,22 +18,14 @@ import org.aerogear.mobile.app.ListNotesQuery;
 import org.aerogear.mobile.app.NoteCreatedSubscription;
 import org.aerogear.mobile.app.ReadNoteQuery;
 import org.aerogear.mobile.app.UpdateNoteMutation;
-import org.aerogear.mobile.app.type.NoteInput;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nonnull;
 
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 
 /**
@@ -46,8 +35,8 @@ import okhttp3.OkHttpClient;
 public class GraphqlNoteStore implements NoteDataStore {
 
     private ApolloClient apolloClient;
-    private static final String BASE_URL = "http://10.201.82.209:8080/graphql/";
-    private static final String SUBSCRIPTION_BASE_URL = "ws://10.201.82.209:8080/websocket";
+    private static final String BASE_URL = "http://10.0.2.2:8000/graphql/";
+    private static final String SUBSCRIPTION_BASE_URL = "ws://10.0.2.2:8000/subscriptions";
     private static final String TAG = "GraphqlNoteStore";
 
     public GraphqlNoteStore() {
@@ -64,9 +53,15 @@ public class GraphqlNoteStore implements NoteDataStore {
 
     @Override
     public Future<Note> createNote(Note note) throws Exception {
-        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).timestamp((double)note.getCreatedAt().getTime()).build();
+        CreateNoteMutation mutation = CreateNoteMutation.builder()
+                .id(note.getId())
+                .title(note.getTitle())
+                .content(note.getContent())
+                .timestamp((double)note.getCreatedAt().getTime())
+                .build();
+
         ApolloCall<CreateNoteMutation.Data> createNoteQuery = apolloClient
-                .mutate(new CreateNoteMutation(noteInput));
+                .mutate(mutation);
 
         CompletableFuture<Note> future = new CompletableFuture<Note>();
         createNoteQuery.enqueue(new ApolloCall.Callback<CreateNoteMutation.Data>() {
@@ -90,9 +85,14 @@ public class GraphqlNoteStore implements NoteDataStore {
 
     @Override
     public Future<Note> updateNote(Note note) throws Exception {
-        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).timestamp((double)note.getCreatedAt().getTime()).build();
+        UpdateNoteMutation mutation = UpdateNoteMutation.builder()
+                .id(note.getId())
+                .title(note.getTitle())
+                .content(note.getContent())
+                .build();
+
         ApolloCall<UpdateNoteMutation.Data> updateNoteQuery = apolloClient
-                .mutate(new UpdateNoteMutation(noteInput));
+                .mutate(mutation);
 
         CompletableFuture<Note> future = new CompletableFuture<Note>();
         updateNoteQuery.enqueue(new ApolloCall.Callback<UpdateNoteMutation.Data>() {
@@ -116,10 +116,12 @@ public class GraphqlNoteStore implements NoteDataStore {
 
     @Override
     public Future<Note> deleteNote(Note note) throws Exception {
-        NoteInput noteInput = NoteInput.builder().id(note.getId()).title(note.getTitle()).content(note.getContent()).timestamp((double)note.getCreatedAt().getTime()).build();
-        ApolloCall<DeleteNoteMutation.Data> deleteNoteQuery = apolloClient
-                .mutate(new DeleteNoteMutation(noteInput));
+        DeleteNoteMutation mutation = DeleteNoteMutation.builder()
+                .id(note.getId())
+                .build();
 
+        ApolloCall<DeleteNoteMutation.Data> deleteNoteQuery = apolloClient
+                .mutate(mutation);
         CompletableFuture<Note> future = new CompletableFuture<>();
         deleteNoteQuery.enqueue(new ApolloCall.Callback<DeleteNoteMutation.Data>() {
             @Override

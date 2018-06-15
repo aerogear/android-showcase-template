@@ -150,11 +150,41 @@
               "description": "",
               "args": [
                 {
-                  "name": "note",
+                  "name": "id",
                   "description": "",
                   "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "NoteInput",
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "title",
+                  "description": "",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "content",
+                  "description": "",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "timestamp",
+                  "description": "",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Float",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -173,11 +203,31 @@
               "description": "",
               "args": [
                 {
-                  "name": "note",
+                  "name": "id",
                   "description": "",
                   "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "NoteInput",
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "title",
+                  "description": "",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "content",
+                  "description": "",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -196,11 +246,11 @@
               "description": "",
               "args": [
                 {
-                  "name": "note",
+                  "name": "id",
                   "description": "",
                   "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "NoteInput",
+                    "kind": "SCALAR",
+                    "name": "String",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -217,61 +267,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "NoteInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "id",
-              "description": "",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "title",
-              "description": "",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "content",
-              "description": "",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "timestamp",
-              "description": "",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },

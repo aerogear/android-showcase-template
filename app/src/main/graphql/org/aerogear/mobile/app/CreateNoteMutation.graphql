@@ -1,5 +1,5 @@
-mutation createNote($note: NoteInput!) {
-  createNote(note: $note) {
+mutation createNote($id: String!, $title: String, $content: String, $timestamp: Float) {
+  createNote(id: $id, title: $title, content: $content, timestamp: $timestamp) {
       id
       title
       content
