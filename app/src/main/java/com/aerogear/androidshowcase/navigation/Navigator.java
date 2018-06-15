@@ -50,7 +50,7 @@ public class Navigator {
 
     public void navigateToAuthenticationView(final BaseActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "keycloak");
+            showNotConfiguredDialog(activity, "identity management");
             return;
         }
 
@@ -66,7 +66,7 @@ public class Navigator {
 
     public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "keycloak");
+            showNotConfiguredDialog(activity, "identity management");
             return;
         }
 
@@ -76,7 +76,7 @@ public class Navigator {
 
     public void navigateToAccessControlView(final BaseActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "keycloak");
+            showNotConfiguredDialog(activity, "identity management");
             return;
         }
 
@@ -92,12 +92,12 @@ public class Navigator {
 
     public void navigateToStorageView(BaseActivity activity) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notes-service");
+            showNotConfiguredDialog(activity, "notesservice");
             return;
         }
 
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "keycloak");
+            showNotConfiguredDialog(activity, "identity management");
             return;
         }
 
@@ -108,12 +108,12 @@ public class Navigator {
 
     public void navigateToSingleNoteView(BaseActivity activity, Note note) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notes-service");
+            showNotConfiguredDialog(activity, "notes service");
             return;
         }
 
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "keycloak");
+            showNotConfiguredDialog(activity, "identity management");
             return;
         }
 
@@ -138,7 +138,7 @@ public class Navigator {
 
     public void navigateToNetworkView(MainActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "keycloak");
+            showNotConfiguredDialog(activity, "identity management");
             return;
         }
 
@@ -173,10 +173,10 @@ public class Navigator {
     }
 
 
-    private void showNotConfiguredDialog(BaseActivity activity, String serviceId) {
-        NotAvailableDialogFragment dialog = NotAvailableDialogFragment.newInstance(serviceId);
+    private void showNotConfiguredDialog(BaseActivity activity, String friendlyServiceName) {
+        NotAvailableDialogFragment dialog = NotAvailableDialogFragment.newInstance(friendlyServiceName);
         android.support.v4.app.FragmentManager fm = activity.getSupportFragmentManager();
-        dialog.show(fm, serviceId);
+        dialog.show(fm, friendlyServiceName);
 
     }
 
