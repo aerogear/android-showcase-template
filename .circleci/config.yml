@@ -6,8 +6,6 @@ jobs:
       - image: circleci/android:api-27-alpha
     environment:
       JVM_OPTS: -Xmx3200m
-      KEYSTORE_PASSWORD: $KEYSTORE_PASSWORD
-      KEY_PASSWORD: $KEY_PASSWORD      
     steps:
       - checkout
       - restore_cache:
