@@ -23,6 +23,9 @@ jobs:
       - run:
           name: Build release artifact
           command: ./gradlew aR
+          environment:
+            KEYSTORE_PASSWORD: $KEYSTORE_PASSWORD
+            KEY_PASSWORD: $KEY_PASSWORD
       
       - run:
           name: Push to Krypowire for scanning
