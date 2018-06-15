@@ -117,6 +117,8 @@
     <string name="nothing_here">Nothing here yet</string>
     <string name="send_notification">Send notifications from the console</string>
     <string name="fragment_title_push">Push</string>
+    <string name="push_deleted">Message deleted</string>
+    <string name="push_undo">Undo</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
