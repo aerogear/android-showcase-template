@@ -50,7 +50,7 @@ public class Navigator {
 
     public void navigateToAuthenticationView(final BaseActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog("keycloak");
+            showNotConfiguredDialog(activity, "keycloak");
             return;
         }
 
@@ -66,7 +66,7 @@ public class Navigator {
 
     public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog("keycloak");
+            showNotConfiguredDialog(activity, "keycloak");
             return;
         }
 
@@ -76,7 +76,7 @@ public class Navigator {
 
     public void navigateToAccessControlView(final BaseActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog("keycloak");
+            showNotConfiguredDialog(activity, "keycloak");
             return;
         }
 
@@ -92,12 +92,12 @@ public class Navigator {
 
     public void navigateToStorageView(BaseActivity activity) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog("notes-service");
+            showNotConfiguredDialog(activity, "notes-service");
             return;
         }
 
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog("keycloak");
+            showNotConfiguredDialog(activity, "keycloak");
             return;
         }
 
@@ -108,12 +108,12 @@ public class Navigator {
 
     public void navigateToSingleNoteView(BaseActivity activity, Note note) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog("notes-service");
+            showNotConfiguredDialog(activity, "notes-service");
             return;
         }
 
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog("keycloak");
+            showNotConfiguredDialog(activity, "keycloak");
             return;
         }
 
@@ -128,7 +128,7 @@ public class Navigator {
 
     public void navigateToPushView(MainActivity activity) {
         if (!isConfigured("push")) {
-            showNotConfiguredDialog("push");
+            showNotConfiguredDialog(activity, "push");
             return;
         }
 
@@ -138,7 +138,7 @@ public class Navigator {
 
     public void navigateToNetworkView(MainActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog("keycloak");
+            showNotConfiguredDialog(activity, "keycloak");
             return;
         }
 
@@ -173,14 +173,24 @@ public class Navigator {
     }
 
 
-    private void showNotConfiguredDialog(String serviceId) {
-        Toast.makeText(context, serviceId + " is not in mobile-core.json", Toast.LENGTH_LONG).show();
+    private void showNotConfiguredDialog(BaseActivity activity, String serviceId) {
+        NotAvailableDialogFragment dialog = NotAvailableDialogFragment.newInstance(serviceId);
+        android.support.v4.app.FragmentManager fm = activity.getSupportFragmentManager();
+        dialog.show(fm, serviceId);
+
     }
 
     private boolean isConfigured(String serviceId) {
         MobileCore core = MobileCore.getInstance();
         ServiceConfiguration configuration = core
             .getServiceConfigurationByType(serviceId);
+
+        //Some services (keycloak, push) are singleton and by type
+        //Custom Service connectors are looked up by id.
+        //So we check both for null.
+        if (configuration == null) {
+            configuration = core.getServiceConfigurationById(serviceId);
+        }
 
         return configuration != null;
     }

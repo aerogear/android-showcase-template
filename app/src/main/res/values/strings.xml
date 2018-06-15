@@ -118,4 +118,9 @@
     <string name="send_notification">Send notifications from the console</string>
     <string name="fragment_title_push">Push</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="show_documentation">Show Documentation</string>
+    <string name="close">Close</string>
+
 </resources>
