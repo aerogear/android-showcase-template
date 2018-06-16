@@ -35,8 +35,8 @@ import okhttp3.OkHttpClient;
 public class GraphqlNoteStore implements NoteDataStore {
 
     private ApolloClient apolloClient;
-    private static final String BASE_URL = "http://10.0.2.2:8000/graphql/";
-    private static final String SUBSCRIPTION_BASE_URL = "ws://10.0.2.2:8000/subscriptions";
+    private static final String BASE_URL = "https://datasync-dm-myproject-4.193b.starter-ca-central-1.openshiftapps.com/graphql/";
+    private static final String SUBSCRIPTION_BASE_URL = "ws://datasync-dm-myproject-4.193b.starter-ca-central-1.openshiftapps.com/subscriptions";
     private static final String TAG = "GraphqlNoteStore";
 
     public GraphqlNoteStore() {
@@ -47,7 +47,7 @@ public class GraphqlNoteStore implements NoteDataStore {
                 .serverUrl(BASE_URL)
                 .okHttpClient(okHttpClient)
                 //.normalizedCache(normalizedCacheFactory, cacheKeyResolver)
-                .subscriptionTransportFactory(new WebSocketSubscriptionTransport.Factory(SUBSCRIPTION_BASE_URL, okHttpClient))
+//                .subscriptionTransportFactory(new WebSocketSubscriptionTransport.Factory(SUBSCRIPTION_BASE_URL, okHttpClient))
                 .build();
     }
 

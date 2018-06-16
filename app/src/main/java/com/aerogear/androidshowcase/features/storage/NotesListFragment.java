@@ -97,7 +97,7 @@ public class NotesListFragment extends BaseFragment<NoteListPresenter, NoteListA
         notesListView = inflater.inflate(R.layout.fragment_notes_list, container, false);
         unbinder = ButterKnife.bind(this, notesListView);
         setupRecyclerView();
-        notesListPresenter.noteCreated(NoteDataStore.STORE_TYPE_GRAPHQL, (NotesDetailFragment.SaveNoteListener) this.getActivity());
+//        notesListPresenter.noteCreated(NoteDataStore.STORE_TYPE_GRAPHQL, (NotesDetailFragment.SaveNoteListener) this.getActivity());
         return notesListView;
     }
 
