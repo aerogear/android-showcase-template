@@ -16,7 +16,7 @@ jobs:
             export KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
             export KEY_PASSWORD=${KEY_PASSWORD}
             export KRYPTOWIRE_API_KEY=${KRYPTOWIRE_API_KEY}
-            
+
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
@@ -29,12 +29,7 @@ jobs:
           command: ./gradlew compileReleaseSources
       - run:
           name: Build release artifact
-          command: |
-            export KEYSTORE_PASSWORD=`cat /tmp/keystorepass.txt`
-            export KEY_PASSWORD=`cat /tmp/keypass.txt`
-            ./gradlew aR
+          command: ./gradlew aR
       - run:
           name: Push to Krypowire for scanning
-          command: |
-            export  KRYPTOWIRE_API_KEY=`cat /tmp/apikey.txt`
-            curl -X POST "https://emm.kryptowire.com/api/submit" -F app=@./app/build/outputs/apk/app-release.apk -F key=$KRYPTOWIRE_API_KEY -F platform=android
+          command: curl -X POST "https://emm.kryptowire.com/api/submit" -F app=@./app/build/outputs/apk/app-release.apk -F key=$KRYPTOWIRE_API_KEY -F platform=android
