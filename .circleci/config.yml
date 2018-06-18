@@ -11,14 +11,11 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}
       - run:
-          name: Export
+          name: Export Env Vars
           command: |
-            export KEYSTORE_PASSWORD_BASE64=$KEYSTORE_PASSWORD_BASE64
-            export KEY_PASSWORD_BASE64=$KEY_PASSWORD_BASE64
-            export KRYPTOWIRE_API_KEY_BASE64=$KRYPTOWIRE_API_KEY_BASE64
-            echo $KEYSTORE_PASSWORD_BASE64 | base64 --decode > /tmp/keystorepass.txt
-            echo $KEY_PASSWORD_BASE64 | base64 --decode > /tmp/keypass.txt
-            echo $KRYPTOWIRE_API_KEY_BASE64 | base64 --decode > /tmp/apikey.txt
+            export KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD
+            export KEY_PASSWORD=$KEY_PASSWORD
+            export KRYPTOWIRE_API_KEY=$KRYPTOWIRE_API_KEY
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
