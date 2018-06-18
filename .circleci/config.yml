@@ -21,8 +21,19 @@ jobs:
           name: Run Tests
           command: ./gradlew compileReleaseSources
       - run:
+          name: Install AWS CLI
+          command: sudo apt-get -y -qq install awscli
+      - run:
+          name: Fetch Signing Config
+          command: |
+            mkdir temp
+            aws s3 cp https://s3-eu-west-1.amazonaws.com/app-signing-credentials/android/config.sh temp
+            chmod +x temp/config.sh
+      - run:
           name: Build release artifact
-          command: ./gradlew aR
+          command: |
+            . temp/config.sh
+            ./gradlew aR
       - run:
           name: Push to Krypowire for scanning
           command: curl -X POST "https://emm.kryptowire.com/api/submit" -F app=@./app/build/outputs/apk/app-release.apk -F key=$KRYPTOWIRE_API_KEY -F platform=android
