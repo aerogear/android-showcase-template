@@ -11,8 +11,11 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}
       - run:
-          name: Print env var
+          name: Export
           command: |
+            export KEYSTORE_PASSWORD_BASE64=$KEYSTORE_PASSWORD_BASE64
+            export KEY_PASSWORD_BASE64=$KEY_PASSWORD_BASE64
+            export KRYPTOWIRE_API_KEY_BASE64=$KRYPTOWIRE_API_KEY_BASE64
             echo $KEYSTORE_PASSWORD_BASE64 | base64 --decode > /tmp/keystorepass.txt
             echo $KEY_PASSWORD_BASE64 | base64 --decode > /tmp/keypass.txt
             echo $KRYPTOWIRE_API_KEY_BASE64 | base64 --decode > /tmp/apikey.txt
