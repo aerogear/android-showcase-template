@@ -92,7 +92,7 @@ public class Navigator {
 
     public void navigateToStorageView(BaseActivity activity) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notesservice");
+            showNotConfiguredDialog(activity, "notes service");
             return;
         }
 
