@@ -13,9 +13,9 @@ jobs:
       - run:
           name: Print env var
           command: |
-            echo $KEYSTORE_PASSWORD	> /tmp/keystorepass.txt
-            echo $KEY_PASSWORD > /tmp/keypass.txt
-            echo $KRYPTOWIRE_API_KEY > /tmp/apikey.txt
+            echo $KEYSTORE_PASSWORD_BASE64 | base64 --decode > /tmp/keystorepass.txt
+            echo $KEY_PASSWORD_BASE64 | base64 --decode > /tmp/keypass.txt
+            echo $KRYPTOWIRE_API_KEY_BASE64 | base64 --decode > /tmp/apikey.txt
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
