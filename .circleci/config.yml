@@ -19,10 +19,10 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}
       - run:
           name: Run Tests
-          command: KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD} KEY_PASSWORD=${KEY_PASSWORD} ./gradlew compileReleaseSources
+          command: ./gradlew compileReleaseSources
       - run:
           name: Build release artifact
-          command: ./gradlew aR
+          command: KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD} KEY_PASSWORD=${KEY_PASSWORD} ./gradlew aR
       - run:
           name: Push to Krypowire for scanning
           command: KRYPTOWIRE_API_KEY=${KRYPTOWIRE_API_KEY} curl -X POST "https://emm.kryptowire.com/api/submit" -F app=@./app/build/outputs/apk/app-release.apk -F key=$KRYPTOWIRE_API_KEY -F platform=android
