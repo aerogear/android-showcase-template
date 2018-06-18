@@ -10,7 +10,6 @@ jobs:
       - checkout
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}
-      - run: echo "$KRYPTOWIRE_API_KEY" >> ~/apikey.txt
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
@@ -23,7 +22,7 @@ jobs:
           command: ./gradlew compileReleaseSources
       - run:
           name: Build release artifact
-          command: KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD KEY_PASSWORD=$KEY_PASSWORD ./gradlew aR
+          command: ./gradlew aR
       - run:
           name: Push to Krypowire for scanning
           command: curl -X POST "https://emm.kryptowire.com/api/submit" -F app=@./app/build/outputs/apk/app-release.apk -F key=$KRYPTOWIRE_API_KEY -F platform=android
