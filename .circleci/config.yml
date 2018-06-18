@@ -13,9 +13,10 @@ jobs:
       - run:
           name: Export Env Vars
           command: |
-            export KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD
-            export KEY_PASSWORD=$KEY_PASSWORD
-            export KRYPTOWIRE_API_KEY=$KRYPTOWIRE_API_KEY
+            export KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
+            export KEY_PASSWORD=${KEY_PASSWORD}
+            export KRYPTOWIRE_API_KEY=${KRYPTOWIRE_API_KEY}
+            
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
