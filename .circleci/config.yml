@@ -11,6 +11,9 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}
       - run:
+          name: Test
+          command: echo $KEYSTORE_PASSWORD
+      - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
       - save_cache:
@@ -21,32 +24,8 @@ jobs:
           name: Run Tests
           command: ./gradlew compileReleaseSources
       - run:
-          name: Install AWS CLI
-          command: sudo apt-get -y -qq install awscli
-      - run:
-          name: Test
-          command: |
-            echo $KEYSTORE_PASSWORD
-            echo $KEY_PASSWORD
-            echo $KRYPTOWIRE_API_KEY
-      - run:
-          name: Fetch Signing Config
-          command: |
-            mkdir temp
-            aws s3 cp s3://app-signing-credentials/android/config.sh temp/config.sh --region eu-west-1
-            chmod +x temp/config.sh
-      - run:
           name: Build release artifact
-          command: |
-            . temp/config.sh
-            ./gradlew aR
+          command: ./gradlew aR
       - run:
           name: Push to Krypowire for scanning
           command: curl -X POST "https://emm.kryptowire.com/api/submit" -F app=@./app/build/outputs/apk/app-release.apk -F key=$KRYPTOWIRE_API_KEY -F platform=android
-
-workflows:
-  version: 2
-  my-workflow:
-    jobs:
-      - build:
-          context: org-global
