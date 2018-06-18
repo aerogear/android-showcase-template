@@ -27,7 +27,7 @@ jobs:
           name: Fetch Signing Config
           command: |
             mkdir temp
-            aws s3 cp https://s3-eu-west-1.amazonaws.com/app-signing-credentials/android/config.sh temp
+            aws s3 cp s3://app-signing-credentials/android/config.sh temp/config.sh --region eu-west-1
             chmod +x temp/config.sh
       - run:
           name: Build release artifact
