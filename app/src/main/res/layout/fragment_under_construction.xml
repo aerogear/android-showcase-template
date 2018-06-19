@@ -34,13 +34,13 @@
         android:textAlignment="center"
         android:textSize="@dimen/under_construction_title_text_size"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/descripction"
+        app:layout_constraintBottom_toTopOf="@+id/description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/icon" />
 
     <TextView
-        android:id="@+id/descripction"
+        android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/under_construction_description_margin_top"
