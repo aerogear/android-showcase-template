@@ -28,4 +28,14 @@
         <item name="android:visibility">visible</item>
     </style>
 
+    <style name="AppTheme.Card">
+        <item name="cardCornerRadius">@dimen/push_cardview_corner_radius</item>
+        <item name="cardElevation">@dimen/push_cardview_elevation</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="AppTheme.CardContent">
+        <item name="android:padding">@dimen/push_cardview_content_padding</item>
+    </style>
+
 </resources>
