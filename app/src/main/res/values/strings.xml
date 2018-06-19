@@ -132,6 +132,10 @@
     <string name="nav_metrics_device_profile_info">Device Profile Info</string>
     <string name="nav_metrics_trust_check_info">Trust Check Info</string>
 
+    <!-- Under Constrution -->
+    <string name="under_construction_title">Under Construction</string>
+    <string name="under_construction_description">This feature is under construction for this platform.\n\nIf you would like to get involved in this work, please check out our community contribution page.\n\n<a href="http://aerogear.org/community/#guides">http://aerogear.org/community/#guides</a></string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="show_documentation">Show Documentation</string>

@@ -22,6 +22,14 @@
     <dimen name="push_message_text_size">18sp</dimen>
     <dimen name="push_received_text_size">12sp</dimen>
     <dimen name="push_received_margin_top">5dp</dimen>
+    
+    <!-- Under Construction -->
+    <dimen name="under_construction_logo_margin_start">40dp</dimen>
+    <dimen name="under_construction_title_margin_top">50dp</dimen>
+    <dimen name="under_construction_title_margin_start">15dp</dimen>
+    <dimen name="under_construction_title_text_size">24sp</dimen>
+    <dimen name="under_construction_description_margin_top">30dp</dimen>
+    <dimen name="under_construction_description_text_size">18sp</dimen>
 
     <dimen name="help_icon_height">48dp</dimen>
     <dimen name="help_icon_width">48dp</dimen>

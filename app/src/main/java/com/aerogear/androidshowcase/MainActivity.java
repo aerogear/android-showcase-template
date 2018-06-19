@@ -19,6 +19,7 @@ import com.aerogear.androidshowcase.features.authentication.AuthenticationDetail
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.aerogear.androidshowcase.features.authentication.providers.OpenIDAuthenticationProvider;
+import com.aerogear.androidshowcase.features.documentation.DocumentUrl;
 import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
 import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.mvp.components.HttpHelper;
@@ -135,6 +136,12 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.nav_security_cert_pinning:
                 navigator.navigateToNetworkView(this);
+                break;
+            case R.id.nav_metrics_device_profile_info:
+                navigator.navigateToUnderConstructorView(this);
+                break;
+            case R.id.nav_metrics_trust_check_info:
+                navigator.navigateToUnderConstructorView(this);
                 break;
             case R.id.nav_push_messages:
                 navigator.navigateToPushView(this);

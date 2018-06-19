@@ -5,7 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.widget.Toast;
+
 import com.aerogear.androidshowcase.BaseActivity;
 import com.aerogear.androidshowcase.MainActivity;
 import com.aerogear.androidshowcase.domain.Constants;
@@ -22,6 +22,7 @@ import com.aerogear.androidshowcase.features.network.NetworkFragment;
 import com.aerogear.androidshowcase.features.push.PushFragment;
 import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
 import com.aerogear.androidshowcase.features.storage.NotesListFragment;
+import com.aerogear.androidshowcase.features.underconstruction.UnderConstructionFragment;
 import com.aerogear.androidshowcase.mvp.views.BaseFragment;
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
@@ -152,6 +153,11 @@ public class Navigator {
             Snackbar.make(activity.findViewById(android.R.id.content), R.string.not_authenticated_api_access, Snackbar.LENGTH_LONG).show();
             navigateToAuthenticationView(activity);
         }
+    }
+
+    public void navigateToUnderConstructorView(MainActivity activity) {
+        UnderConstructionFragment fragment = new UnderConstructionFragment();
+        loadFragment(activity, fragment, UnderConstructionFragment.TAG);
     }
 
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {
