@@ -13,6 +13,8 @@ import com.aerogear.androidshowcase.features.accesscontrol.AccessControlFragment
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.device.DeviceFragment;
+import com.aerogear.androidshowcase.features.documentation.DocumentUrl;
+import com.aerogear.androidshowcase.features.documentation.DocumentationFragment;
 import com.aerogear.androidshowcase.features.home.HomeFragment;
 import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.domain.models.Note;
@@ -50,7 +52,7 @@ public class Navigator {
 
     public void navigateToAuthenticationView(final BaseActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management");
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
             return;
         }
 
@@ -66,7 +68,7 @@ public class Navigator {
 
     public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management");
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
             return;
         }
 
@@ -76,7 +78,7 @@ public class Navigator {
 
     public void navigateToAccessControlView(final BaseActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management");
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
             return;
         }
 
@@ -92,12 +94,12 @@ public class Navigator {
 
     public void navigateToStorageView(BaseActivity activity) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notes service");
+            showNotConfiguredDialog(activity, "notes service", DocumentUrl.NOTES_SERVICE);
             return;
         }
 
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management");
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
             return;
         }
 
@@ -108,12 +110,12 @@ public class Navigator {
 
     public void navigateToSingleNoteView(BaseActivity activity, Note note) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notes service");
+            showNotConfiguredDialog(activity, "notes service", DocumentUrl.NOTES_SERVICE);
             return;
         }
 
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management");
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
             return;
         }
 
@@ -128,7 +130,7 @@ public class Navigator {
 
     public void navigateToPushView(MainActivity activity) {
         if (!isConfigured("push")) {
-            showNotConfiguredDialog(activity, "push");
+            showNotConfiguredDialog(activity, "push", DocumentUrl.PUSH);
             return;
         }
 
@@ -138,7 +140,7 @@ public class Navigator {
 
     public void navigateToNetworkView(MainActivity activity) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management");
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
             return;
         }
 
@@ -173,11 +175,17 @@ public class Navigator {
     }
 
 
-    private void showNotConfiguredDialog(BaseActivity activity, String friendlyServiceName) {
+    private void showNotConfiguredDialog(BaseActivity activity, String friendlyServiceName, DocumentUrl docUrl) {
         NotAvailableDialogFragment dialog = NotAvailableDialogFragment.newInstance(friendlyServiceName);
+        dialog.setGotoDocsCallback(()->{gotoDocs(activity, docUrl); dialog.dismiss();});
         android.support.v4.app.FragmentManager fm = activity.getSupportFragmentManager();
         dialog.show(fm, friendlyServiceName);
 
+    }
+
+    private void gotoDocs(BaseActivity activity, DocumentUrl docUrl) {
+        DocumentationFragment fragment = DocumentationFragment.newInstance(docUrl);
+        loadFragment(activity, fragment, docUrl.getUrl());
     }
 
     private boolean isConfigured(String serviceId) {

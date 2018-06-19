@@ -18,6 +18,7 @@ public class NotAvailableDialogFragment extends DialogFragment {
 
 
     private String serviceType;
+    private GotoDocsListener gotoDocsCallback;
 
     public NotAvailableDialogFragment() {
     }
@@ -29,7 +30,6 @@ public class NotAvailableDialogFragment extends DialogFragment {
      * @param serviceType serviceType name to lookup.
      * @return A new instance of fragment NotAvailableDialogFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static NotAvailableDialogFragment newInstance(String serviceType) {
         NotAvailableDialogFragment fragment = new NotAvailableDialogFragment();
         Bundle args = new Bundle();
@@ -55,7 +55,11 @@ public class NotAvailableDialogFragment extends DialogFragment {
         builder.setMessage(String.format("The service %s does not have a configuration in mobile-services.json.  Refer to the documentation for instructions on how to configure this service.", serviceType))
                 .setPositiveButton(R.string.show_documentation, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dismiss();
+                        if (gotoDocsCallback != null) {
+                            gotoDocsCallback.goToDocs();
+                        } else {
+                            dismiss();
+                        }
                     }
                 })
                 .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
@@ -71,4 +75,7 @@ public class NotAvailableDialogFragment extends DialogFragment {
         super.onDetach();
     }
 
+    public void setGotoDocsCallback(GotoDocsListener gotoDocsCallback) {
+        this.gotoDocsCallback = gotoDocsCallback;
+    }
 }
