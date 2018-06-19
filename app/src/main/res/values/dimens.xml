@@ -6,9 +6,8 @@
     <dimen name="nav_header_height">200dp</dimen>
 
     <!-- Home -->
-    <dimen name="home_logo_margin_top">50dp</dimen>
     <dimen name="home_logo_margin_start">40dp</dimen>
-    <dimen name="home_description_margin_top">15dp</dimen>
+    <dimen name="home_description_margin_top">50dp</dimen>
     <dimen name="home_description_margin_start">15dp</dimen>
     <dimen name="home_description_text_size">18sp</dimen>
 
