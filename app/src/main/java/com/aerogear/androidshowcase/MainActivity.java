@@ -122,29 +122,41 @@ public class MainActivity extends BaseActivity
             case R.id.nav_home:
                 navigator.navigateToHomeView(this);
                 break;
+            case R.id.nav_identity_management_documentation:
+                navigator.navigateToIdentityManagementDocumentation(this);
+                break;
             case R.id.nav_identity_management_authentication:
                 navigator.navigateToAuthenticationView(this);
                 break;
             case R.id.nav_identity_management_sso:
                 navigator.navigateToAccessControlView(this);
                 break;
-            case R.id.nav_security_storage:
-                navigator.navigateToStorageView(this);
+            case R.id.nav_security_documentation:
+                navigator.navigateToSecurityDocumentation(this);
                 break;
             case R.id.nav_security_device_trust:
                 navigator.navigateToDeviceView(this);
                 break;
+            case R.id.nav_security_storage:
+                navigator.navigateToStorageView(this);
+                break;
             case R.id.nav_security_cert_pinning:
                 navigator.navigateToNetworkView(this);
+                break;
+            case R.id.nav_push_documentation:
+                navigator.navigateToPushDocumentation(this);
+                break;
+            case R.id.nav_push_messages:
+                navigator.navigateToPushView(this);
+                break;
+            case R.id.nav_metrics_documentation:
+                navigator.navigateToMetricsDocumentation(this);
                 break;
             case R.id.nav_metrics_device_profile_info:
                 navigator.navigateToUnderConstructorView(this);
                 break;
             case R.id.nav_metrics_trust_check_info:
                 navigator.navigateToUnderConstructorView(this);
-                break;
-            case R.id.nav_push_messages:
-                navigator.navigateToPushView(this);
                 break;
         }
 
