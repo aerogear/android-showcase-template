@@ -160,6 +160,28 @@ public class Navigator {
         loadFragment(activity, fragment, UnderConstructionFragment.TAG);
     }
 
+    public void navigateToIdentityManagementDocumentation(MainActivity activity) {
+        navigateToDocumentation(activity, DocumentUrl.IDENTITY_MANAGEMENT);
+    }
+
+    public void navigateToSecurityDocumentation(MainActivity activity) {
+        navigateToDocumentation(activity, DocumentUrl.DEVICE_SECURITY);
+    }
+
+    public void navigateToMetricsDocumentation(MainActivity activity) {
+        navigateToDocumentation(activity, DocumentUrl.METRICS);
+    }
+
+    public void navigateToPushDocumentation(MainActivity activity) {
+        navigateToDocumentation(activity, DocumentUrl.PUSH);
+    }
+
+    private void navigateToDocumentation(MainActivity activity, DocumentUrl documentUrl) {
+        DocumentationFragment documentationFragment = DocumentationFragment.newInstance(documentUrl);
+        loadFragment(activity, documentationFragment, documentUrl.getUrl());
+
+    }
+
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {
         FragmentManager fm = activity.getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
@@ -208,6 +230,5 @@ public class Navigator {
 
         return configuration != null;
     }
-
 
 }
