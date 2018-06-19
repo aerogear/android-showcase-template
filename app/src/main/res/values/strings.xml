@@ -8,12 +8,15 @@
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_documentation">Documentation</string>
 
     <!-- Strings related to Home -->
     <string name="fragment_title_home">Home</string>
 
     <!-- Strings related to Authentication -->
-    <string name="fragment_title_authenticate">Authenticate</string>
+    <string name="fragment_title_authenticate">Identity Management</string>
+    <string name="nav_identity_management_authentication">Authentication</string>
+    <string name="nav_identity_management_sso">SSO</string>
     <string name="action_settings">Settings</string>
     <string name="app_redirect_scheme">com.aerogear.androidshowcase</string>
     <string name="title_activity_authenticate">Authenticate</string>
@@ -32,8 +35,11 @@
     <string name="cert_pin_verification_failed">Certificate Pinning Verification Failed</string>
     <string name="insecure_connection_prevent_auth">Insecure Server Connection. Preventing Authentication</string>
 
-    <!-- Strings related to Access Control -->
-    <string name="fragment_title_accesscontrol">Access Control</string>
+    <!-- Strings related to Security -->
+    <string name="fragment_title_security">Security</string>
+    <string name="nav_security_device_trust">Device Trust</string>
+    <string name="nav_security_storage">Secure Storage</string>
+    <string name="nav_security_cert_pinning">Cert Pinning</string>
     <string name="not_authenticated">Insufficient Privileges. Your Access Token must possess the "mobile-user" realm role.</string>
     <string name="not_authenticated_api_access">Insufficient Privileges. Your Access Token must possess the "api-access" realm role.</string>
     <string name="role_mobile_user_label">Mobile User Role</string>
@@ -43,7 +49,6 @@
     <string name="access_denied">Access Denied</string>
 
     <!-- Strings related to Storage -->
-    <string name="fragment_title_storage">Secure Storage</string>
     <string name="fragment_note_title">Title</string>
     <string name="fragment_note_content">Content</string>
     <string name="action_save">Save</string>
@@ -112,6 +117,8 @@
     <string name="fragment_title_http">HTTP</string>
 
     <!-- Push -->
+    <string name="nav_push">Push Notifications</string>
+    <string name="nav_push_messages">Push Messages</string>
     <string name="device_register_success">Device success registered on Unified Push Server</string>
     <string name="device_register_error">An error occurred while trying to register the device on Unified Push Server</string>
     <string name="nothing_here">Nothing here yet</string>
@@ -119,6 +126,11 @@
     <string name="fragment_title_push">Push</string>
     <string name="push_deleted">Message deleted</string>
     <string name="push_undo">Undo</string>
+
+    <!-- Metrics -->
+    <string name="nav_metrics">Metrics</string>
+    <string name="nav_metrics_device_profile_info">Device Profile Info</string>
+    <string name="nav_metrics_trust_check_info">Trust Check Info</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

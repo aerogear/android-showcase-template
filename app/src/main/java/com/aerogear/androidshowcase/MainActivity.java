@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,8 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
@@ -23,13 +23,18 @@ import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
 import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.mvp.components.HttpHelper;
 import com.aerogear.androidshowcase.navigation.Navigator;
+
+import org.aerogear.mobile.auth.AuthService;
+import org.aerogear.mobile.auth.user.UserPrincipal;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
-import javax.inject.Inject;
-import org.aerogear.mobile.auth.AuthService;
-import org.aerogear.mobile.auth.user.UserPrincipal;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, NotesDetailFragment.SaveNoteListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
@@ -41,7 +46,8 @@ public class MainActivity extends BaseActivity
     @Inject
     OpenIDAuthenticationProvider authProvider;
 
-    @Inject @Nullable
+    @Inject
+    @Nullable
     AuthService authService;
 
     @Inject
@@ -61,6 +67,7 @@ public class MainActivity extends BaseActivity
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
+     *
      * @param savedInstanceState - the saved instance state
      */
     @Override
@@ -93,7 +100,7 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (navigator.canGoBack(this)){
+        } else if (navigator.canGoBack(this)) {
             navigator.goBack(this);
         } else {
             super.onBackPressed();
@@ -102,45 +109,39 @@ public class MainActivity extends BaseActivity
 
     /**
      * Handling for Sidebar Navigation
+     *
      * @param item - the menu item that was selected from the menu
      */
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
         int id = item.getItemId();
 
-        // Visit the Authentication Screen
-        if (id == R.id.nav_home) {
-            navigator.navigateToHomeView(this);
-        }
-        // Visit the Authentication Screen
-        if (id == R.id.nav_authentication) {
-            navigator.navigateToAuthenticationView(this);
-        }
-        // Visit the Access Control Screen
-        if (id == R.id.nav_accesscontrol) {
-            navigator.navigateToAccessControlView(this);
-        }
-        // Visit the Storage Screen
-        if (id == R.id.nav_storage) {
-            navigator.navigateToStorageView(this);
-        }
-        // Visit the Device Screen
-        if (id == R.id.nav_device) {
-            navigator.navigateToDeviceView(this);
-        }
-        // Visit the Network Screen
-        if (id == R.id.nav_network) {
-            navigator.navigateToNetworkView(this);
-        }
-
-        // Visit the Push Screen
-        if (id == R.id.nav_push) {
-            navigator.navigateToPushView(this);
+        switch (id) {
+            case R.id.nav_home:
+                navigator.navigateToHomeView(this);
+                break;
+            case R.id.nav_identity_management_authentication:
+                navigator.navigateToAuthenticationView(this);
+                break;
+            case R.id.nav_identity_management_sso:
+                navigator.navigateToAccessControlView(this);
+                break;
+            case R.id.nav_security_storage:
+                navigator.navigateToStorageView(this);
+                break;
+            case R.id.nav_security_device_trust:
+                navigator.navigateToDeviceView(this);
+                break;
+            case R.id.nav_security_cert_pinning:
+                navigator.navigateToNetworkView(this);
+                break;
+            case R.id.nav_push_messages:
+                navigator.navigateToPushView(this);
+                break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

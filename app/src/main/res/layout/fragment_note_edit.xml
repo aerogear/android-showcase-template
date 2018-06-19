@@ -44,6 +44,7 @@
                 android:id="@+id/note_content_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="top|start"
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:minHeight="@dimen/note_content_edit_min_height" />

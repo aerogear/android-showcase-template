@@ -60,7 +60,7 @@ public class StorageFeatureTest {
     public void testNotesOperations() {
         //go to the notes list view
         onView(withId(R.id.drawer_layout)).perform(open());
-        onView(withText(R.string.fragment_title_storage)).perform(click());
+        onView(withText(R.string.nav_security_storage)).perform(click());
         //the list view should be appear
         onView(withId(R.id.notes_list_view)).check(matches(isDisplayed()));
         //click on the add button
