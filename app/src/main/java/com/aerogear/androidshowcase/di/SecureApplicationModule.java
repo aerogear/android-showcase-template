@@ -84,10 +84,11 @@ public class SecureApplicationModule {
     }
 
     @Provides @Singleton
-    NoteDataStoreFactory provideNoteDataStoreFactory(Context context, @Named("fileStore") NoteDataStore fileStore, @Named("sqliteStore") NoteDataStore sqlStore, @Named("graphqlStore") NoteDataStore graphqlStore) {
+    NoteDataStoreFactory provideNoteDataStoreFactory(Context context, @Named("fileStore") NoteDataStore fileStore, @Named("graphqlStore") NoteDataStore graphqlStore) {
+//        NoteDataStoreFactory provideNoteDataStoreFactory(Context context, @Named("fileStore") NoteDataStore fileStore, @Named("sqliteStore") NoteDataStore sqlStore, @Named("graphqlStore") NoteDataStore graphqlStore) {
         List<NoteDataStore> stores = new ArrayList<NoteDataStore>();
         stores.add(fileStore);
-        stores.add(sqlStore);
+//        stores.add(sqlStore);
         stores.add(graphqlStore);
         return new NoteDataStoreFactory(context, stores);
     }
