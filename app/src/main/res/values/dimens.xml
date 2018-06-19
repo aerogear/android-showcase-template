@@ -52,7 +52,7 @@
     <dimen name="profile_image_border_padding_left">10dp</dimen>
     <dimen name="profile_image_border_padding_right">10dp</dimen>
     <dimen name="profile_image_border_padding_top">10dp</dimen>
-    <dimen name="authentication_button_margin_bottom">15dp</dimen>
+    <dimen name="authentication_button_margin_bottom">110dp</dimen>
     <dimen name="section_header_padding">10dp</dimen>
     <dimen name="authentication_email_margin_top">12dp</dimen>
     <dimen name="authentication_name_margin_top">75dp</dimen>
