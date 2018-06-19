@@ -8,27 +8,28 @@ import android.support.design.widget.Snackbar;
 
 import com.aerogear.androidshowcase.BaseActivity;
 import com.aerogear.androidshowcase.MainActivity;
+import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.domain.Constants;
-import com.aerogear.androidshowcase.features.accesscontrol.AccessControlFragment;
+import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.device.DeviceFragment;
 import com.aerogear.androidshowcase.features.documentation.DocumentUrl;
 import com.aerogear.androidshowcase.features.documentation.DocumentationFragment;
 import com.aerogear.androidshowcase.features.home.HomeFragment;
-import com.aerogear.androidshowcase.R;
-import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.features.network.NetworkFragment;
 import com.aerogear.androidshowcase.features.push.PushFragment;
 import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
 import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.features.underconstruction.UnderConstructionFragment;
 import com.aerogear.androidshowcase.mvp.views.BaseFragment;
+
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
-import javax.inject.Inject;
 import org.aerogear.mobile.core.MobileCore;
 import org.aerogear.mobile.core.configuration.ServiceConfiguration;
+
+import javax.inject.Inject;
 
 /**
  * A class to control the navigation of the app.
@@ -75,22 +76,6 @@ public class Navigator {
 
         AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(user);
         loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
-    }
-
-    public void navigateToAccessControlView(final BaseActivity activity) {
-        if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
-            return;
-        }
-
-        UserPrincipal currentUser = authService.currentUser();
-        if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_MOBILE_USER)) {
-            AccessControlFragment accessControView = new AccessControlFragment();
-            loadFragment(activity, accessControView, AccessControlFragment.TAG);
-        } else {
-            Snackbar.make(activity.findViewById(android.R.id.content), R.string.not_authenticated, Snackbar.LENGTH_LONG).show();
-            navigateToAuthenticationView(activity);
-        }
     }
 
     public void navigateToStorageView(BaseActivity activity) {
