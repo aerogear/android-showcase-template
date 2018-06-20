@@ -1,6 +1,6 @@
 package com.aerogear.androidshowcase.di;
 
-import com.aerogear.androidshowcase.features.accesscontrol.AccessControlFragment;
+
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.device.DeviceFragment;
@@ -31,9 +31,6 @@ public abstract class FragmentModules {
 
     @ContributesAndroidInjector
     abstract AuthenticationFragment contributeAuthenticationFragmentInjector();
-
-    @ContributesAndroidInjector
-    abstract AccessControlFragment contributeAccessControlFragmentInjector();
 
     @ContributesAndroidInjector
     abstract AuthenticationDetailsFragment contributeAuthenticationDetailsFragmentInjector();
