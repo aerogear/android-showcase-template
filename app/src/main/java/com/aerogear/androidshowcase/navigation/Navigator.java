@@ -5,7 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.widget.Toast;
+
 import com.aerogear.androidshowcase.BaseActivity;
 import com.aerogear.androidshowcase.MainActivity;
 import com.aerogear.androidshowcase.domain.Constants;
@@ -22,6 +22,7 @@ import com.aerogear.androidshowcase.features.network.NetworkFragment;
 import com.aerogear.androidshowcase.features.push.PushFragment;
 import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
 import com.aerogear.androidshowcase.features.storage.NotesListFragment;
+import com.aerogear.androidshowcase.features.underconstruction.UnderConstructionFragment;
 import com.aerogear.androidshowcase.mvp.views.BaseFragment;
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
@@ -154,6 +155,33 @@ public class Navigator {
         }
     }
 
+    public void navigateToUnderConstructorView(MainActivity activity) {
+        UnderConstructionFragment fragment = new UnderConstructionFragment();
+        loadFragment(activity, fragment, UnderConstructionFragment.TAG);
+    }
+
+    public void navigateToIdentityManagementDocumentation(MainActivity activity) {
+        navigateToDocumentation(activity, DocumentUrl.IDENTITY_MANAGEMENT);
+    }
+
+    public void navigateToSecurityDocumentation(MainActivity activity) {
+        navigateToDocumentation(activity, DocumentUrl.DEVICE_SECURITY);
+    }
+
+    public void navigateToMetricsDocumentation(MainActivity activity) {
+        navigateToDocumentation(activity, DocumentUrl.METRICS);
+    }
+
+    public void navigateToPushDocumentation(MainActivity activity) {
+        navigateToDocumentation(activity, DocumentUrl.PUSH);
+    }
+
+    private void navigateToDocumentation(MainActivity activity, DocumentUrl documentUrl) {
+        DocumentationFragment documentationFragment = DocumentationFragment.newInstance(documentUrl);
+        loadFragment(activity, documentationFragment, documentUrl.getUrl());
+
+    }
+
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {
         FragmentManager fm = activity.getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
@@ -202,6 +230,5 @@ public class Navigator {
 
         return configuration != null;
     }
-
 
 }

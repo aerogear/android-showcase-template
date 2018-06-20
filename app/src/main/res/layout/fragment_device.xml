@@ -13,7 +13,7 @@
         android:layout_margin="@dimen/note_add_btn_margin"
         android:background="@color/orange"
         android:clickable="true"
-        android:src="@drawable/ic_refresh_black_24dp"
+        android:src="@drawable/ic_refresh"
         android:tint="@color/white"
         app:backgroundTint="@color/orange"
         app:fabSize="normal" />

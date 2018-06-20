@@ -6,32 +6,74 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="@string/fragment_title_home" />
+
         <item
-            android:id="@+id/nav_authentication"
-            android:icon="@drawable/ic_lock_open"
+            android:id="@+id/nav_identity_management"
+            android:icon="@drawable/ic_account_circle"
             android:title="@string/fragment_title_authenticate" />
 
         <item
-            android:id="@+id/nav_accesscontrol"
-            android:icon="@drawable/ic_security_black_24dp"
-            android:title="@string/fragment_title_accesscontrol" />
+            android:id="@+id/nav_identity_management_documentation"
+            android:title="@string/nav_documentation" />
 
         <item
-            android:id="@+id/nav_storage"
-            android:icon="@drawable/ic_storage"
-            android:title="@string/fragment_title_storage" />
+            android:id="@+id/nav_identity_management_authentication"
+            android:title="@string/nav_identity_management_authentication" />
+
         <item
-            android:id="@+id/nav_network"
-            android:icon="@drawable/ic_network_locked"
-            android:title="@string/fragment_title_network" />
+            android:id="@+id/nav_identity_management_sso"
+            android:title="@string/nav_identity_management_sso" />
+
         <item
-            android:id="@+id/nav_device"
-            android:icon="@drawable/ic_phone_lock"
-            android:title="@string/fragment_title_device" />
+            android:id="@+id/nav_security"
+            android:icon="@drawable/ic_security"
+            android:title="@string/fragment_title_security" />
+
+        <item
+            android:id="@+id/nav_security_documentation"
+            android:title="@string/nav_documentation" />
+
+        <item
+            android:id="@+id/nav_security_device_trust"
+            android:title="@string/nav_security_device_trust" />
+
+        <item
+            android:id="@+id/nav_security_storage"
+            android:title="@string/nav_security_storage" />
+
+        <item
+            android:id="@+id/nav_security_cert_pinning"
+            android:title="@string/nav_security_cert_pinning" />
 
         <item
             android:id="@+id/nav_push"
             android:icon="@drawable/ic_message"
-            android:title="@string/fragment_title_push" />
+            android:title="@string/nav_push" />
+
+        <item
+            android:id="@+id/nav_push_documentation"
+            android:title="@string/nav_documentation" />
+
+        <item
+            android:id="@+id/nav_push_messages"
+            android:title="@string/nav_push_messages" />
+
+        <item
+            android:id="@+id/nav_metrics"
+            android:icon="@drawable/ic_insert_chart"
+            android:title="@string/nav_metrics" />
+
+        <item
+            android:id="@+id/nav_metrics_documentation"
+            android:title="@string/nav_documentation" />
+
+        <item
+            android:id="@+id/nav_metrics_device_profile_info"
+            android:title="@string/nav_metrics_device_profile_info" />
+
+        <item
+            android:id="@+id/nav_metrics_trust_check_info"
+            android:title="@string/nav_metrics_trust_check_info" />
+
     </group>
 </menu>

@@ -2,8 +2,6 @@ package com.aerogear.androidshowcase.features.push;
 
 import android.app.Activity;
 import android.content.Context;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -29,7 +27,6 @@ import org.aerogear.mobile.push.PushService;
 import org.aerogear.mobile.push.UnifiedPushMessage;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
