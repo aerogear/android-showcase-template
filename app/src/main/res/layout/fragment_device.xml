@@ -34,65 +34,54 @@
                 android:id="@+id/trustScoreText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0%"
                 android:background="@color/colorPrimary"
-                android:textColor="@color/red"
+                android:text="0%"
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-                android:textSize="70sp" />
+                android:textColor="@color/white"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/trustScoreHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:textAlignment="center"
                 android:paddingBottom="10dp"
-                android:text="@string/trust_score_header_title" />
-
-            <ProgressBar
-                android:id="@+id/trustScore"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:layout_marginBottom="-15dp"
-                android:layout_marginTop="-10dp"
-                android:progressTint="@color/green"
-                android:progressBackgroundTint="@color/colorPrimary"
+                android:text="@string/trust_score_header_title"
                 android:textAlignment="center"
-                android:max="100"
-                android:progress="100" />
+                android:textColor="@color/white" />
 
             <RadioButton
                 android:id="@+id/emulatorAccess"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:button="@drawable/ic_emulator"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:textColor="@color/green"
-                android:padding="15dp"
                 android:layout_margin="10dp"
-                android:text="@string/emulator_detected_negative" />
+                android:button="@drawable/baseline_verified_user"
+                android:buttonTint="@color/green"
+                android:checked="false"
+                android:padding="15dp"
+                android:text="@string/emulator_detected_negative"
+                android:textColor="@color/green" />
 
             <RadioButton
                 android:id="@+id/debuggerAccess"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:button="@drawable/ic_debug"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:textColor="@color/green"
+                android:button="@drawable/baseline_verified_user"
+                android:buttonTint="@color/green"
                 android:padding="15dp"
-                android:text="@string/debugger_detected_negative" />
+                android:text="@string/debugger_detected_negative"
+                android:textColor="@color/green" />
 
             <RadioButton
                 android:id="@+id/rootAccess"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:button="@drawable/ic_root"
-                android:buttonTint="@color/colorPrimaryDark"
+                android:button="@drawable/baseline_verified_user"
+                android:buttonTint="@color/green"
                 android:padding="15dp"
                 android:text="@string/root_detected_negative"
                 android:textColor="@color/green" />
@@ -101,45 +90,45 @@
                 android:id="@+id/lockScreenSetup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:button="@drawable/ic_lock_screen"
-                android:textColor="@color/green"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:padding="15dp"
                 android:layout_margin="10dp"
-                android:text="@string/device_lock_detected_positive" />
+                android:button="@drawable/baseline_verified_user"
+                android:buttonTint="@color/green"
+                android:padding="15dp"
+                android:text="@string/device_lock_detected_positive"
+                android:textColor="@color/green" />
 
             <RadioButton
                 android:id="@+id/allowBackup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:button="@drawable/ic_backup"
-                android:textColor="@color/green"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:padding="15dp"
                 android:layout_margin="10dp"
-                android:text="@string/allow_backup_detected_negative" />
+                android:button="@drawable/baseline_verified_user"
+                android:buttonTint="@color/green"
+                android:padding="15dp"
+                android:text="@string/allow_backup_detected_negative"
+                android:textColor="@color/green" />
 
             <RadioButton
                 android:id="@+id/deviceEncrypted"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:button="@drawable/ic_encrypt"
-                android:textColor="@color/green"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:padding="15dp"
                 android:layout_margin="10dp"
-                android:text="@string/device_encrypted_positive" />
+                android:button="@drawable/baseline_verified_user"
+                android:buttonTint="@color/green"
+                android:padding="15dp"
+                android:text="@string/device_encrypted_positive"
+                android:textColor="@color/green" />
 
             <RadioButton
                 android:id="@+id/developerOptions"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:button="@drawable/ic_developer_options"
-                android:textColor="@color/green"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:padding="15dp"
                 android:layout_margin="10dp"
-                android:text="@string/developer_options_negative" />
+                android:button="@drawable/baseline_verified_user"
+                android:buttonTint="@color/green"
+                android:padding="15dp"
+                android:text="@string/developer_options_negative"
+                android:textColor="@color/green" />
 
         </LinearLayout>
 

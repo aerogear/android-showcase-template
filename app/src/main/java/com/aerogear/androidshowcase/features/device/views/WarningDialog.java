@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import com.aerogear.androidshowcase.R;
 
 public class WarningDialog extends DialogFragment {
+    int SCORE_THRESHOLD;
+    int trustScore;
 
     @Nullable
     @Override
@@ -26,17 +28,18 @@ public class WarningDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setCustomTitle(inflater.inflate(R.layout.fragment_warning_title, null));
-        builder.setMessage(R.string.device_trust_warning)
-                .setPositiveButton(R.string.device_continue, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dismiss();
-                    }
-                })
-                .setNegativeButton(R.string.device_exit, new DialogInterface.OnClickListener() {
+        SCORE_THRESHOLD = getArguments().getInt("SCORE_THRESHOLD");
+        trustScore = getArguments().getInt("trustScore");
+        builder.setTitle("Warning");
+        builder.setMessage("Your current device trust score " + trustScore + "% is below the specified target of " + SCORE_THRESHOLD + "%, do you want to continue or exit the app?")
+                .setPositiveButton(R.string.device_exit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         android.os.Process.killProcess(android.os.Process.myPid());
+                    }
+                })
+                .setNegativeButton(R.string.device_continue, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dismiss();
                     }
                 });
         return builder.create();

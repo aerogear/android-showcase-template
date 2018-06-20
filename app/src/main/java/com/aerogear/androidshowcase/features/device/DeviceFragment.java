@@ -2,11 +2,11 @@ package com.aerogear.androidshowcase.features.device;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -67,9 +67,6 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
 
     @BindView(R.id.developerOptions)
     RadioButton developerOptions;
-
-    @BindView(R.id.trustScore)
-    ProgressBar trustScore;
 
     @BindView(R.id.trustScoreText)
     TextView trustScoreText;
@@ -277,6 +274,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         totalTestFailures++;
         uiElement.setText(textResource);
         uiElement.setTextColor(getResources().getColor(R.color.orange));
+        uiElement.setButtonDrawable(R.drawable.baseline_warning);
+        uiElement.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
+
     }
 
 
@@ -289,22 +289,21 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
      * Set the trust score colouring as an indicator
      */
     public void setTrustScore(int score) {
-        trustScore.setProgress(score);
         trustScoreText.setText(score + "%");
         trustScoreHeader.setText(
-            getText(R.string.trust_score_header_title) + "\n(" + Math.round(totalTests)
-                + " Tests)");
-
-        // change the score percentage colour depending on the trust score
-        if (trustScore.getProgress() == 100) {
-            trustScoreHeader.setBackgroundColor(getResources().getColor(R.color.green));
-            trustScoreText.setBackgroundColor(getResources().getColor(R.color.green));
-        }
+            getText(R.string.trust_score_header_title) + "\n(" + Math.round(totalTests - totalTestFailures) +" out of "  + Math.round(totalTests)
+                + " checks passing)");
     }
 
     private void checkTrustScore(int score) {
         if (score < SCORE_THRESHOLD) {
             WarningDialog warning = new WarningDialog();
+            Bundle warningBundle = new Bundle();
+
+            warningBundle.putInt("SCORE_THRESHOLD", SCORE_THRESHOLD);
+            warningBundle.putInt("trustScore", score);
+
+            warning.setArguments(warningBundle);
             warning.show(getFragmentManager(), "device_warning");
         }
     }
