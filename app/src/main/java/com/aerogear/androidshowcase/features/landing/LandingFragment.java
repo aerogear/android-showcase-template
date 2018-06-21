@@ -1,22 +1,31 @@
 package com.aerogear.androidshowcase.features.landing;
 
 import android.app.Activity;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aerogear.androidshowcase.BR;
 import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.features.landing.presenters.LandingPresenter;
 import com.aerogear.androidshowcase.features.landing.views.LandingViewImpl;
 import com.aerogear.androidshowcase.mvp.presenters.Presenter;
 import com.aerogear.androidshowcase.mvp.views.AppView;
 import com.aerogear.androidshowcase.mvp.views.BaseFragment;
+import com.github.nitrico.lastadapter.LastAdapter;
+
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -31,14 +40,16 @@ public class LandingFragment extends BaseFragment {
 
     public static final String TAG = "Landing";
 
+    private ObservableList<String> description = new ObservableArrayList<>();
+
     @Inject
     LandingPresenter landingPresenter;
 
     @BindView(R.id.title)
-    TextView title;
+    TextView mTitle;
     
     @BindView(R.id.description)
-    TextView description;
+    RecyclerView mDescription;
 
     @Nullable
     @Override
@@ -49,6 +60,12 @@ public class LandingFragment extends BaseFragment {
 
         ButterKnife.bind(this, view);
 
+        mDescription.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        new LastAdapter(description, BR.description)
+                .map(String.class, R.layout.item_landing)
+                .into(mDescription);
+
         return view;
     }
 
@@ -57,10 +74,11 @@ public class LandingFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         
         @StringRes int titleResId = getArguments().getInt(TITLE);
-        title.setText(getString(titleResId));
+        mTitle.setText(getString(titleResId));
         
-        @StringRes int descriptionResId = getArguments().getInt(DESCRIPTION);
-        description.setText(getString(descriptionResId));
+        @ArrayRes int descriptionResId = getArguments().getInt(DESCRIPTION);
+        String[] descriptionArray = getResources().getStringArray(descriptionResId);
+        description.addAll(Arrays.asList(descriptionArray));
     }
 
     @Override
@@ -87,7 +105,7 @@ public class LandingFragment extends BaseFragment {
     }
 
     public static LandingFragment newInstance(@StringRes int titleResId, 
-                                              @StringRes int descriptionResId) {
+                                              @ArrayRes int descriptionResId) {
         LandingFragment fragment = new LandingFragment();
 
         Bundle args = new Bundle();

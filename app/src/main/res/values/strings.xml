@@ -5,6 +5,7 @@
     <string name="app_name">AeroGear Android Showcase</string>
     <string name="app_description">This app demonstrates how to use the AeroGear Mobile services, backed by OpenShift to perform a wide range of common mobile tasks such as Identity Management, Device Security, Metrics Capture, Push Notifications and more. \n\nFor further information, visit <a href="http://www.aerogear.org">www.aerogear.org</a></string>
     <string name="further_information">For further information, visit\n<a href="http://www.aerogear.org">www.aerogear.org</a></string>
+    <string name="bullet">\u2022</string>
 
     <!-- Strings related to Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -19,7 +20,12 @@
     <string name="nav_identity_management_authentication">Authentication</string>
     <string name="nav_identity_management_sso">SSO</string>
     <string name="identity_management_landing_title">The Identity Management service allows you to add authentication and authorization to your mobile app.</string>
-    <string name="identity_management_landing_description">\u2022 Secure your mobile app using the industry standard OpenID Connect protocol\n\u2022 Add access control to your app based on user’s group membership\n\u2022 Easily implement SSO, multi factor authentication and Social Login support\n\u2022 Back end support for identity brokering and user federation</string>
+    <string-array name="identity_management_landing_description">
+        <item>Secure your mobile app using the industry standard OpenID Connect protocol</item>
+        <item>Add access control to your app based on user’s group membership</item>
+        <item>Easily implement SSO, multi factor authentication and Social Login support</item>
+        <item>Back end support for identity brokering and user federation</item>
+    </string-array>
     <string name="action_settings">Settings</string>
     <string name="app_redirect_scheme">com.aerogear.androidshowcase</string>
     <string name="title_activity_authenticate">Authenticate</string>
@@ -50,7 +56,10 @@
     <string name="nav_security_storage">Secure Storage</string>
     <string name="nav_security_cert_pinning">Cert Pinning</string>
     <string name="security_landing_title">The Security service allows you to easily configure and manage device security, and trust checks for your mobile app</string>
-    <string name="security_landing_description">\u2022 Perform a range of device trust checks on the mobile device, such as checking if the device is rooted, and allows you take proactive action based on the results\n\u2022 Distribute SSL certificates with a mobile app to create a direct chain of trust (certificate pinning)</string>
+    <string-array name="security_landing_description">
+        <item>Perform a range of device trust checks on the mobile device, such as checking if the device is rooted, and allows you take proactive action based on the results</item>
+        <item>Distribute SSL certificates with a mobile app to create a direct chain of trust (certificate pinning)</item>
+    </string-array>
     <string name="not_authenticated">Insufficient Privileges. Your Access Token must possess the "mobile-user" realm role.</string>
     <string name="not_authenticated_api_access">Insufficient Privileges. Your Access Token must possess the "api-access" realm role.</string>
 
@@ -126,7 +135,13 @@
     <string name="nav_push">Push Notifications</string>
     <string name="nav_push_messages">Push Messages</string>
     <string name="push_landing_title">The Push service allows you send native push notifications to different mobile operating systems.</string>
-    <string name="push_landing_description">\u2022 Code once and send push notifications to iOS and Android\n\u2022 Push notifications to defined groups\n\u2022 Push notifications to either iOS only or Android only\n\u2022 Push notifications to different variants of a mobile app\n\u2022 Push notifications from different back-end apps to the same mobile app</string>
+    <string-array name="push_landing_description">
+        <item>Code once and send push notifications to iOS and Android</item>
+        <item>Push notifications to defined groups</item>
+        <item>Push notifications to either iOS only or Android only</item>
+        <item>Push notifications to different variants of a mobile app</item>
+        <item>Push notifications from different back-end apps to the same mobile app</item>
+    </string-array>
     <string name="push_device_register_success">Device success registered on Unified Push Server</string>
     <string name="push_deleted">Message deleted</string>
     <string name="push_undo">Undo</string>
@@ -136,7 +151,10 @@
     <string name="nav_metrics_device_profile_info">Device Profile Info</string>
     <string name="nav_metrics_trust_check_info">Trust Check Info</string>
     <string name="metrics_landing_title">The Metrics service allows you gather metrics on mobile apps, device versions, device security checks and back-end mobile service usage.</string>
-    <string name="metrics_landing_description">\u2022 Monitor usage by version of mobile app, platform and SDK\n\u2022 Monitor interactions with the Identity Management service</string>
+    <string-array name="metrics_landing_description">
+        <item>Monitor usage by version of mobile app, platform and SDK</item>
+        <item>Monitor interactions with the Identity Management service</item>
+    </string-array>
 
     <!-- Under Constrution -->
     <string name="under_construction_title">Under Construction</string>

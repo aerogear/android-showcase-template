@@ -3,6 +3,7 @@ package com.aerogear.androidshowcase.navigation;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -174,7 +175,7 @@ public class Navigator {
         navigateToLanding(
                 activity,
                 R.string.identity_management_landing_title,
-                R.string.identity_management_landing_description
+                R.array.identity_management_landing_description
         );
     }
 
@@ -182,7 +183,7 @@ public class Navigator {
         navigateToLanding(
                 activity,
                 R.string.security_landing_title,
-                R.string.security_landing_description
+                R.array.security_landing_description
         );
     }
 
@@ -190,7 +191,7 @@ public class Navigator {
         navigateToLanding(
                 activity,
                 R.string.push_landing_title,
-                R.string.push_landing_description
+                R.array.push_landing_description
         );
     }
 
@@ -198,12 +199,12 @@ public class Navigator {
         navigateToLanding(
                 activity,
                 R.string.metrics_landing_title,
-                R.string.metrics_landing_description
+                R.array.metrics_landing_description
         );
     }
 
     private void navigateToLanding(MainActivity activity, @StringRes int titleResId,
-                                   @StringRes int descriptionResId) {
+                                   @ArrayRes int descriptionResId) {
         LandingFragment landingFragment = LandingFragment.newInstance(titleResId, descriptionResId);
         loadFragment(activity, landingFragment, LandingFragment.TAG);
     }
