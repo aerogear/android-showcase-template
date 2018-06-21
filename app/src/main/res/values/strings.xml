@@ -34,6 +34,12 @@
     <string name="unknown_name">Unknown Name</string>
     <string name="cert_pin_verification_failed">Certificate Pinning Verification Failed</string>
     <string name="insecure_connection_prevent_auth">Insecure Server Connection. Preventing Authentication</string>
+    <string name="full_name">Full Name:</string>
+    <string name="email">Email:</string>
+    <string name="username">Username:</string>
+    <string name="OTP">OTP 2FA Enabled</string>
+    <string name="email_verified">Email Verified</string>
+    <string name="assigned_roles">Assigned Roles</string>
 
     <!-- Strings related to Security -->
     <string name="fragment_title_security">Security</string>

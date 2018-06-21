@@ -80,4 +80,7 @@
     <dimen name="authentication_banner_image_height">120dp</dimen>
     <dimen name="authentication_banner_image_width">120dp</dimen>
     <dimen name="authentication_header_image_height">100dp</dimen>
+    <dimen name="card_margin_side">15dp</dimen>
+    <dimen name="card_margin_top">10dp</dimen>
+    <dimen name="auth_info_bottom_margin">20dp</dimen>
 </resources>
