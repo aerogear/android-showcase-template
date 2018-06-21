@@ -273,9 +273,9 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
     public void setCheckFailed(RadioButton uiElement, int textResource) {
         totalTestFailures++;
         uiElement.setText(textResource);
-        uiElement.setTextColor(getResources().getColor(R.color.orange));
+        uiElement.setTextColor(getResources().getColor(R.color.red));
         uiElement.setButtonDrawable(R.drawable.baseline_warning);
-        uiElement.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
+        uiElement.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.red)));
 
     }
 
