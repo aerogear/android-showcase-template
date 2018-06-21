@@ -121,11 +121,19 @@ public class MainActivity extends BaseActivity
             case R.id.nav_home:
                 navigator.navigateToHomeView(this);
                 break;
+            case R.id.nav_identity_management:
+                navigator.navigateToLandingIdentityManagement(this);
+                break;
             case R.id.nav_identity_management_documentation:
                 navigator.navigateToIdentityManagementDocumentation(this);
                 break;
             case R.id.nav_identity_management_authentication:
                 navigator.navigateToAuthenticationView(this);
+            case R.id.nav_identity_management_sso:
+                navigator.navigateToUnderConstructorView(this);
+                break;
+            case R.id.nav_security:
+                navigator.navigateToLandingSecurity(this);
                 break;
             case R.id.nav_security_documentation:
                 navigator.navigateToSecurityDocumentation(this);
@@ -139,11 +147,17 @@ public class MainActivity extends BaseActivity
             case R.id.nav_security_cert_pinning:
                 navigator.navigateToNetworkView(this);
                 break;
+            case R.id.nav_push:
+                navigator.navigateToLandingPush(this);
+                break;
             case R.id.nav_push_documentation:
                 navigator.navigateToPushDocumentation(this);
                 break;
             case R.id.nav_push_messages:
                 navigator.navigateToPushView(this);
+                break;
+            case R.id.nav_metrics:
+                navigator.navigateToLandingMetrics(this);
                 break;
             case R.id.nav_metrics_documentation:
                 navigator.navigateToMetricsDocumentation(this);

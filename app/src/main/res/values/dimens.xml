@@ -34,6 +34,15 @@
     <dimen name="under_construction_description_margin_top">30dp</dimen>
     <dimen name="under_construction_description_text_size">18sp</dimen>
 
+    <!-- Landing -->
+    <dimen name="landing_logo_margin_start">40dp</dimen>
+    <dimen name="landing_margin_start">15dp</dimen>
+    <dimen name="landing_title_margin_top">30dp</dimen>
+    <dimen name="landing_title_text_size">18sp</dimen>
+    <dimen name="landing_description_margin_top">10dp</dimen>
+    <dimen name="landing_description_text_size">16sp</dimen>
+    <dimen name="landing_footer_margin_top">10dp</dimen>
+
     <dimen name="help_icon_height">48dp</dimen>
     <dimen name="help_icon_width">48dp</dimen>
 
