@@ -43,11 +43,11 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     @Inject
     Context context;
 
-    @BindView(R.id.divider_realm)
-    TextView divider_realm;
-
     @BindView(R.id.user_name)
     TextView user_name;
+
+    @BindView(R.id.user_full_name)
+    TextView user_full_name;
 
     @BindView(R.id.user_email)
     TextView user_email;
@@ -155,8 +155,10 @@ public class AuthenticationDetailsFragment extends BaseFragment<AuthenticationDe
     private void renderIdentityInfo(final Bundle args) {
         UserPrincipal user = (UserPrincipal) args.get(Constants.TOKEN_FIELDS.IDENTITY_DATA);
         if (user != null) {
+
+            user_name.setText(user.getUsername());
             // get the users name
-            user_name.setText(user.getName());
+            user_full_name.setText(user.getName());
             // get the users email
             user_email.setText(user.getEmail());
             // get the users roles

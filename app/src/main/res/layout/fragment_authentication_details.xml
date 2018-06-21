@@ -1,98 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     tools:context="com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/header_cover_image"
+        <LinearLayout
+            android:id="@+id/top_card"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/authentication_header_image_height"
-            android:scaleType="centerCrop"
-            android:background="@color/colorPrimary" />
+            android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/user_profile_photo"
-            android:layout_width="@dimen/authentication_banner_image_width"
-            android:layout_height="@dimen/authentication_banner_image_height"
-            android:layout_below="@+id/header_cover_image"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/authentication_banner_image_margin_top"
-            android:background="@drawable/profile_image_border"
-            android:elevation="@dimen/authentication_banner_image_elevation"
-            android:padding="@dimen/authentication_banner_image_padding"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ag_avatar" />
-
-        <RelativeLayout
-            android:id="@+id/profile_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/header_cover_image"
-            android:background="@color/colorPrimary"
-            android:elevation="@dimen/authentication_banner_padding_elevation"
-            android:paddingBottom="@dimen/authentication_banner_padding_bottom">
-
-
-            <TextView
-                android:id="@+id/user_name"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.CardView
+                android:id="@+id/userInfoCard"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/authentication_name_margin_top"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="@dimen/card_margin_side"
+                android:layout_marginRight="@dimen/card_margin_side"
+                android:layout_marginTop="@dimen/card_margin_top">
 
-            <TextView
-                android:id="@+id/user_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/user_name"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/authentication_email_margin_top"
-                android:textColor="#fff"
-                android:textSize="14sp" />
-        </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/userInfoView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/user_profile_photo"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_margin="-5dp"
+                            android:background="@drawable/ic_person" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/auth_info_bottom_margin"
+                            android:layout_marginStart="10dp">
+
+                            <TextView
+                                android:id="@+id/name_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/full_name"
+                                android:textColor="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/user_full_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/name_label" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/email_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/userInfoView">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/auth_info_bottom_margin">
+
+                            <TextView
+                                android:id="@+id/email_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email"
+                                android:textColor="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/user_email"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/email_label" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/username_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/email_info">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/username_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/username"
+                                android:textColor="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/user_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/username_label" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
 
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:id="@+id/roles_card"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_layout"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical">
+            android:layout_below="@+id/top_card">
 
-            <TextView
-                android:id="@+id/divider_realm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/section_header_padding"
-                android:text="@string/roles"
-                android:textColor="@color/orange"
-                android:textStyle="bold" />
-
-            <ListView
-                android:id="@+id/roles"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none" />
+                android:layout_height="wrap_content">
 
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/card_margin_side">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/roles_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/light_grey"
+                            android:padding="16dp"
+                            android:text="@string/assigned_roles" />
+
+                        <ListView
+                            android:id="@+id/roles"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/roles_title"
+                            android:scrollbars="none" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </RelativeLayout>
         </LinearLayout>
+
         <Button
             android:id="@+id/keycloakLogout"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/authentication_button_margin_bottom"
+            android:textColor="@color/white"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:background="@color/orange"
+            android:layout_marginTop="@dimen/authentication_button_margin_bottom"
+            android:background="@color/colorPrimary"
             android:text="Logout" />
     </RelativeLayout>
-</RelativeLayout>
+
+</LinearLayout>
