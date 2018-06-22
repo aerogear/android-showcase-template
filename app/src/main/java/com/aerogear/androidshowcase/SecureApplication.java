@@ -74,7 +74,7 @@ public class SecureApplication extends Application implements HasActivityInjecto
                 .respondWith(new Responder<Boolean>() {
                     @Override
                     public void onResult(Boolean value) {
-                        MobileCore.getLogger().info("Device registered on Unified Push Server");
+                        MobileCore.getLogger().info(getString(R.string.push_device_register_success));
                     }
 
                     @Override

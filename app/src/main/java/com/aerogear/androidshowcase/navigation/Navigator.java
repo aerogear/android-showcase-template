@@ -3,7 +3,10 @@ package com.aerogear.androidshowcase.navigation;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.support.annotation.ArrayRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 
 import com.aerogear.androidshowcase.BaseActivity;
@@ -17,6 +20,7 @@ import com.aerogear.androidshowcase.features.device.DeviceFragment;
 import com.aerogear.androidshowcase.features.documentation.DocumentUrl;
 import com.aerogear.androidshowcase.features.documentation.DocumentationFragment;
 import com.aerogear.androidshowcase.features.home.HomeFragment;
+import com.aerogear.androidshowcase.features.landing.LandingFragment;
 import com.aerogear.androidshowcase.features.network.NetworkFragment;
 import com.aerogear.androidshowcase.features.push.PushFragment;
 import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
@@ -39,7 +43,8 @@ public class Navigator {
     @Inject
     Context context;
 
-    @Inject @Nullable
+    @Inject
+    @Nullable
     AuthService authService;
 
     @Inject
@@ -164,7 +169,44 @@ public class Navigator {
     private void navigateToDocumentation(MainActivity activity, DocumentUrl documentUrl) {
         DocumentationFragment documentationFragment = DocumentationFragment.newInstance(documentUrl);
         loadFragment(activity, documentationFragment, documentUrl.getUrl());
+    }
 
+    public void navigateToLandingIdentityManagement(MainActivity activity) {
+        navigateToLanding(
+                activity,
+                R.string.identity_management_landing_title,
+                R.array.identity_management_landing_description
+        );
+    }
+
+    public void navigateToLandingSecurity(MainActivity activity) {
+        navigateToLanding(
+                activity,
+                R.string.security_landing_title,
+                R.array.security_landing_description
+        );
+    }
+
+    public void navigateToLandingPush(MainActivity activity) {
+        navigateToLanding(
+                activity,
+                R.string.push_landing_title,
+                R.array.push_landing_description
+        );
+    }
+
+    public void navigateToLandingMetrics(MainActivity activity) {
+        navigateToLanding(
+                activity,
+                R.string.metrics_landing_title,
+                R.array.metrics_landing_description
+        );
+    }
+
+    private void navigateToLanding(MainActivity activity, @StringRes int titleResId,
+                                   @ArrayRes int descriptionResId) {
+        LandingFragment landingFragment = LandingFragment.newInstance(titleResId, descriptionResId);
+        loadFragment(activity, landingFragment, LandingFragment.TAG);
     }
 
     public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {
@@ -190,7 +232,10 @@ public class Navigator {
 
     private void showNotConfiguredDialog(BaseActivity activity, String friendlyServiceName, DocumentUrl docUrl) {
         NotAvailableDialogFragment dialog = NotAvailableDialogFragment.newInstance(friendlyServiceName);
-        dialog.setGotoDocsCallback(()->{gotoDocs(activity, docUrl); dialog.dismiss();});
+        dialog.setGotoDocsCallback(() -> {
+            gotoDocs(activity, docUrl);
+            dialog.dismiss();
+        });
         android.support.v4.app.FragmentManager fm = activity.getSupportFragmentManager();
         dialog.show(fm, friendlyServiceName);
 
@@ -204,7 +249,7 @@ public class Navigator {
     private boolean isConfigured(String serviceId) {
         MobileCore core = MobileCore.getInstance();
         ServiceConfiguration configuration = core
-            .getServiceConfigurationByType(serviceId);
+                .getServiceConfigurationByType(serviceId);
 
         //Some services (keycloak, push) are singleton and by type
         //Custom Service connectors are looked up by id.
