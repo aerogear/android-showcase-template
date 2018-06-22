@@ -261,4 +261,7 @@ public class Navigator {
         return configuration != null;
     }
 
+    public void navigateToSSODocumentation(MainActivity mainActivity) {
+        gotoDocs(mainActivity, DocumentUrl.IDENTITY_MANAGEMENT_SSO);
+    }
 }
