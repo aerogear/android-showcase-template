@@ -5,7 +5,7 @@
 
     <!-- Nav -->
     <dimen name="nav_header_vertical_spacing">12dp</dimen>
-    <dimen name="nav_header_height">200dp</dimen>
+    <dimen name="nav_header_height">112dp</dimen>
     <dimen name="nav_header_icon_width">60dp</dimen>
     <dimen name="nav_header_description_margin_bottom">10dp</dimen>
 
