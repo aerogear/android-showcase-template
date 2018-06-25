@@ -73,7 +73,7 @@ public class MainActivity extends BaseActivity
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        toolbar.setTitle(R.string.fragment_title_home);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
