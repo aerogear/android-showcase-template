@@ -4,17 +4,13 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.annotation.ArrayRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 
 import com.aerogear.androidshowcase.BaseActivity;
 import com.aerogear.androidshowcase.MainActivity;
 import com.aerogear.androidshowcase.R;
-import com.aerogear.androidshowcase.domain.Constants;
-import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.device.DeviceFragment;
@@ -22,10 +18,7 @@ import com.aerogear.androidshowcase.features.documentation.DocumentUrl;
 import com.aerogear.androidshowcase.features.documentation.DocumentationFragment;
 import com.aerogear.androidshowcase.features.home.HomeFragment;
 import com.aerogear.androidshowcase.features.landing.LandingFragment;
-import com.aerogear.androidshowcase.features.network.NetworkFragment;
 import com.aerogear.androidshowcase.features.push.PushFragment;
-import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
-import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.features.underconstruction.UnderConstructionFragment;
 import com.aerogear.androidshowcase.mvp.views.BaseFragment;
 
@@ -84,37 +77,6 @@ public class Navigator {
         loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG, title);
     }
 
-    public void navigateToStorageView(BaseActivity activity, String title) {
-        if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notes service", DocumentUrl.NOTES_SERVICE, title);
-            return;
-        }
-
-        if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
-            return;
-        }
-
-
-        NotesListFragment notesListView = new NotesListFragment();
-        loadFragment(activity, notesListView, NotesListFragment.TAG, title);
-    }
-
-    public void navigateToSingleNoteView(BaseActivity activity, Note note, String title) {
-        if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notes service", DocumentUrl.NOTES_SERVICE, title);
-            return;
-        }
-
-        if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
-            return;
-        }
-
-        NotesDetailFragment noteDetails = NotesDetailFragment.forNote(note);
-        loadFragment(activity, noteDetails, NotesDetailFragment.TAG, title);
-    }
-
     public void navigateToDeviceView(MainActivity activity, String title) {
         DeviceFragment deviceFragment = new DeviceFragment();
         loadFragment(activity, deviceFragment, DeviceFragment.TAG, title);
@@ -128,22 +90,6 @@ public class Navigator {
 
         PushFragment pushFragment = new PushFragment();
         loadFragment(activity, pushFragment, PushFragment.TAG, title);
-    }
-
-    public void navigateToNetworkView(MainActivity activity, String title) {
-        if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
-            return;
-        }
-
-        UserPrincipal currentUser = authService.currentUser();
-        if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
-            NetworkFragment networkFragment = new NetworkFragment();
-            loadFragment(activity, networkFragment, NetworkFragment.TAG, title);
-        } else {
-            Snackbar.make(activity.findViewById(android.R.id.content), R.string.not_authenticated_api_access, Snackbar.LENGTH_LONG).show();
-            navigateToAuthenticationView(activity, title);
-        }
     }
 
     public void navigateToUnderConstructorView(MainActivity activity, String title) {

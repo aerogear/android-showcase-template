@@ -11,16 +11,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.aerogear.androidshowcase.features.authentication.providers.OpenIDAuthenticationProvider;
-import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
-import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.mvp.components.HttpHelper;
 import com.aerogear.androidshowcase.navigation.Navigator;
 
@@ -37,7 +33,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, NotesDetailFragment.SaveNoteListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
+        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
 
 
     @Inject
@@ -143,10 +139,10 @@ public class MainActivity extends BaseActivity
                 navigator.navigateToDeviceView(this, getString(R.string.nav_security_device_trust));
                 break;
             case R.id.nav_security_storage:
-                navigator.navigateToStorageView(this, getString(R.string.nav_security_storage));
+                navigator.navigateToUnderConstructorView(this, getString(R.string.nav_security_storage));
                 break;
             case R.id.nav_security_cert_pinning:
-                navigator.navigateToNetworkView(this, getString(R.string.nav_security_cert_pinning));
+                navigator.navigateToUnderConstructorView(this, getString(R.string.nav_security_cert_pinning));
                 break;
             case R.id.nav_push:
                 navigator.navigateToLandingPush(this, getString(R.string.nav_push));
@@ -212,22 +208,6 @@ public class MainActivity extends BaseActivity
 
     }
 
-    @Override
-    public void onNoteClicked(Note note) {
-        Log.i("SecureAndroidApp", "Note selected: " + note.getContent());
-        navigator.navigateToSingleNoteView(this, note, getString(R.string.nav_security_storage));
-    }
-
-    @Override
-    public void onCreateNote() {
-        navigator.navigateToSingleNoteView(this, null, getString(R.string.nav_security_storage));
-    }
-
-
-    @Override
-    public void onNoteSaved(Note note) {
-        navigator.navigateToStorageView(this, getString(R.string.nav_security_storage));
-    }
 }
 
 

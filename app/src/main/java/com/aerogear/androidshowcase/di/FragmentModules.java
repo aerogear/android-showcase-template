@@ -7,12 +7,8 @@ import com.aerogear.androidshowcase.features.device.DeviceFragment;
 import com.aerogear.androidshowcase.features.documentation.DocumentationFragment;
 import com.aerogear.androidshowcase.features.home.HomeFragment;
 import com.aerogear.androidshowcase.features.landing.LandingFragment;
-import com.aerogear.androidshowcase.features.network.NetworkFragment;
 import com.aerogear.androidshowcase.features.push.PushFragment;
-import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
-import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.features.underconstruction.UnderConstructionFragment;
-import com.aerogear.androidshowcase.features.underconstruction.presenters.UnderConstructionPresenter;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -25,9 +21,6 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class FragmentModules {
 
     @ContributesAndroidInjector
-    abstract NotesListFragment contributeNotesListFragmentInjector();
-
-    @ContributesAndroidInjector
     abstract HomeFragment contributeHomeFragmentInjector();
 
     @ContributesAndroidInjector
@@ -37,13 +30,7 @@ public abstract class FragmentModules {
     abstract AuthenticationDetailsFragment contributeAuthenticationDetailsFragmentInjector();
 
     @ContributesAndroidInjector
-    abstract NotesDetailFragment contributeNoteCreateFragmentInjector();
-
-    @ContributesAndroidInjector
     abstract DeviceFragment contributeDeviceFragmentInjector();
-
-    @ContributesAndroidInjector
-    abstract NetworkFragment contributeNetworkFragmentInjector();
 
     @ContributesAndroidInjector
     abstract PushFragment contributePushFragmentInjector();
