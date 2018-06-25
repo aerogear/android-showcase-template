@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity
                 navigator.navigateToAuthenticationView(this);
                 break;
             case R.id.nav_identity_management_sso:
-                navigator.navigateToUnderConstructorView(this);
+                navigator.navigateToSSODocumentation(this);
                 break;
             case R.id.nav_security:
                 navigator.navigateToLandingSecurity(this);
