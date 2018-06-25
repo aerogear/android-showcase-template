@@ -51,7 +51,7 @@
     <string name="assigned_roles">Assigned Roles</string>
 
     <!-- Strings related to Security -->
-    <string name="fragment_title_security">Security</string>
+    <string name="fragment_title_security">Device Security</string>
     <string name="nav_security_device_trust">Device Trust</string>
     <string name="nav_security_storage">Secure Storage</string>
     <string name="nav_security_cert_pinning">Cert Pinning</string>
