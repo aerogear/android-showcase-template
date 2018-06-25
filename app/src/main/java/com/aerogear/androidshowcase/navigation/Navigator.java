@@ -8,6 +8,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 
 import com.aerogear.androidshowcase.BaseActivity;
 import com.aerogear.androidshowcase.MainActivity;
@@ -52,14 +53,14 @@ public class Navigator {
 
     }
 
-    public void navigateToHomeView(BaseActivity activity) {
+    public void navigateToHomeView(BaseActivity activity, String title) {
         HomeFragment homeView = new HomeFragment();
-        loadFragment(activity, homeView, HomeFragment.TAG);
+        loadFragment(activity, homeView, HomeFragment.TAG, title);
     }
 
-    public void navigateToAuthenticationView(final BaseActivity activity) {
+    public void navigateToAuthenticationView(final BaseActivity activity, String title) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
             return;
         }
 
@@ -67,149 +68,155 @@ public class Navigator {
         UserPrincipal user = authService.currentUser();
 
         if (user != null) {
-            navigateToAuthenticateDetailsView(activity, user);
+            navigateToAuthenticateDetailsView(activity, user, title);
         } else {
-            loadFragment(activity, authFragment, AuthenticationFragment.TAG);
+            loadFragment(activity, authFragment, AuthenticationFragment.TAG, title);
         }
     }
 
-    public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user) {
+    public void navigateToAuthenticateDetailsView(final BaseActivity activity, final UserPrincipal user, String title) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
             return;
         }
 
         AuthenticationDetailsFragment authDetailsView = AuthenticationDetailsFragment.forIdentityData(user);
-        loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG);
+        loadFragment(activity, authDetailsView, AuthenticationDetailsFragment.TAG, title);
     }
 
-    public void navigateToStorageView(BaseActivity activity) {
+    public void navigateToStorageView(BaseActivity activity, String title) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notes service", DocumentUrl.NOTES_SERVICE);
+            showNotConfiguredDialog(activity, "notes service", DocumentUrl.NOTES_SERVICE, title);
             return;
         }
 
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
             return;
         }
 
 
         NotesListFragment notesListView = new NotesListFragment();
-        loadFragment(activity, notesListView, NotesListFragment.TAG);
+        loadFragment(activity, notesListView, NotesListFragment.TAG, title);
     }
 
-    public void navigateToSingleNoteView(BaseActivity activity, Note note) {
+    public void navigateToSingleNoteView(BaseActivity activity, Note note, String title) {
         if (!isConfigured("notes-service")) {
-            showNotConfiguredDialog(activity, "notes service", DocumentUrl.NOTES_SERVICE);
+            showNotConfiguredDialog(activity, "notes service", DocumentUrl.NOTES_SERVICE, title);
             return;
         }
 
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
             return;
         }
 
         NotesDetailFragment noteDetails = NotesDetailFragment.forNote(note);
-        loadFragment(activity, noteDetails, NotesDetailFragment.TAG);
+        loadFragment(activity, noteDetails, NotesDetailFragment.TAG, title);
     }
 
-    public void navigateToDeviceView(MainActivity activity) {
+    public void navigateToDeviceView(MainActivity activity, String title) {
         DeviceFragment deviceFragment = new DeviceFragment();
-        loadFragment(activity, deviceFragment, DeviceFragment.TAG);
+        loadFragment(activity, deviceFragment, DeviceFragment.TAG, title);
     }
 
-    public void navigateToPushView(MainActivity activity) {
+    public void navigateToPushView(MainActivity activity, String title) {
         if (!isConfigured("push")) {
-            showNotConfiguredDialog(activity, "push", DocumentUrl.PUSH);
+            showNotConfiguredDialog(activity, "push", DocumentUrl.PUSH, title);
             return;
         }
 
         PushFragment pushFragment = new PushFragment();
-        loadFragment(activity, pushFragment, PushFragment.TAG);
+        loadFragment(activity, pushFragment, PushFragment.TAG, title);
     }
 
-    public void navigateToNetworkView(MainActivity activity) {
+    public void navigateToNetworkView(MainActivity activity, String title) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT);
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
             return;
         }
 
         UserPrincipal currentUser = authService.currentUser();
         if (currentUser != null && currentUser.hasRealmRole(Constants.ACCESS_CONTROL_ROLES.ROLE_API_ACCESS)) {
             NetworkFragment networkFragment = new NetworkFragment();
-            loadFragment(activity, networkFragment, NetworkFragment.TAG);
+            loadFragment(activity, networkFragment, NetworkFragment.TAG, title);
         } else {
             Snackbar.make(activity.findViewById(android.R.id.content), R.string.not_authenticated_api_access, Snackbar.LENGTH_LONG).show();
-            navigateToAuthenticationView(activity);
+            navigateToAuthenticationView(activity, title);
         }
     }
 
-    public void navigateToUnderConstructorView(MainActivity activity) {
+    public void navigateToUnderConstructorView(MainActivity activity, String title) {
         UnderConstructionFragment fragment = new UnderConstructionFragment();
-        loadFragment(activity, fragment, UnderConstructionFragment.TAG);
+        loadFragment(activity, fragment, UnderConstructionFragment.TAG, title);
     }
 
-    public void navigateToIdentityManagementDocumentation(MainActivity activity) {
-        navigateToDocumentation(activity, DocumentUrl.IDENTITY_MANAGEMENT);
+    public void navigateToIdentityManagementDocumentation(MainActivity activity, String title) {
+        navigateToDocumentation(activity, DocumentUrl.IDENTITY_MANAGEMENT, title);
     }
 
-    public void navigateToSecurityDocumentation(MainActivity activity) {
-        navigateToDocumentation(activity, DocumentUrl.DEVICE_SECURITY);
+    public void navigateToSecurityDocumentation(MainActivity activity, String title) {
+        navigateToDocumentation(activity, DocumentUrl.DEVICE_SECURITY, title);
     }
 
-    public void navigateToMetricsDocumentation(MainActivity activity) {
-        navigateToDocumentation(activity, DocumentUrl.METRICS);
+    public void navigateToMetricsDocumentation(MainActivity activity, String title) {
+        navigateToDocumentation(activity, DocumentUrl.METRICS, title);
     }
 
-    public void navigateToPushDocumentation(MainActivity activity) {
-        navigateToDocumentation(activity, DocumentUrl.PUSH);
+    public void navigateToPushDocumentation(MainActivity activity, String title) {
+        navigateToDocumentation(activity, DocumentUrl.PUSH, title);
     }
 
-    private void navigateToDocumentation(MainActivity activity, DocumentUrl documentUrl) {
+    private void navigateToDocumentation(MainActivity activity, DocumentUrl documentUrl, String title) {
         DocumentationFragment documentationFragment = DocumentationFragment.newInstance(documentUrl);
-        loadFragment(activity, documentationFragment, documentUrl.getUrl());
+        loadFragment(activity, documentationFragment, documentUrl.getUrl(),
+                title);
     }
 
-    public void navigateToLandingIdentityManagement(MainActivity activity) {
+    public void navigateToLandingIdentityManagement(MainActivity activity, String title) {
         navigateToLanding(
                 activity,
                 R.string.identity_management_landing_title,
-                R.array.identity_management_landing_description
+                R.array.identity_management_landing_description,
+                title
         );
     }
 
-    public void navigateToLandingSecurity(MainActivity activity) {
+    public void navigateToLandingSecurity(MainActivity activity, String title) {
         navigateToLanding(
                 activity,
                 R.string.security_landing_title,
-                R.array.security_landing_description
+                R.array.security_landing_description,
+                title
         );
     }
 
-    public void navigateToLandingPush(MainActivity activity) {
+    public void navigateToLandingPush(MainActivity activity, String title) {
         navigateToLanding(
                 activity,
                 R.string.push_landing_title,
-                R.array.push_landing_description
+                R.array.push_landing_description,
+                title
         );
     }
 
-    public void navigateToLandingMetrics(MainActivity activity) {
+    public void navigateToLandingMetrics(MainActivity activity, String title) {
         navigateToLanding(
                 activity,
                 R.string.metrics_landing_title,
                 R.array.metrics_landing_description
+                ,
+                title
         );
     }
 
     private void navigateToLanding(MainActivity activity, @StringRes int titleResId,
-                                   @ArrayRes int descriptionResId) {
+                                   @ArrayRes int descriptionResId, String title) {
         LandingFragment landingFragment = LandingFragment.newInstance(titleResId, descriptionResId);
-        loadFragment(activity, landingFragment, LandingFragment.TAG);
+        loadFragment(activity, landingFragment, LandingFragment.TAG, title);
     }
 
-    public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag) {
+    public void loadFragment(BaseActivity activity, BaseFragment fragment, String fragmentTag, String title) {
         FragmentManager fm = activity.getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         // create a FragmentTransaction to begin the transaction and replace the Fragment
@@ -217,6 +224,7 @@ public class Navigator {
                 .addToBackStack(null)
                 .replace(R.id.frameLayout, fragment, fragmentTag)
                 .commit();
+        ((Toolbar)activity.findViewById(R.id.toolbar)).setTitle(title);
     }
 
     public boolean canGoBack(BaseActivity activity) {
@@ -230,10 +238,10 @@ public class Navigator {
     }
 
 
-    private void showNotConfiguredDialog(BaseActivity activity, String friendlyServiceName, DocumentUrl docUrl) {
+    private void showNotConfiguredDialog(BaseActivity activity, String friendlyServiceName, DocumentUrl docUrl, String title) {
         NotAvailableDialogFragment dialog = NotAvailableDialogFragment.newInstance(friendlyServiceName);
         dialog.setGotoDocsCallback(() -> {
-            gotoDocs(activity, docUrl);
+            gotoDocs(activity, docUrl, title);
             dialog.dismiss();
         });
         android.support.v4.app.FragmentManager fm = activity.getSupportFragmentManager();
@@ -241,9 +249,9 @@ public class Navigator {
 
     }
 
-    private void gotoDocs(BaseActivity activity, DocumentUrl docUrl) {
+    private void gotoDocs(BaseActivity activity, DocumentUrl docUrl, String title) {
         DocumentationFragment fragment = DocumentationFragment.newInstance(docUrl);
-        loadFragment(activity, fragment, docUrl.getUrl());
+        loadFragment(activity, fragment, docUrl.getUrl(), title);
     }
 
     private boolean isConfigured(String serviceId) {
@@ -261,7 +269,7 @@ public class Navigator {
         return configuration != null;
     }
 
-    public void navigateToSSODocumentation(MainActivity mainActivity) {
-        gotoDocs(mainActivity, DocumentUrl.IDENTITY_MANAGEMENT_SSO);
+    public void navigateToSSODocumentation(MainActivity mainActivity, String title) {
+        gotoDocs(mainActivity, DocumentUrl.IDENTITY_MANAGEMENT_SSO, title);
     }
 }
