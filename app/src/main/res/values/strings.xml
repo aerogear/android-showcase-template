@@ -1,7 +1,7 @@
 <resources>
     <!-- Strings related to apps -->
     <string name="org_name">AeroGear</string>
-    <string name="org_url">www.aerogear.org</string>
+    <string name="org_url">aerogear.org</string>
     <string name="app_name">AeroGear Android Showcase</string>
     <string name="app_description">This app demonstrates how to use the AeroGear Mobile services, backed by OpenShift to perform a wide range of common mobile tasks such as Identity Management, Device Security, Metrics Capture, Push Notifications and more. \n\nFor further information, visit <a href="http://www.aerogear.org">www.aerogear.org</a></string>
     <string name="further_information">For further information, visit\n<a href="http://www.aerogear.org">www.aerogear.org</a></string>
