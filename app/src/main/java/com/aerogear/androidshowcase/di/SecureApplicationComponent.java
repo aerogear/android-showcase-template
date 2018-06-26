@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import com.aerogear.androidshowcase.SecureApplication;
 import com.aerogear.androidshowcase.domain.crypto.AesCrypto;
-import com.aerogear.androidshowcase.domain.repositories.NoteRepository;
-import com.aerogear.androidshowcase.domain.services.NoteCrudlService;
 import com.aerogear.androidshowcase.features.authentication.providers.OpenIDAuthenticationProvider;
 import dagger.BindsInstance;
 import dagger.Component;
@@ -35,9 +33,6 @@ public interface SecureApplicationComponent {
 
     AesCrypto provideAesCrypto();
 
-    NoteRepository noteRepository();
-
     OpenIDAuthenticationProvider authProvider();
 
-    NoteCrudlService provideNoteCrudleService();
 }

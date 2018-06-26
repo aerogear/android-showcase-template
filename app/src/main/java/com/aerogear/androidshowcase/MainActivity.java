@@ -11,16 +11,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.aerogear.androidshowcase.domain.models.Note;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.authentication.providers.KeycloakAuthenticateProviderImpl;
 import com.aerogear.androidshowcase.features.authentication.providers.OpenIDAuthenticationProvider;
-import com.aerogear.androidshowcase.features.storage.NotesDetailFragment;
-import com.aerogear.androidshowcase.features.storage.NotesListFragment;
 import com.aerogear.androidshowcase.mvp.components.HttpHelper;
 import com.aerogear.androidshowcase.navigation.Navigator;
 
@@ -37,7 +33,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, NotesListFragment.NoteListListener, NotesDetailFragment.SaveNoteListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
+        implements NavigationView.OnNavigationItemSelectedListener, AuthenticationFragment.AuthenticationListener, AuthenticationDetailsFragment.AuthenticationDetailsListener, HasFragmentInjector {
 
 
     @Inject
@@ -77,7 +73,7 @@ public class MainActivity extends BaseActivity
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        toolbar.setTitle(R.string.fragment_title_home);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -89,7 +85,7 @@ public class MainActivity extends BaseActivity
         HttpHelper.init();
 
         // load the main menu fragment
-        navigator.navigateToHomeView(this);
+        navigator.navigateToHomeView(this, getString(R.string.fragment_title_home));
     }
 
     /**
@@ -119,55 +115,55 @@ public class MainActivity extends BaseActivity
 
         switch (id) {
             case R.id.nav_home:
-                navigator.navigateToHomeView(this);
+                navigator.navigateToHomeView(this, getString(R.string.fragment_title_home));
                 break;
             case R.id.nav_identity_management:
-                navigator.navigateToLandingIdentityManagement(this);
+                navigator.navigateToLandingIdentityManagement(this, getString(R.string.fragment_title_authenticate));
                 break;
             case R.id.nav_identity_management_documentation:
-                navigator.navigateToIdentityManagementDocumentation(this);
+                navigator.navigateToIdentityManagementDocumentation(this, getString(R.string.nav_documentation));
                 break;
             case R.id.nav_identity_management_authentication:
-                navigator.navigateToAuthenticationView(this);
+                navigator.navigateToAuthenticationView(this, getString(R.string.nav_identity_management_authentication));
                 break;
             case R.id.nav_identity_management_sso:
-                navigator.navigateToSSODocumentation(this);
+                navigator.navigateToSSODocumentation(this, getString(R.string.nav_identity_management_sso));
                 break;
             case R.id.nav_security:
-                navigator.navigateToLandingSecurity(this);
+                navigator.navigateToLandingSecurity(this, getString(R.string.fragment_title_security));
                 break;
             case R.id.nav_security_documentation:
-                navigator.navigateToSecurityDocumentation(this);
+                navigator.navigateToSecurityDocumentation(this, getString(R.string.nav_documentation));
                 break;
             case R.id.nav_security_device_trust:
-                navigator.navigateToDeviceView(this);
+                navigator.navigateToDeviceView(this, getString(R.string.nav_security_device_trust));
                 break;
             case R.id.nav_security_storage:
-                navigator.navigateToStorageView(this);
+                navigator.navigateToUnderConstructorView(this, getString(R.string.nav_security_storage));
                 break;
             case R.id.nav_security_cert_pinning:
-                navigator.navigateToNetworkView(this);
+                navigator.navigateToUnderConstructorView(this, getString(R.string.nav_security_cert_pinning));
                 break;
             case R.id.nav_push:
-                navigator.navigateToLandingPush(this);
+                navigator.navigateToLandingPush(this, getString(R.string.nav_push));
                 break;
             case R.id.nav_push_documentation:
-                navigator.navigateToPushDocumentation(this);
+                navigator.navigateToPushDocumentation(this, getString(R.string.nav_documentation));
                 break;
             case R.id.nav_push_messages:
-                navigator.navigateToPushView(this);
+                navigator.navigateToPushView(this, getString(R.string.nav_push_messages));
                 break;
             case R.id.nav_metrics:
-                navigator.navigateToLandingMetrics(this);
+                navigator.navigateToLandingMetrics(this, getString(R.string.nav_metrics));
                 break;
             case R.id.nav_metrics_documentation:
-                navigator.navigateToMetricsDocumentation(this);
+                navigator.navigateToMetricsDocumentation(this, getString(R.string.nav_documentation));
                 break;
             case R.id.nav_metrics_device_profile_info:
-                navigator.navigateToUnderConstructorView(this);
+                navigator.navigateToUnderConstructorView(this, getString(R.string.nav_metrics_device_profile_info));
                 break;
             case R.id.nav_metrics_trust_check_info:
-                navigator.navigateToUnderConstructorView(this);
+                navigator.navigateToUnderConstructorView(this, getString(R.string.nav_metrics_trust_check_info));
                 break;
         }
 
@@ -194,7 +190,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onAuthSuccess(final UserPrincipal user) {
-        navigator.navigateToAuthenticateDetailsView(this, user);
+        navigator.navigateToAuthenticateDetailsView(this, user, getString(R.string.nav_identity_management_authentication));
     }
 
     @Override
@@ -204,7 +200,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onLogoutSuccess(final UserPrincipal user) {
-        navigator.navigateToAuthenticationView(this);
+        navigator.navigateToAuthenticationView(this, getString(R.string.nav_identity_management_authentication));
     }
 
     @Override
@@ -212,22 +208,6 @@ public class MainActivity extends BaseActivity
 
     }
 
-    @Override
-    public void onNoteClicked(Note note) {
-        Log.i("SecureAndroidApp", "Note selected: " + note.getContent());
-        navigator.navigateToSingleNoteView(this, note);
-    }
-
-    @Override
-    public void onCreateNote() {
-        navigator.navigateToSingleNoteView(this, null);
-    }
-
-
-    @Override
-    public void onNoteSaved(Note note) {
-        navigator.navigateToStorageView(this);
-    }
 }
 
 

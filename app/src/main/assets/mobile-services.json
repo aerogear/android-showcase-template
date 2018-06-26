@@ -4,47 +4,6 @@
   "namespace": "myproject",
   "clientId": "app-android",
   "services": [
-    {
-      "id": "notes-service",
-      "name": "notes-service",
-      "type": "Custom Runtime Connector",
-      "url": "https://api.security.feedhenry.org",
-      "config": {
-      }
-    },
-    {
-      "id": "keycloak",
-      "name": "keycloak",
-      "type": "keycloak",
-      "url": "https://keycloak.security.feedhenry.org/auth",
-      "config": {
-        "auth-server-url": "https://keycloak.security.feedhenry.org/auth",
-        "realm": "secure-app",
-        "resource": "client-app",
-        "ssl-required": "external"
-      }
-    },
-    {
-      "id": "metrics",
-      "name": "metrics",
-      "url": "http://192.168.0.101:3000/metrics",
-      "type": "metrics",
-      "config": {
-      }
-    },
-    {
-      "id": "push",
-      "name": "push",
-      "url": "https://ups-dm-myproject-1.193b.starter-ca-central-1.openshiftapps.com/",
-      "type": "push",
-      "config": {
-        "android": {
-          "variantId": "9351f86d-9531-4ba3-beac-b73dc3c8764b",
-          "variantSecret": "22784d6d-9526-4826-bbed-b18e977fc38c",
-          "senderId": "56938872708"
-        }
-      }
-    }
-  ]
+      ]
 }
 
