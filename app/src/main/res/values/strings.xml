@@ -18,6 +18,7 @@
     <!-- Strings related to Identity Management -->
     <string name="fragment_title_authenticate">Identity Management</string>
     <string name="nav_identity_management_authentication">Authentication</string>
+    <string name="nav_identity_management_identity_profile">Identity Profile</string>
     <string name="nav_identity_management_sso">SSO</string>
     <string name="identity_management_landing_title">The Identity Management service allows you to add authentication and authorization to your mobile app.</string>
     <string-array name="identity_management_landing_description">
