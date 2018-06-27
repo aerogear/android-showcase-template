@@ -51,9 +51,9 @@ public class Navigator {
         loadFragment(activity, homeView, HomeFragment.TAG, title);
     }
 
-    public void navigateToAuthenticationView(final BaseActivity activity, String title) {
+    public void navigateToAuthenticationView(final BaseActivity activity, String authViewTitle, String authDetailsTitle) {
         if (!isConfigured("keycloak")) {
-            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, title);
+            showNotConfiguredDialog(activity, "identity management", DocumentUrl.IDENTITY_MANAGEMENT, authViewTitle);
             return;
         }
 
@@ -61,9 +61,9 @@ public class Navigator {
         UserPrincipal user = authService.currentUser();
 
         if (user != null) {
-            navigateToAuthenticateDetailsView(activity, user, title);
+            navigateToAuthenticateDetailsView(activity, user, authDetailsTitle);
         } else {
-            loadFragment(activity, authFragment, AuthenticationFragment.TAG, title);
+            loadFragment(activity, authFragment, AuthenticationFragment.TAG, authViewTitle);
         }
     }
 

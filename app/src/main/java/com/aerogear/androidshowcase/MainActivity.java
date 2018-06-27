@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity
                 navigator.navigateToIdentityManagementDocumentation(this, getString(R.string.nav_documentation));
                 break;
             case R.id.nav_identity_management_authentication:
-                navigator.navigateToAuthenticationView(this, getString(R.string.nav_identity_management_authentication));
+                navigator.navigateToAuthenticationView(this, getString(R.string.nav_identity_management_authentication), getString(R.string.nav_identity_management_identity_profile));
                 break;
             case R.id.nav_identity_management_sso:
                 navigator.navigateToSSODocumentation(this, getString(R.string.nav_identity_management_sso));
@@ -190,7 +190,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onAuthSuccess(final UserPrincipal user) {
-        navigator.navigateToAuthenticateDetailsView(this, user, getString(R.string.nav_identity_management_authentication));
+        navigator.navigateToAuthenticateDetailsView(this, user, getString(R.string.nav_identity_management_identity_profile));
     }
 
     @Override
@@ -200,7 +200,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onLogoutSuccess(final UserPrincipal user) {
-        navigator.navigateToAuthenticationView(this, getString(R.string.nav_identity_management_authentication));
+        navigator.navigateToAuthenticationView(this, getString(R.string.nav_identity_management_authentication), getString(R.string.nav_identity_management_identity_profile));
     }
 
     @Override
