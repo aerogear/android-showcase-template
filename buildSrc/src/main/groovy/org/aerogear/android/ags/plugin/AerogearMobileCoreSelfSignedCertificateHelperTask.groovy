@@ -2,14 +2,10 @@ package org.aerogear.android.ags.plugin
 
 import groovy.json.JsonSlurper
 import groovy.xml.MarkupBuilder
+import org.apache.commons.codec.digest.DigestUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.TaskAction
-import org.gradle.internal.impldep.org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException
+import org.gradle.api.tasks.*
 
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -94,11 +90,20 @@ class AerogearMobileCoreSelfSignedCertificateHelperTask extends DefaultTask {
 
                 certChain.each { X509Certificate cert ->
 
-                    certificateMap[cert.getSubjectDN().toString()] =
-                            "-----BEGIN CERTIFICATE-----\n" +
+                    if (!cert.getSubjectDN().toString().contains("openshift-signer")) {
+
+                    certificateMap[aURL.host] = [
+                            dn         : cert.getSubjectDN().toString(),
+                            certificate: "-----BEGIN CERTIFICATE-----\n" +
                                     cert.encoded.encodeBase64(true).toString() +
-                                    "-----END CERTIFICATE-----\n"
+                                    "-----END CERTIFICATE-----\n",
+                            digest     : Base64.encoder.encodeToString(DigestUtils.sha256(cert.publicKey.encoded))
+                    ]
+                    }
                 }
+
+
+
             } catch (exception) {
                 System.err.println("Could not get certificate for " + host)
                 System.err.println(exception)
@@ -117,20 +122,36 @@ class AerogearMobileCoreSelfSignedCertificateHelperTask extends DefaultTask {
         def writer = new StringWriter()
         MarkupBuilder xml = new MarkupBuilder(writer)
 
-            xml."network-security-config" {
-                    "debug-overrides" {
-                        "trust-anchors" {
-                            certificateMap.keySet().each { String key ->
-                                certificates src: "@raw/" + certificateNamePattern + AerogearMobileCoreSelfSignedCertificateHelperTask.escape(key);
-                            }
-                        }
+        xml."network-security-config" {
+                "base-config" {
+                    "trust-anchors" {
+                        certificates  src: "user"
+                        certificates  src: "system"
                     }
                 }
+                certificateMap.keySet().each { String host ->
+                    "domain-config" (cleartextTrafficPermitted: false) {
+                        "domain"(includeSubdomains: "true", host)
+                        "pin-set" {
+                            "pin"(digest: "SHA-256", certificateMap[host]['digest'])
+                            //Stub value, we need a backup pin, but since this is for setup and
+                            //self hosting, we will use a stub value.
+                            "pin"(digest: "SHA-256", 'arENjoQnbWupnAtu1/WagBE0RgJ+p7ke2ppWML8vAl0=')
+                        }
+                        "trust-anchors" {
+                            certificates src: "@raw/" + certificateNamePattern + AerogearMobileCoreSelfSignedCertificateHelperTask.escape(host);
+                        }
+                        "trustkit-config" enforcePinning:true
+                    }
+
+                }
+
+            }
             
 
-        certificateMap.keySet().each { String key ->
-            def certFile = new File(configRawDir, certificateNamePattern + AerogearMobileCoreSelfSignedCertificateHelperTask.escape(key));
-            certFile << certificateMap[key];
+        certificateMap.keySet().each { String host ->
+            def certFile = new File(configRawDir, certificateNamePattern + AerogearMobileCoreSelfSignedCertificateHelperTask.escape(host));
+            certFile << certificateMap[host]['certificate'];
         }
 
         networkSecurityFile << writer.toString()

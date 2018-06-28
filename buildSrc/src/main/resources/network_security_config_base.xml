@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+  <base-config>
+    <trust-anchors>
+      <certificates src="user"/>
+      <certificates src="system"/>
+    </trust-anchors>
+  </base-config>
+  <domain-config cleartextTrafficPermitted="false">
+    <domain includeSubdomains="true">security.feedhenry.org</domain>
+    <pin-set>
+
+      <pin digest="SHA-256">trENjoQnbWupnAtu1/WagBE0RgJ+p7ke2ppWML8vAl0=</pin>
+
+      <pin digest="SHA-256">arENjoQnbWupnAtu1/WagBE0RgJ+p7ke2ppWML8vAl0=</pin>
+    </pin-set>
+
+    <trustkit-config enforcePinning="true"></trustkit-config>
+  </domain-config>
+</network-security-config>
+
+
+

@@ -1,42 +1,8 @@
 {
   "version": 1,
   "clusterName": "https://192.168.42.208:8443",
-  "namespace": "myproject",
+  "namespace": "showcase",
   "clientId": "myapp-android",
   "services": [
-    {
-      "id": "ups-secret-myapp-android-d6jvd",
-      "name": "ups",
-      "type": "push",
-      "url": "https://ups-myproject.192.168.42.208.nip.io/",
-      "config": {
-        "android": {
-          "senderId": "131836372639",
-          "variantId": "b086b87b-f808-4be4-8819-effc6cf9fe93",
-          "variantSecret": "29235138-3998-4f61-afc1-d58497a75fe5"
-        }
-      }
-    },
-    {
-      "id": "metrics-myapp-android",
-      "name": "metrics",
-      "type": "metrics",
-      "url": "https://aerogear-app-metrics-myproject.192.168.42.208.nip.io/metrics",
-      "config": {}
-    },
-    {
-      "id": "keycloak-myapp-android-public",
-      "name": "keycloak",
-      "type": "keycloak",
-      "url": "https://keycloak-myproject.192.168.42.208.nip.io/auth",
-      "config": {
-        "auth-server-url": "https://keycloak-myproject.192.168.42.208.nip.io/auth",
-        "confidential-port": 0,
-        "public-client": true,
-        "realm": "myproject",
-        "resource": "myapp-android-public",
-        "ssl-required": "external"
-      }
-    }
   ]
 }
