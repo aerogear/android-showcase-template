@@ -20,6 +20,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:itemTextColor="@drawable/menu_color"
+        app:itemIconTint="@drawable/menu_color"
         app:headerLayout="@layout/menu_nav_header"
         app:menu="@menu/menu_sidebar_content" />
 
