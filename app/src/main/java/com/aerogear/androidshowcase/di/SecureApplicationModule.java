@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.Nullable;
 
+import com.aerogear.androidshowcase.providers.PushServiceProvider;
 import com.aerogear.androidshowcase.domain.crypto.AesCrypto;
 import com.aerogear.androidshowcase.domain.crypto.AndroidMSecureKeyStore;
 import com.aerogear.androidshowcase.domain.crypto.NullAndroidSecureKeyStore;
@@ -72,6 +73,14 @@ public class SecureApplicationModule {
         return MobileCore.getInstance().getService(SecurityService.class);
     }
     // end::securityServiceInit[]
+
+    @Provides @Singleton @Nullable
+    PushServiceProvider providePushServiceProvider() {
+        if (MobileCore.getInstance().getServiceConfigurationsByType("push") == null) {
+            return null;
+        }
+        return PushServiceProvider.getInstance();
+    }
 
     // tag::authServiceInit[]
     @Provides @Singleton @Nullable
