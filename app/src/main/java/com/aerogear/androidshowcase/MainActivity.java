@@ -18,6 +18,7 @@ import android.text.style.StyleSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.aerogear.androidshowcase.providers.PushServiceProvider;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationDetailsFragment;
 import com.aerogear.androidshowcase.features.authentication.AuthenticationFragment;
 import com.aerogear.androidshowcase.features.authentication.providers.KeycloakAuthenticateProviderImpl;
@@ -27,6 +28,7 @@ import com.aerogear.androidshowcase.navigation.Navigator;
 
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
+import org.aerogear.mobile.core.MobileCore;
 
 import javax.inject.Inject;
 
@@ -53,6 +55,10 @@ public class MainActivity extends BaseActivity
 
     @Inject
     Navigator navigator;
+
+    @Inject
+    @Nullable
+    PushServiceProvider pushServiceProvider;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -91,6 +97,10 @@ public class MainActivity extends BaseActivity
 
         // initialise the httphelper
         HttpHelper.init();
+
+        if (pushServiceProvider != null) {
+            pushServiceProvider.registerDevice();
+        }
 
         // load the main menu fragment
         navigator.navigateToHomeView(this, getString(R.string.fragment_title_home));
