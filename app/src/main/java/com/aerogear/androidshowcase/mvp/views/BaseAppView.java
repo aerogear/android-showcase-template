@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 
+import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.mvp.components.ProgressDialogHelper;
 
 /**
@@ -38,7 +39,10 @@ public abstract class BaseAppView implements AppView {
     public void showMessage(String message) {
         Context ctx = getContext();
         if (ctx != null) {
-            Snackbar.make(this.fragment.getActivity().getCurrentFocus(), message, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            Snackbar snackbar = Snackbar.make(this.fragment.getActivity().getCurrentFocus(), message, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null);
+            snackbar.getView().setBackgroundResource(R.color.white);
+            snackbar.show();
         }
     }
 
