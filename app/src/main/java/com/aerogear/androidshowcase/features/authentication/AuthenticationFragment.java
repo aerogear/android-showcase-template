@@ -71,19 +71,11 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     private View view;
     private AuthenticationListener authenticationListener;
-    private CertPinningHelper certPinningHelper;
-    ProgressDialog pinningDialog;
-
-
-    public AuthenticationFragment() {
-        this.certPinningHelper = new CertPinningHelper();
-    }
 
     @Override
     public void onAttach(Activity activity) {
 
         AndroidInjection.inject(this);
-        pinningDialog = new ProgressDialog(activity);
         super.onAttach(activity);
         if (activity instanceof AuthenticationListener) {
             authenticationListener = (AuthenticationListener) activity;
@@ -103,8 +95,6 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         view = inflater.inflate(R.layout.fragment_authentication, container, false);
         ButterKnife.bind(this, view);
 
-        // Check for a valid server certificate before allow a user to authenticate on the server
-        performCertPinningVerification();
 
         return view;
     }
@@ -137,11 +127,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
              */
             @Override
             public void showAuthError(final Exception error) {
-                if (certPinningHelper.checkCertificateVerificationError(error)) {
-                    showMessage(R.string.cert_pin_verification_failed);
-                } else {
                     showMessage(R.string.authentication_failed);
-                }
 
                 if (authenticationListener != null) {
                     authenticationListener.onAuthError(error);
@@ -158,76 +144,6 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
         if (authenticationViewPresenter != null) {
             authenticationViewPresenter.doLogin();
         }
-    }
-
-    /**
-     * Perform certificate pinning verification before allowing a user to login to the application using a secure channel
-     */
-    public void performCertPinningVerification() {
-
-        // disable allowing a user to login until the channel is secure
-        keycloakLogin.setEnabled(false);
-
-        pinningDialog.setTitle("Please Wait");
-        pinningDialog.setMessage("Checking For Secure Channel...");
-        pinningDialog.show();
-
-        ServiceConfiguration keycloakServiceConfiguration = MobileCore.getInstance().getServiceConfigurationByType("keycloak");
-        String hostURL = keycloakServiceConfiguration.getUrl();
-        boolean sendAccessToken = false;
-
-        certPinningHelper.createRequest(hostURL, sendAccessToken, new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-
-                Snackbar snackbar = Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundResource(R.color.white);
-                snackbar.show();
-
-                if (certPinningHelper.checkCertificateVerificationError(e)) {
-                    Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
-
-                    // run the UI updates on the UI thread
-                    getActivity().runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            pinningDialog.hide();
-
-                            // hide the authentication button
-                            keycloakLogin.setVisibility(view.GONE);
-
-                            // update the UI to state the connection is insecure
-                            authMessage.setText(getString(R.string.cert_pin_verification_failed) + "\n\n" + e.getMessage());
-                            background.setImageResource(R.drawable.ic_error_background);
-                            logo.setImageResource(R.drawable.ic_lock);
-
-                            // Show a warning message to the user
-                            Snackbar snackbar = Snackbar.make(view, R.string.insecure_connection_prevent_auth, Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackgroundResource(R.color.white);
-                            snackbar.show();
-                        }
-                    });
-                } else {
-                    new AppExecutors().mainThread().submit(()->pinningDialog.hide());
-                }
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                // No Certificate Pinning Errors, allow a user to login
-
-                getActivity().runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        pinningDialog.hide();
-                        keycloakLogin.setEnabled(true);
-                    }
-                });
-
-            }
-        });
     }
 
 }

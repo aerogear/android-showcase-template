@@ -6,6 +6,7 @@ import org.aerogear.mobile.core.MobileCore;
 import org.aerogear.mobile.core.configuration.MobileCoreConfiguration;
 import org.aerogear.mobile.core.configuration.MobileCoreJsonParser;
 import org.aerogear.mobile.core.configuration.ServiceConfiguration;
+import org.aerogear.mobile.core.executor.AppExecutors;
 import org.aerogear.mobile.core.http.HttpServiceModule;
 import org.aerogear.mobile.core.reactive.Request;
 import org.aerogear.mobile.core.reactive.Requester;
@@ -69,7 +70,7 @@ public class HttpHelper {
 
             }
             return CERTIFICATES_CONFIGURED;
-        });
+        }).requestOn(new AppExecutors().networkThread());
 
     }
 
