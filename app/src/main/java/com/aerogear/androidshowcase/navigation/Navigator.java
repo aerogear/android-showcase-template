@@ -234,4 +234,8 @@ public class Navigator {
     public void navigateToSSODocumentation(MainActivity mainActivity, String title) {
         gotoDocs(mainActivity, DocumentUrl.IDENTITY_MANAGEMENT_SSO, title);
     }
+
+    public void navigateToSelfSignedCertificateDocumentation(MainActivity mainActivity, String title) {
+        gotoDocs(mainActivity, DocumentUrl.SELF_SIGNED_DOCS, title);
+    }
 }
