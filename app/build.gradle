@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: "aerogear-android-plugin"
 
 android {
     compileSdkVersion 27

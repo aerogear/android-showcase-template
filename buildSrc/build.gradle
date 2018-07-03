@@ -1,0 +1,48 @@
+plugins {
+    id 'java-gradle-plugin'
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    jcenter()
+    google()
+}
+
+dependencies {
+    compile 'com.android.tools.build:gradle:3.2.0-beta01'
+    testCompile 'junit:junit:4.12'
+    compile  'org.codehaus.groovy:groovy-all:2.4.12'
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.11'
+
+}
+configurations.all {
+//    resolutionStrategy {
+//        force 'org.codehaus.groovy:groovy-all:2.4.12'
+//    }
+}
+
+gradlePlugin {
+    plugins {
+        mcpAndroidPlugin {
+            id = "aerogear-android-plugin"
+            implementationClass = "org.aerogear.android.ags.plugin.AeroGearMobileCorePlugin"
+        }
+    }
+}
+// Write the plugin's classpath to a file to share with the tests
+task createClasspathManifest {
+    def outputDir = file("$buildDir/$name")
+
+    inputs.files sourceSets.main.runtimeClasspath
+    outputs.dir outputDir
+
+    doLast {
+        outputDir.mkdirs()
+        file("$outputDir/plugin-classpath.txt").text = sourceSets.main.runtimeClasspath.join("\n")
+    }
+}
