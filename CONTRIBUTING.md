@@ -37,50 +37,15 @@ cd aerogear-showcase-template/
 
 ## Installing dependencies and building the ShowCase Template
 
-Open showcase app in Android Studio and select the build variant `release` or `debug` to run the showcase with the latest release, or select build variant `local` to run the show case with a locally installed version of the [SDK](https://github.com/aerogear/aerogear-android-sdk/blob/master/docs/modules/ROOT/pages/index.adoc)
+Open showcase app in Android Studio and select the build variant `release` or `debug` to run the showcase with the latest release.
 
 With the variant selected navigate to `build` on the toolbar in Android Studio and select `Build Project`
 
-## Using a Published SDK
-
-### jcenter()
-
-To use a published version of the SDK, add jcenter to the [build.gradle](https://github.com/aerogear/android-showcase-template/blob/master/build.gradle) file in the root directory of this project.
-
-```groovy
-allprojects {
-    repositories {
-        jcenter() // <-- Add This line
-        google()
-    }
-}
-```
-
-### Reference the Dependencies
-
-In the [build.gradle](./app/build.gradle) file in the app directory, add the dependencies provided by the SDK.
-
-```groovy
-dependencies {
-    ...
-    releaseimplementation 'org.aerogear:android-push:[version]
-    releaseimplementation 'org.aerogear:android-auth:[version]
-    releaseimplementation 'org.aerogear:android-security:[version]
-    
-    debugimplementation 'org.aerogear:android-push:[version]
-    debugimplementation 'org.aerogear:android-auth:[version]
-    debugimplementation 'org.aerogear:android-security:[version]
-    
-}
-```
-
-A full list of releases can be viewed [here](https://github.com/aerogear/aerogear-android-sdk/releases).
-
 ## Installing Local Build of SDK
 
-Alternatively the SDK can be installed manually instead of using a published version.
+If you are developing the Android SDK itself, it may be helpful to build the showcase using local dependencies.  
 
-### Clone and build the library
+### Clone and build the Android SDK
 
 ```bash
 git clone https://github.com/aerogear/aerogear-android-sdk
@@ -116,8 +81,8 @@ In the [build.gradle](./app/build.gradle) file in the app directory, add the dep
 ```groovy
 dependencies {
     ...
-    localimplementation 'org.aerogear:android-push:[version]-SNAPSHOT
-    localimplementation 'org.aerogear:android-auth:[version]-SNAPSHOT
-    localimplementation 'org.aerogear:android-security:[version]-SNAPSHOT
+    implementation 'org.aerogear:android-push:[version]-SNAPSHOT
+    implementation 'org.aerogear:android-auth:[version]-SNAPSHOT
+    implementation 'org.aerogear:android-security:[version]-SNAPSHOT
 }
 ```
