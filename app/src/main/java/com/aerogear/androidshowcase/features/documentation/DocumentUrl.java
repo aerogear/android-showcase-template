@@ -10,7 +10,8 @@ public enum DocumentUrl {
     METRICS("https://docs.aerogear.org/aerogear/latest/showcase/metrics.html"),
     RUNTIME("https://docs.aerogear.org/aerogear/latest/showcase/runtime.html"),
     IDENTITY_MANAGEMENT_SSO("https://docs.aerogear.org/aerogear/latest/keycloak/index.html?sso=1"),
-    NOTES_SERVICE("https://github.com/feedhenry/mobile-security/tree/master/projects/api-server");
+    NOTES_SERVICE("https://github.com/feedhenry/mobile-security/tree/master/projects/api-server"),
+    SELF_SIGNED_DOCS("https://docs.aerogear.org/aerogear/latest/getting-started.html#using-self-signed-certificates-in-mobile-apps");
 
     private final String url;
 

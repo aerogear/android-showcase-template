@@ -27,6 +27,9 @@ import com.aerogear.androidshowcase.navigation.Navigator;
 
 import org.aerogear.mobile.auth.AuthService;
 import org.aerogear.mobile.auth.user.UserPrincipal;
+import org.aerogear.mobile.core.executor.AppExecutors;
+import org.aerogear.mobile.core.reactive.Requester;
+import org.aerogear.mobile.core.reactive.Responder;
 
 import javax.inject.Inject;
 
@@ -91,7 +94,7 @@ public class MainActivity extends BaseActivity
 
         // initialise the httphelper
         HttpHelper.init();
-
+        testNetwork();
         // load the main menu fragment
         navigator.navigateToHomeView(this, getString(R.string.fragment_title_home));
     }
@@ -230,6 +233,28 @@ public class MainActivity extends BaseActivity
     @Override
     public void onLogoutError(final Exception error) {
 
+    }
+
+    private void testNetwork() {
+        HttpHelper.checkCertificates(this).respondOn(new AppExecutors().mainThread())
+                .respondWith(new Responder<Boolean>() {
+                    @Override
+                    public void onResult(Boolean value) {
+                        if (!value) {
+                            CertificateErrorDialog dialog = new CertificateErrorDialog();
+                            dialog.setGotoDocs(()-> {
+                                navigator.navigateToSelfSignedCertificateDocumentation(MainActivity.this, "Getting Started");
+                                dialog.dismiss();
+                            });
+                            dialog.show(getFragmentManager(), "CERT_ERROR");
+                        }
+                    }
+
+                    @Override
+                    public void onException(Exception exception) {
+
+                    }
+                });
     }
 
 }

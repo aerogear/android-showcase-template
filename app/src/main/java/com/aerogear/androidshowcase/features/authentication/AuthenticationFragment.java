@@ -21,7 +21,10 @@ import com.aerogear.androidshowcase.mvp.views.BaseFragment;
 import com.aerogear.androidshowcase.navigation.Navigator;
 import org.aerogear.mobile.auth.user.UserPrincipal;
 import org.aerogear.mobile.core.MobileCore;
+import org.aerogear.mobile.core.configuration.MobileCoreJsonParser;
 import org.aerogear.mobile.core.configuration.ServiceConfiguration;
+import org.aerogear.mobile.core.executor.AppExecutors;
+
 import java.io.IOException;
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -78,6 +81,7 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
 
     @Override
     public void onAttach(Activity activity) {
+
         AndroidInjection.inject(this);
         pinningDialog = new ProgressDialog(activity);
         super.onAttach(activity);
@@ -176,8 +180,9 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
             @Override
             public void onFailure(Call call, final IOException e) {
 
-                Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG)
-                        .show();
+                Snackbar snackbar = Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.getView().setBackgroundResource(R.color.white);
+                snackbar.show();
 
                 if (certPinningHelper.checkCertificateVerificationError(e)) {
                     Log.w("Certificate Pinning", "Certificate Pinning Validation Failed", e);
@@ -198,10 +203,13 @@ public class AuthenticationFragment extends BaseFragment<AuthenticationViewPrese
                             logo.setImageResource(R.drawable.ic_lock);
 
                             // Show a warning message to the user
-                            Snackbar.make(view, R.string.insecure_connection_prevent_auth, Snackbar.LENGTH_LONG)
-                                    .show();
+                            Snackbar snackbar = Snackbar.make(view, R.string.insecure_connection_prevent_auth, Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackgroundResource(R.color.white);
+                            snackbar.show();
                         }
                     });
+                } else {
+                    new AppExecutors().mainThread().submit(()->pinningDialog.hide());
                 }
             }
 
