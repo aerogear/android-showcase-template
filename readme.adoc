@@ -56,43 +56,6 @@ The Keycloak configuration is saved in the https://github.com/aerogear/android-s
 include::https://raw.githubusercontent.com/aerogear/android-showcase-template/master/app/src/main/assets/mobile-services.json[]
 ....
 
-=== Cert Pinning Configuration
-If you are using HTTPS, update the certificate pinning configuration in link:app/src/main/res/xml/network_security_config.xml[network_security_config.xml] file
-
-To generate the hash value of the certificate, you can use this command:
-[source, bash]
-----
-openssl s_client -servername <hostname> -connect <hostname:port> | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64
-----
-
-If you are using self-signed certificate, follow the instructions in the next section.
-
 == Work with Self-signed Certificate
 
-By default, the app will not work with self-signed certificate due to security reasons. However, to help with local development, you may need to support it.  Here are the steps you can follow:
-
-1. Get the CA certificate of the server. You can use this command:
-+
-[source, bash]
-----
-openssl s_client -showcerts -connect host:port
----- 
-+
-It will print out the full certificate chain of the server and you should save the content of the root certificate into a file.
-
-2. Add the CA certificate to the project. It should be placed in `app/src/main/res/raw`.
-
-3. Update the `network_security_config.xml` file to add the extra trust anchor like this:
-+
-[source, xml]
-----
-<domain-config>
-...
-  <trust-anchors>
-    <certificates src="@raw/ca"/>
-  </trust-anchors>
-...
-</domain-config>
-----        
-+
-The file name should match the name of the CA certificate file.
+By default, the app will not work with self-signed certificate due to security reasons. However, to help with local development, you may need to support it.  link:https://docs.aerogear.org/aerogear/latest/getting-started.html#using-self-signed-certificates-in-mobile-apps[Docs.aerogear.org] has full configuration instructions.

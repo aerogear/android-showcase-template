@@ -36,9 +36,6 @@ public class SecureApplication extends Application implements HasActivityInjecto
         super.onCreate();
         initInjector();
 
-        // Initialize TrustKit for Certificate Pinning
-        TrustKit.initializeWithNetworkSecurityConfiguration(this, R.xml.network_security_config);
-
         try {
             SQLiteDatabase.loadLibs(this);
         } catch (UnsatisfiedLinkError e) {
