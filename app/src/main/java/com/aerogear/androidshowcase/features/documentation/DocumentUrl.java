@@ -11,7 +11,8 @@ public enum DocumentUrl {
     RUNTIME("https://docs.aerogear.org/external/showcase/android/runtime.html"),
     IDENTITY_MANAGEMENT_SSO("https://docs.aerogear.org/external/showcase/android/idmsso.html"),
     NOTES_SERVICE("https://github.com/feedhenry/mobile-security/tree/master/projects/api-server");
-
+    SELF_SIGNED_DOCS("https://docs.aerogear.org/external/cert/self-signed-cert.html");
+    
     private final String url;
 
     DocumentUrl(String urlString) {
