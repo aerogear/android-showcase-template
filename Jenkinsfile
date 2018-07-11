@@ -38,6 +38,21 @@ node("android"){
 //    }
 // }
 
+stage('Kryptowire') {
+  //using a try-catch block so the pipeline script won't fail if the krypowire plugin is not installed
+  try {
+    if (params.BUILD_CONFIG == 'release') {
+      kwSubmit filePath: "app/build/outputs/apk/release/app-release.apk", platform: 'android'
+    } else {
+      kwSubmit filePath: "app/build/outputs/apk/debug/app-debug.apk", platform: 'android'
+    }
+  } catch(Error e) {
+        e.printStackTrace()
+  }
+}
+
+    
+
  stage("Archive"){
     if (params.BUILD_CONFIG == 'release') {
         archiveArtifacts artifacts: 'app/build/outputs/apk/**/app-release.apk', excludes: 'app/build/outputs/apk/*-unaligned.apk'
