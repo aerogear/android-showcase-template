@@ -89,6 +89,8 @@ class AerogearMobileCoreSelfSignedCertificateHelperTask extends DefaultTask {
                 }
 
                 certChain.each { X509Certificate cert ->
+                    project.logger.debug("cert DN: " + cert.getSubjectDN())
+                    project.logger.debug("cert content: " + cert.encoded.encodeBase64(true).toString())
 
                     if (!cert.getSubjectDN().toString().contains("openshift-signer")) {
 
@@ -96,7 +98,7 @@ class AerogearMobileCoreSelfSignedCertificateHelperTask extends DefaultTask {
                             dn         : cert.getSubjectDN().toString(),
                             certificate: "-----BEGIN CERTIFICATE-----\n" +
                                     cert.encoded.encodeBase64(true).toString() +
-                                    "-----END CERTIFICATE-----\n",
+                                    "\n-----END CERTIFICATE-----\n",
                             digest     : Base64.encoder.encodeToString(DigestUtils.sha256(cert.publicKey.encoded))
                     ]
                     }
