@@ -32,6 +32,7 @@ import org.aerogear.mobile.core.MobileCore;
 import org.aerogear.mobile.core.executor.AppExecutors;
 import org.aerogear.mobile.core.reactive.Requester;
 import org.aerogear.mobile.core.reactive.Responder;
+import org.aerogear.mobile.push.UnifiedPushMessage;
 
 import javax.inject.Inject;
 
@@ -107,7 +108,11 @@ public class MainActivity extends BaseActivity
 
         testNetwork();
         // load the main menu fragment
-        navigator.navigateToHomeView(this, getString(R.string.fragment_title_home));
+        if(getIntent().getStringExtra(UnifiedPushMessage.class.getName()) == null) {
+            navigator.navigateToHomeView(this, getString(R.string.fragment_title_home));
+        } else {
+            navigator.navigateToPushView(this, getString(R.string.nav_push_messages));
+        }
     }
 
     private void restyleNavigationview() {

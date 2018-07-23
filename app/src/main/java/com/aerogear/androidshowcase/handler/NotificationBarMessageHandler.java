@@ -73,6 +73,7 @@ public class NotificationBarMessageHandler implements MessageHandler {
     private void displayMessageOnNotificationBar(Context context, String message) {
         Intent intent = new Intent(context, MainActivity.class).putExtra(UnifiedPushMessage.MESSAGE,
                 message);
+        intent.putExtra(UnifiedPushMessage.class.getName(), PushFragment.class.getName());
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
