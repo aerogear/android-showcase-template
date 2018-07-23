@@ -2,6 +2,8 @@ package com.aerogear.androidshowcase.features.push;
 
 import android.app.Activity;
 import android.content.Context;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aerogear.androidshowcase.R;
+import com.aerogear.androidshowcase.SecureApplication;
 import com.aerogear.androidshowcase.features.push.presenters.PushPresenter;
 import com.aerogear.androidshowcase.features.push.views.PushView;
 import com.aerogear.androidshowcase.features.push.views.PushViewImpl;
@@ -50,6 +53,7 @@ public class PushFragment extends BaseFragment implements MessageHandler {
 
     public static final String TAG = "Push";
 
+    private SecureApplication application;
     private PushGestureAdapter adapter;
 
     @Override
@@ -60,7 +64,10 @@ public class PushFragment extends BaseFragment implements MessageHandler {
 
         ButterKnife.bind(this, view);
 
+        application = (SecureApplication) getActivity().getApplication();
+
         adapter = new PushGestureAdapter();
+        adapter.setData(application.getPushMessagesReceived());
         adapter.setDataChangeListener(new GestureAdapter.OnDataChangeListener<PushMessage>() {
             @Override
             public void onItemRemoved(final PushMessage item, final int position) {
@@ -132,7 +139,10 @@ public class PushFragment extends BaseFragment implements MessageHandler {
 
     @Override
     public void onMessage(Context context, Map<String, String> message) {
-        adapter.add(new PushMessage(message.get(UnifiedPushMessage.MESSAGE), new Date()));
+        PushMessage pushMessage = new PushMessage(
+                message.get(UnifiedPushMessage.MESSAGE), new Date());
+        adapter.add(pushMessage);
+        application.getPushMessagesReceived().add(pushMessage);
     }
 
     public static class PushMessage {
