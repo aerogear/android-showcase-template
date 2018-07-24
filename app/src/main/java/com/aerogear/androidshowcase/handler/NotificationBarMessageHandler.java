@@ -1,5 +1,6 @@
 package com.aerogear.androidshowcase.handler;
 
+import java.util.Date;
 import java.util.Map;
 
 import android.app.NotificationChannel;
@@ -15,12 +16,11 @@ import android.support.v4.app.NotificationCompat;
 
 import com.aerogear.androidshowcase.R;
 import com.aerogear.androidshowcase.MainActivity;
+import com.aerogear.androidshowcase.SecureApplication;
+import com.aerogear.androidshowcase.features.push.PushFragment;
+
 import org.aerogear.mobile.push.MessageHandler;
 import org.aerogear.mobile.push.UnifiedPushMessage;
-
-/**
- * Created by tjackman on 02/05/18.
- */
 
 public class NotificationBarMessageHandler implements MessageHandler {
 
@@ -43,6 +43,11 @@ public class NotificationBarMessageHandler implements MessageHandler {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel(context);
         }
+
+        SecureApplication application = (SecureApplication) context.getApplicationContext();
+        PushFragment.PushMessage pushMessage = new PushFragment.PushMessage(
+                message.get(UnifiedPushMessage.MESSAGE), new Date());
+        application.getPushMessagesReceived().add(pushMessage);
 
         displayMessageOnNotificationBar(context, message.get(UnifiedPushMessage.MESSAGE));
 
@@ -68,6 +73,7 @@ public class NotificationBarMessageHandler implements MessageHandler {
     private void displayMessageOnNotificationBar(Context context, String message) {
         Intent intent = new Intent(context, MainActivity.class).putExtra(UnifiedPushMessage.MESSAGE,
                 message);
+        intent.putExtra(UnifiedPushMessage.class.getName(), PushFragment.class.getName());
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);

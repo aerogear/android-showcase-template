@@ -2,19 +2,13 @@ package com.aerogear.androidshowcase;
 
 import android.app.Activity;
 import android.app.Application;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 
 import com.aerogear.androidshowcase.di.DaggerSecureApplicationComponent;
-import com.datatheorem.android.trustkit.TrustKit;
+import com.aerogear.androidshowcase.features.push.PushFragment.PushMessage;
 
 import net.sqlcipher.database.SQLiteDatabase;
-
-import org.aerogear.mobile.core.MobileCore;
-import org.aerogear.mobile.core.executor.AppExecutors;
-import org.aerogear.mobile.core.reactive.Responder;
-import org.aerogear.mobile.push.PushService;
-import org.aerogear.mobile.push.UnifiedPushConfig;
-
-import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -27,6 +21,8 @@ import dagger.android.HasActivityInjector;
  */
 
 public class SecureApplication extends Application implements HasActivityInjector {
+
+    private ObservableList<PushMessage> pushMessagesReceived = new ObservableArrayList<>();
 
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
@@ -55,4 +51,9 @@ public class SecureApplication extends Application implements HasActivityInjecto
     public AndroidInjector<Activity> activityInjector() {
         return dispatchingAndroidInjector;
     }
+
+    public ObservableList<PushMessage> getPushMessagesReceived() {
+        return pushMessagesReceived;
+    }
+
 }
