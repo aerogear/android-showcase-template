@@ -92,7 +92,7 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         view = inflater.inflate(R.layout.fragment_device, container, false);
         ButterKnife.bind(this, view);
 
-        securityService = MobileCore.getInstance().getService(SecurityService.class);
+        securityService = new SecurityService();
 
         // run the detection tests on load
         runTests();
