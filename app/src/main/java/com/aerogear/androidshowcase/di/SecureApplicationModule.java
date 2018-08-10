@@ -91,11 +91,9 @@ public class SecureApplicationModule {
                         //be configured.  We are not returning an Optional because we can't guarantee
                         //Optional is available on Android M and L and we don't want to add Guava.
         }
-
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
                 .withRedirectUri("com.aerogear.androidshowcase:/callback")
                 .build();
-
         return new AuthService(authServiceConfig);
     }
     // end::authServiceInit[]

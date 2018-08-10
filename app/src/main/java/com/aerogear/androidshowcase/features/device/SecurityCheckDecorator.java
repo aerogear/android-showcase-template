@@ -8,7 +8,7 @@ import org.aerogear.mobile.security.DeviceCheckResult;
 import org.aerogear.mobile.security.DeviceCheckType;
 
 /**
- * This class is a decorator used to interpretate the result of a device check as a security check.
+ * This class is a decorator used to interpret the result of a device check as a security check.
  * While the device checks simple tests if a feature is enabled or not, returning <code>true</code> if the feature is enabled,
  * this decorator returns a result (#CheckResultSecurityDecorator) containing a #CheckResultSecurityDecorator#isSecure method
  * that allows to check if the current situation is secure or not.
