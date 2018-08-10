@@ -133,8 +133,8 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         // perform detections
 
         for (DeviceCheckResult res : results.values()) {
-            if (!res.passed()) {
-                SecurityCheckDecorator.CheckResultSecurityDecorator decorator = (SecurityCheckDecorator.CheckResultSecurityDecorator) res;
+            SecurityCheckDecorator.CheckResultSecurityDecorator decorator = (SecurityCheckDecorator.CheckResultSecurityDecorator) res;
+            if (!decorator.isSecure()) {
                 setCheckFailed(decorator.getRadioButton(), decorator.getUnsecureMessageResouceId());
             }
         }

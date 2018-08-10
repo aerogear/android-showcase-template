@@ -10,8 +10,9 @@ import org.aerogear.mobile.security.DeviceCheckType;
 /**
  * This class is a decorator used to interpretate the result of a device check as a security check.
  * While the device checks simple tests if a feature is enabled or not, returning <code>true</code> if the feature is enabled,
- * this decorator tests if the device is in the most secure situation.
- * That means, for example, that while the DebuggerEnabledCheck test returns <code>true</code> if the debugger is enabled, the decorator,
+ * this decorator returns a result (#CheckResultSecurityDecorator) containing a #CheckResultSecurityDecorator#isSecure method
+ * that allows to check if the current situation is secure or not.
+ * That means, for example, that while the DebuggerEnabledCheck test returns <code>true</code> if the debugger is enabled, the #CheckResultSecurityDecorator#isSecure,
  * in the same situation, returns <code>false</code>, because having debugger enabled is considered less secure.
  */
 class SecurityCheckDecorator implements DeviceCheck {
@@ -101,8 +102,8 @@ class SecurityCheckDecorator implements DeviceCheck {
     }
 
     /**
-     * Instruct the decorator whether to return <code>true</code> when the delegate test passes or not
-     * @param secureWhenFalse whether to return <code>true</code> when the delegate test passes or not
+     * Instruct the decorator whether to consider secure a `passed` check or not
+     * @param secureWhenFalse whether to consider secure a `passed` check or not
      * @return this
      */
     public SecurityCheckDecorator secureWhenFalse(boolean secureWhenFalse) {
@@ -131,6 +132,7 @@ class SecurityCheckDecorator implements DeviceCheck {
 
         /**
          * Returns {@link #delegate#getName()}
+         *
          * @return {@link #delegate#getName()}
          */
         @Override
@@ -140,6 +142,7 @@ class SecurityCheckDecorator implements DeviceCheck {
 
         /**
          * Returns {@link #delegate#getId()}
+         *
          * @return {@link #delegate#getId()}
          */
         @Override
@@ -148,7 +151,18 @@ class SecurityCheckDecorator implements DeviceCheck {
         }
 
         /**
+         * Returns #DeviceCheckResult{@link #passed()}
+         *
+         * @return #DeviceCheckResult{@link #passed()}
+         */
+        @Override
+        public boolean passed() {
+            return delegate.passed();
+        }
+
+        /**
          * Returns the resource id to be used to show the message in case of an unsecure result.
+         *
          * @return the resource id to be used to show the message in case of an unsecure result
          */
         public int getUnsecureMessageResouceId() {
@@ -164,11 +178,11 @@ class SecurityCheckDecorator implements DeviceCheck {
         }
 
         /**
-         * Returns whether the result is considered secure or not.
-         * @return whether the result is considered secure or not
+         * Returns whether the result of the check is considered secure or not.
+         *
+         * @return whether the result of the check is considered secure or not
          */
-        @Override
-        public boolean passed() {
+        public boolean isSecure() {
             boolean retVal = delegate.passed();
 
             if (deviceCheck.secureWhenFalse) {
