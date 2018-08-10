@@ -152,13 +152,13 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
 
         Builder builder = DeviceCheckExecutor.Builder
             .newSyncExecutor(context)
-            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.ROOT_ENABLED).withUnsecureMessage(R.string.root_detected_positive).withRadioButton(rootAccess).secureWhenFalse(true).build())
-            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.SCREEN_LOCK_ENABLED).withUnsecureMessage(R.string.device_lock_detected_negative).withRadioButton(lockScreenSetup).build())
-            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.IS_EMULATOR).withUnsecureMessage(R.string.emulator_detected_positive).withRadioButton(emulatorAccess).secureWhenFalse(true).build())
-            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.DEBUGGER_ENABLED).withUnsecureMessage(R.string.debugger_detected_positive).withRadioButton(debuggerAccess).secureWhenFalse(true).build())
-            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.DEVELOPER_MODE_ENABLED).withUnsecureMessage(R.string.developer_options_positive).withRadioButton(developerOptions).secureWhenFalse(true).build())
-            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.ENCRYPTION_ENABLED).withUnsecureMessage(R.string.device_encrypted_negative).withRadioButton(deviceEncrypted).build())
-            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.BACKUP_ENABLED).withUnsecureMessage(R.string.allow_backup_detected_positive).withRadioButton(allowBackup).secureWhenFalse(true).build());
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.ROOT_ENABLED).withUnsecureMessage(R.string.root_detected_positive).withRadioButton(rootAccess).secureWhenFalse(true))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.SCREEN_LOCK_ENABLED).withUnsecureMessage(R.string.device_lock_detected_negative).withRadioButton(lockScreenSetup))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.IS_EMULATOR).withUnsecureMessage(R.string.emulator_detected_positive).withRadioButton(emulatorAccess).secureWhenFalse(true))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.DEBUGGER_ENABLED).withUnsecureMessage(R.string.debugger_detected_positive).withRadioButton(debuggerAccess).secureWhenFalse(true))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.DEVELOPER_MODE_ENABLED).withUnsecureMessage(R.string.developer_options_positive).withRadioButton(developerOptions).secureWhenFalse(true))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.ENCRYPTION_ENABLED).withUnsecureMessage(R.string.device_encrypted_negative).withRadioButton(deviceEncrypted))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.BACKUP_ENABLED).withUnsecureMessage(R.string.allow_backup_detected_positive).withRadioButton(allowBackup).secureWhenFalse(true));
 
         if (core.getServiceConfigurationByType("metrics") != null) {
             builder.withMetricsService(core.getMetricsService());
