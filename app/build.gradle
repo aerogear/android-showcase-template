@@ -83,10 +83,17 @@ dependencies {
 
     implementation "net.zetetic:android-database-sqlcipher:3.5.7@aar"
 
+<<<<<<< HEAD
     implementation "org.aerogear:android-core:1.1.0-SNAPSHOT"
     implementation "org.aerogear:android-auth:1.1.0-SNAPSHOT"
     implementation "org.aerogear:android-security:1.1.0-SNAPSHOT"
     implementation "org.aerogear:android-push:1.1.0-SNAPSHOT"
+=======
+    implementation "org.aerogear:android-core:1.1.0-alpha.1"
+    implementation "org.aerogear:android-auth:1.1.0-alpha.1"
+    implementation "org.aerogear:android-security:1.1.0-alpha.1"
+    implementation "org.aerogear:android-push:1.1.0-alpha.1"
+>>>>>>> a1eb40f... Updated to the latest SDK
     
     testImplementation "junit:junit:4.12"
     testImplementation "org.mockito:mockito-core:2.10.0"
