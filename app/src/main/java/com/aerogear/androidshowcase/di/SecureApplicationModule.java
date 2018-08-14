@@ -94,8 +94,7 @@ public class SecureApplicationModule {
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
                 .withRedirectUri("com.aerogear.androidshowcase:/callback")
                 .build();
-        AuthService authService = new AuthService(authServiceConfig);
-        return authService;
+        return new AuthService(authServiceConfig);
     }
     // end::authServiceInit[]
 }
