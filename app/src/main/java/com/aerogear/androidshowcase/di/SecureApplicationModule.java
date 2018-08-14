@@ -70,7 +70,7 @@ public class SecureApplicationModule {
     // tag::securityServiceInit[]
     @Provides @Singleton
     SecurityService provideSecurityService() {
-        return MobileCore.getInstance().getService(SecurityService.class);
+        return new SecurityService();
     }
     // end::securityServiceInit[]
 
@@ -91,13 +91,10 @@ public class SecureApplicationModule {
                         //be configured.  We are not returning an Optional because we can't guarantee
                         //Optional is available on Android M and L and we don't want to add Guava.
         }
-        AuthService authService = core.getService(AuthService.class);
         AuthServiceConfiguration authServiceConfig = new AuthServiceConfiguration.AuthConfigurationBuilder()
                 .withRedirectUri("com.aerogear.androidshowcase:/callback")
                 .build();
-
-        authService.init(context, authServiceConfig);
-        return authService;
+        return new AuthService(authServiceConfig);
     }
     // end::authServiceInit[]
 }
