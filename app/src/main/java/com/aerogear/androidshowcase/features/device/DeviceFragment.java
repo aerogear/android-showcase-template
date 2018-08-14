@@ -22,11 +22,11 @@ import dagger.android.AndroidInjection;
 import java.util.Map;
 import javax.inject.Inject;
 import org.aerogear.mobile.core.MobileCore;
-import org.aerogear.mobile.security.SecurityCheckExecutor;
-import org.aerogear.mobile.security.SecurityCheckResult;
-import org.aerogear.mobile.security.SecurityCheckType;
+import org.aerogear.mobile.security.DeviceCheckExecutor;
+import org.aerogear.mobile.security.DeviceCheckResult;
+import org.aerogear.mobile.security.DeviceCheckType;
 import org.aerogear.mobile.security.SecurityService;
-import org.aerogear.mobile.security.SyncSecurityCheckExecutor.Builder;
+import static org.aerogear.mobile.security.SyncDeviceCheckExecutor.Builder;
 
 /**
  * The fragment for the Device related functionality.
@@ -128,16 +128,18 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         totalTests = 0;
         totalTestFailures = 0;
 
-        Map<String, SecurityCheckResult> results = buildResults();
+        Map<String, DeviceCheckResult> results = buildResults();
 
         // perform detections
-        detectRoot(results);
-        detectDeviceLock(results);
-        detectEmulator(results);
-        debuggerDetected(results);
-        detectBackupEnabled(results);
-        detectDeviceEncryptionStatus(results);
-        detectDeveloperOptions(results);
+
+        for (DeviceCheckResult res : results.values()) {
+            SecurityCheckDecorator.CheckResultSecurityDecorator decorator = (SecurityCheckDecorator.CheckResultSecurityDecorator) res;
+            if (!decorator.isSecure()) {
+                setCheckFailed(decorator.getRadioButton(), decorator.getUnsecureMessageResouceId());
+            }
+        }
+
+        totalTests = results.size();
 
         // get trust score
         int score = getTrustScore();
@@ -145,17 +147,18 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
         checkTrustScore(score);
     }
 
-    private Map<String, SecurityCheckResult> buildResults() {
+    private Map<String, DeviceCheckResult> buildResults() {
         MobileCore core = MobileCore.getInstance();
-        Builder builder = SecurityCheckExecutor.Builder
+
+        Builder builder = DeviceCheckExecutor.Builder
             .newSyncExecutor(context)
-            .withSecurityCheck(SecurityCheckType.NOT_ROOTED)
-            .withSecurityCheck(SecurityCheckType.SCREEN_LOCK_ENABLED)
-            .withSecurityCheck(SecurityCheckType.NOT_IN_EMULATOR)
-            .withSecurityCheck(SecurityCheckType.NO_DEBUGGER)
-            .withSecurityCheck(SecurityCheckType.NO_DEVELOPER_MODE)
-            .withSecurityCheck(SecurityCheckType.HAS_ENCRYPTION_ENABLED)
-            .withSecurityCheck(SecurityCheckType.ALLOW_BACKUP_DISABLED);
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.ROOT_ENABLED).withUnsecureMessage(R.string.root_detected_positive).withRadioButton(rootAccess).secureWhenFalse(true))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.SCREEN_LOCK_ENABLED).withUnsecureMessage(R.string.device_lock_detected_negative).withRadioButton(lockScreenSetup))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.IS_EMULATOR).withUnsecureMessage(R.string.emulator_detected_positive).withRadioButton(emulatorAccess).secureWhenFalse(true))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.DEBUGGER_ENABLED).withUnsecureMessage(R.string.debugger_detected_positive).withRadioButton(debuggerAccess).secureWhenFalse(true))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.DEVELOPER_MODE_ENABLED).withUnsecureMessage(R.string.developer_options_positive).withRadioButton(developerOptions).secureWhenFalse(true))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.ENCRYPTION_ENABLED).withUnsecureMessage(R.string.device_encrypted_negative).withRadioButton(deviceEncrypted))
+            .withSecurityCheck(SecurityCheckDecorator.forCheck(DeviceCheckType.BACKUP_ENABLED).withUnsecureMessage(R.string.allow_backup_detected_positive).withRadioButton(allowBackup).secureWhenFalse(true));
 
         if (core.getServiceConfigurationByType("metrics") != null) {
             builder.withMetricsService(core.getMetricsService());
@@ -163,105 +166,6 @@ public class DeviceFragment extends BaseFragment<DevicePresenter, DeviceView> {
 
         return builder.build().execute();
     }
-
-    // tag::detectRoot[]
-    /**
-     * Detect if the device is rooted.
-     */
-    public void detectRoot(Map<String, SecurityCheckResult> results) {
-        totalTests++;
-        SecurityCheckResult result = results.get(SecurityCheckType.NOT_ROOTED.getType());
-        if (result != null && !result.passed()) {
-            setCheckFailed(rootAccess, R.string.root_detected_positive);
-        }
-    }
-    // end::detectRoot[]
-
-    // tag::detectDeviceLock[]
-
-    /**
-     * Detect if the device has a lock screen setup (pin, password etc).
-     */
-    public void detectDeviceLock(Map<String, SecurityCheckResult> results) {
-        totalTests++;
-        SecurityCheckResult result = results.get(SecurityCheckType.SCREEN_LOCK_ENABLED.getType());
-        if (result != null && !result.passed()) {
-            setCheckFailed(lockScreenSetup, R.string.device_lock_detected_negative);
-        }
-    }
-    // end::detectDeviceLock[]
-
-    // tag::debuggerDetected[]
-
-    /**
-     * Detect if a debugger is attached to the application.
-     */
-    public void debuggerDetected(Map<String, SecurityCheckResult> results) {
-        totalTests++;
-        SecurityCheckResult result = results.get(SecurityCheckType.NO_DEBUGGER.getType());
-        if (result != null && !result.passed()) {
-            setCheckFailed(debuggerAccess, R.string.debugger_detected_positive);
-        }
-    }
-    // end::debuggerDetected[]
-
-    // tag::detectEmulator[]
-
-    /**
-     * Detect if the application is being run in an emulator.
-     */
-    public void detectEmulator(Map<String, SecurityCheckResult> results) {
-        totalTests++;
-        SecurityCheckResult result = results.get(SecurityCheckType.NOT_IN_EMULATOR.getType());
-        if (result != null && !result.passed()) {
-            setCheckFailed(emulatorAccess, R.string.emulator_detected_positive);
-        }
-    }
-    // end::detectEmulator[]
-
-    // tag::detectBackupEnabled[]
-
-    /**
-     * Function to check if the backup flag is enabled in the application manifest file
-     */
-    public void detectBackupEnabled(Map<String, SecurityCheckResult> results) {
-        totalTests++;
-        SecurityCheckResult result = securityService.check(SecurityCheckType.ALLOW_BACKUP_DISABLED);
-        if (result != null && !result.passed()) {
-            setCheckFailed(allowBackup, R.string.allow_backup_detected_positive);
-        }
-    }
-    // end::detectBackupEnabled[]
-
-    // tag::detectDeviceEncryptionStatus[]
-
-    /**
-     * Function to check if the devices filesystem is encrypted
-     */
-    public void detectDeviceEncryptionStatus(Map<String, SecurityCheckResult> results) {
-        totalTests++;
-        SecurityCheckResult result =
-            securityService.check(SecurityCheckType.HAS_ENCRYPTION_ENABLED);
-        if (result != null && !result.passed()) {
-            setCheckFailed(deviceEncrypted, R.string.device_encrypted_negative);
-        }
-    }
-    // end::detectDeviceEncryptionStatus[]
-
-    // tag::detectDeveloperOptions[]
-
-    /**
-     * Detect if the developer options mode is enabled on the device
-     */
-    public void detectDeveloperOptions(Map<String, SecurityCheckResult> results) {
-        totalTests++;
-        SecurityCheckResult result = results.get(SecurityCheckType.NO_DEVELOPER_MODE.getType());
-        if (result != null && !result.passed()) {
-            setCheckFailed(developerOptions, R.string.developer_options_positive);
-        }
-    }
-    // end::detectDeveloperOptions[]
-
 
     /**
      * Function to allow updates to the radio buttons UI when a security check has failed Passed
